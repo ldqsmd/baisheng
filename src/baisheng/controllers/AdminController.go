@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"baisheng/models"
+	"fmt"
+	"github.com/astaxie/beego/orm"
 )
 
 type AdminController struct {
@@ -19,9 +21,27 @@ func (this *AdminController)AdminList() {
 	this.TplName  = "admin/list.html"
 }
 
-
 func (this *AdminController)AddAdmin() {
 
-	this.TplName  = "admin/add.html"
+	switch this.requestMethod {
+		case "GET":
+			this.TplName  = "admin/add.html"
+
+		case "POST":
+			var admin models.Admin
+
+			if err := this.ParseForm(&admin); err != nil {
+				fmt.Println(err.Error())
+			}
+			o := orm.NewOrm()
+			id, err := o.Insert(&admin)
+			if err != nil {
+				fmt.Println(err.Error())
+			}else{
+				fmt.Println(id)
+			}
+			this.TplName  = "admin/list.html"
+		}
 }
+
 

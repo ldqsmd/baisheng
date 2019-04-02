@@ -9,11 +9,14 @@ type BaseController struct {
 	beego.Controller
 	controllerName string             //当前控制名称
 	actionName     string             //当前action名称
+	requestMethod  string             //当前接口请求方式
+
 }
 
-func (c *BaseController) Prepare() {
+func (this *BaseController) Prepare() {
 	//附值
-	c.controllerName, c.actionName = c.GetControllerAndAction()
+	this.controllerName, this.actionName = this.GetControllerAndAction()
+	this.requestMethod = this.Ctx.Request.Method  //当前接口请求方式
 	//从Session里获取数据 设置用户信息
 	//c.adapterUserInfo()
 }

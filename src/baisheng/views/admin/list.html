@@ -6,12 +6,8 @@
     <title>H+ 后台主题UI框架 - 数据表格</title>
     <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
     <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
-    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?" rel="stylesheet">
-    <link href="css/font-awesome.css" rel="stylesheet">
-    <!-- Data Tables -->
-    <link href="css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico">
+    {{template "base/globalcss.html"}}
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -19,7 +15,7 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <a data-toggle="modal" class="btn btn-primary" href="form_basic.htm#modal-form">添加新用户</a>
+                    <a class="btn btn-primary" href="/admin/add">添加</a>
                 </div>
                 <div class="ibox-content">
                     <table class="table table-striped table-bordered table-hover dataTables-example">
@@ -53,18 +49,7 @@
     </div>
 </div>
 
-{{template "admin/add.html"}}
-<!-- 全局js -->
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js?"></script>
-<script src="js/plugins/jeditable/jquery.jeditable.js"></script>
-<!-- Data Tables -->
-<script src="js/plugins/dataTables/jquery.dataTables.js"></script>
-<script src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
-
-<!-- 自定义js -->
-<script src="js/content.js"></script>
-
+{{template "base/globaljs.html"}}
 
 <!-- Page-Level Scripts -->
 <script>
