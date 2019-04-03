@@ -5,11 +5,9 @@ type HomeController struct {
 }
 
 func (home *HomeController) Index() {
-	//home.Data["Website"] = "beego.me"
-	//home.Data["Email"] = "astaxie@gmail.com"
-	home.setTpl()
+	home.SetTpl()
 }
 
 func (home *HomeController)Content() {
-	home.setTpl()
+	home.SetTpl()
 }

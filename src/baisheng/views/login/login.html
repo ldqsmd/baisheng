@@ -25,12 +25,13 @@
         </div>
         <h3>欢迎使用 BaiSheng管理后台</h3>
 
-        <form class="m-t" role="form" action="/login" method="POST">
+        <form id="commentForm" class="m-t" role="form">
+
             <div class="form-group">
-                <input type="text" name="account" class="form-control" placeholder="用户名" required="true">
+                <input id="account" type="text" name="account" class="form-control" placeholder="用户名" required="true">
             </div>
             <div class="form-group">
-                <input type="password" name="password" class="form-control" placeholder="密码" required="true">
+                <input id="password"  type="password" name="password" class="form-control" placeholder="密码" required="true">
             </div>
             <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
             <p class="text-muted text-center"> <a href="login.html#"><small>忘记密码了？</small></a> | <a href="register.html">注册一个新账号</a>
@@ -39,7 +40,54 @@
         </form>
     </div>
 </div>
+{{template "base/globaljs.html"}}
+<script>
+
+    //以下为官方示例
+    $().ready(function () {
+
+        // validate signup form on keyup and submit
+        var icon = "<i class='fa fa-times-circle'></i> ";
+        $("#commentForm").validate({
+            rules: {
+                account: "required",
+                password: {
+                    required: true,
+                }
+            },
+            messages: {
+                account: icon + "请输入您的账户",
+                password: {
+                    required: icon + "请输入您的密码",
+                }
+            },
+            submitHandler:function(form){
+                var account = $('#account').val();
+                var password = $('#password').val();
+                var url = '{{urlfor "LoginController.Login"}}';
+
+                $.ajax({
+                    url : url,
+                    type : 'POST',
+                    dataType : 'json',
+                    data : {
+                        account : account,
+                        password : password
+                    },
+                    success : function(data) {
+                        console.log(data);
+                        if(data.code == 0){
+                            window.location.href='{{ urlfor "HomeController.Index"}}'
+                        }else{
+                            layer.msg(data.message, {icon: 5,offset: '400px'});
+                        }
+                    }
+                });
+            }
+        });
+
+    });
+</script>
 
 </body>
-
 </html>

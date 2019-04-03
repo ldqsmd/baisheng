@@ -12,7 +12,6 @@ func init() {
 
 
 func main() {
-	common.ErrorInit()
 	beego.Run()
 }
 

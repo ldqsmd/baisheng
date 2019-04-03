@@ -56,15 +56,18 @@ func (this *Admin) GetList()([]Admin,int64)  {
 
 
 //获取管理员信息
-func (this *Admin)Login()(admin Admin,err error)  {
+func (this *Admin)Login()error{
 
-
-
-
-	query := orm.NewOrm().QueryTable(AdminTabelName())
-
-	err = query.Filter("id").One(&admin)
-	return admin, err
+	err := orm.NewOrm().Raw("SELECT id,account,user_name,email,status FROM admin WHERE account=? and password=?", this.Account,this.Password).QueryRow(&this)
+	if err == orm.ErrMultiRows {
+		// 多条的时候报错
+		fmt.Println("Returned Multi Rows Not One")
+	}
+	if err == orm.ErrNoRows {
+		// 没有找到记录
+		fmt.Println("Not row found")
+	}
+	return err
 }
 
 

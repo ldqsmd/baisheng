@@ -14,19 +14,16 @@ func (this *AdminController)AdminList() {
 
 	var admin models.Admin
 	list,total := admin.GetList()
-
 	this.Data["list"]  = list
 	this.Data["total"] = total
-
-	this.TplName  = "admin/list.html"
+	this.SetTpl("base/layout_page.html","admin/list.html")
 }
 
 func (this *AdminController)AddAdmin() {
 
 	switch this.requestMethod {
 		case "GET":
-			this.TplName  = "admin/add.html"
-
+			this.SetTpl("base/layout_page.html","admin/add.html")
 		case "POST":
 			var admin models.Admin
 
@@ -40,7 +37,7 @@ func (this *AdminController)AddAdmin() {
 			}else{
 				fmt.Println(id)
 			}
-			this.TplName  = "admin/list.html"
+			this.Redirect("/adminList",200)
 		}
 }
 

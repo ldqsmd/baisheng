@@ -2,8 +2,6 @@ package controllers
 
 import (
 	"baisheng/models"
-	"fmt"
-	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
 )
 
@@ -11,47 +9,34 @@ type LoginController struct {
 	BaseController
 }
 
-func (this *LoginController)Get() {
+func (this *LoginController)Login() {
 
+	switch this.requestMethod {
+		case "GET":
+			this.TplName = "login/login.html"
+		case "POST":
+			var admin models.Admin
 
-	var errCon ErrorController
-	errCon.Error404()
-	this.Abort("404")
-	//this.TplName = "login/login.html"
-}
+			if err := this.ParseForm(&admin); err != nil {
+				this.ReturnJson(-1,err.Error(),nil)
+			}
+			//表单验证
+			valid := validation.Validation{}
+			valid.Required(admin.Account, "账号").Message("不能为空")
+			valid.Required(admin.Password, "密码").Message("不能为空")
 
+			if valid.HasErrors() {
+				for _, err := range valid.Errors {
+					this.ReturnJson(-1,err.Key+err.Message,nil)
+				}
+			}
+			err :=  admin.Login()
+			if err != nil{
+				this.ReturnJson(-1,"登录失败,账号或密码错误！",nil)
+			}
 
-func (this *LoginController)Post() {
-
-	var admin models.Admin
-
-	fmt.Println(this.Input())
-	if err := this.ParseForm(&admin); err != nil {
-		fmt.Println(err.Error())
+			this.ReturnJson(0,"登录成功",nil)
 	}
-	//表单验证
-	valid := validation.Validation{}
-	valid.Required(admin.Account, "account")
-	valid.Required(admin.Password, "password")
-	if valid.HasErrors() {
-		for _, err := range valid.Errors {
-			fmt.Println(err.Key, err.Message)
-		}
-		return
-	}
 
-	err := orm.NewOrm().Raw("SELECT account,user_name FROM user WHERE id = ?", 1).QueryRow(&user)
-
-
-	//查看数据表
-	err := orm.NewOrm().QueryTable("admin").Filter("account", admin.Account).Filter("password", admin.Password).One(&admin)
-	if err == orm.ErrMultiRows {
-		// 多条的时候报错
-		fmt.Printf("Returned Multi Rows Not One")
-	}
-	if err == orm.ErrNoRows {
-		// 没有找到记录
-		fmt.Printf("Not row found")
-	}
 }
 

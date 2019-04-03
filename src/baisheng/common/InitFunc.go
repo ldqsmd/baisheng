@@ -1,7 +1,6 @@
 package common
 
 import (
-	"baisheng/controllers"
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -25,8 +24,3 @@ func MySQLInit()  {
 }
 
 
-
-//自定义错误初始化
-func ErrorInit()  {
-	beego.ErrorController(&controllers.ErrorController{})
-}

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"baisheng/models"
 	"github.com/astaxie/beego"
 	"strings"
 )
@@ -10,8 +11,9 @@ type BaseController struct {
 	controllerName string             //当前控制名称
 	actionName     string             //当前action名称
 	requestMethod  string             //当前接口请求方式
-
 }
+
+
 
 func (this *BaseController) Prepare() {
 	//附值
@@ -23,7 +25,7 @@ func (this *BaseController) Prepare() {
 
 // 设置模板
 // 第一个参数模板，第二个参数为layout
-func (base *BaseController) setTpl(template ...string) {
+func (base *BaseController) SetTpl(template ...string) {
 
 	var tplName string
 	layout := "base/layout_base.html"
@@ -31,7 +33,7 @@ func (base *BaseController) setTpl(template ...string) {
 		case len(template) == 1:
 			tplName = template[0]
 		case len(template) == 2:
-			 layout = template[0]
+			 layout  = template[0]
 			 tplName = template[1]
 		default:
 			//不要Controller这个10个字母
@@ -41,4 +43,33 @@ func (base *BaseController) setTpl(template ...string) {
 	}
 	base.Layout = layout
 	base.TplName = tplName
+}
+
+//JSON返回
+func (base *BaseController) ReturnJson(code int,message string,data interface{}) {
+
+	var  returnJson models.ReturnJson
+	returnJson.Code	 	= code
+	returnJson.Message 	= message
+	returnJson.Data 	= data
+	base.Data["json"] = &returnJson
+	base.ServeJSON()
+	base.StopRun()
+}
+
+
+//
+func (c *BaseController) Error404() {
+	c.Data["content"] = "page not found"
+	c.TplName = "error/404.html"
+}
+
+func (c *BaseController) Error501() {
+	c.Data["content"] = "server error"
+	c.TplName = "error/501.tpl"
+}
+
+func (c *BaseController) ErrorDb() {
+	c.Data["content"] = "database is now down"
+	c.TplName = "error/dberror.tpl"
 }
