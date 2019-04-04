@@ -38,7 +38,6 @@ func (this *AdminController)AddAdmin() {
 				fmt.Println(id)
 			}
 			this.Redirect("/adminList",200)
-		}
+	}
 }
-
 

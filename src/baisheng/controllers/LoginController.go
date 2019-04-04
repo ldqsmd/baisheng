@@ -2,16 +2,17 @@ package controllers
 
 import (
 	"baisheng/models"
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/validation"
 )
 
 type LoginController struct {
-	BaseController
+	beego.Controller
 }
 
 func (this *LoginController)Login() {
 
-	switch this.requestMethod {
+	switch this.Ctx.Request.Method  {
 		case "GET":
 			this.TplName = "login/login.html"
 		case "POST":
@@ -30,13 +31,33 @@ func (this *LoginController)Login() {
 					this.ReturnJson(-1,err.Key+err.Message,nil)
 				}
 			}
+
+			//判断用户名密码
 			err :=  admin.Login()
 			if err != nil{
 				this.ReturnJson(-1,"登录失败,账号或密码错误！",nil)
+			}else if admin.Status == 1{
+				this.ReturnJson(-1,"账号已被禁用,请联系管理员！",nil)
 			}
-
+			//设置session信息
+			this.SetSession("adminInfo",admin)
 			this.ReturnJson(0,"登录成功",nil)
-	}
-
+		}
 }
 
+func (this *LoginController)Logout() {
+	this.DestroySession()
+	this.Redirect(this.URLFor("LoginController.Login"),302)
+	this.StopRun()
+}
+
+func (this *LoginController) ReturnJson(code int,message string,data interface{}) {
+
+	var  json models.ReturnJson
+	json.Code	 	= code
+	json.Message 	= message
+	json.Data 		= data
+	this.Data["json"] 	= &json
+	this.ServeJSON()
+	this.StopRun()
+}

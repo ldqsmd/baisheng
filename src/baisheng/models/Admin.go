@@ -16,7 +16,6 @@ type Admin struct {
 }
 
 
-
 func (this *Admin) GetList()([]Admin,int64)  {
 
 
@@ -67,11 +66,9 @@ func (this *Admin)Login()error{
 		// 没有找到记录
 		fmt.Println("Not row found")
 	}
+	//设置session记录
 	return err
 }
-
-
-
 
 
 
