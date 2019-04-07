@@ -5,3 +5,4 @@ pkg/
 *.exe~
 src/opms/
 src/sdrms/
+*.gz

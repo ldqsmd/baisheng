@@ -30,22 +30,29 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">餐厅品牌</label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="brand" id="brand">
-                                    <option></option>
-                                    <option value="1">KFC</option>
-                                    <option value="1">kfc</option>
-                                    <option value="1">kfc</option>
-                                    <option value="1">kfc</option>
-                                </select>
+                                <label class="">
+                                    {{/*KFC 肯德基 PHDI 必胜客 LS 小肥羊   TB 塔可贝尔 CJ 咖啡*/}}
+                                    <input type="radio" value="1"  name="brand">&nbsp;&nbsp;肯德基
+                                    <input type="radio" value="2"  name="brand">&nbsp;&nbsp;必胜客
+                                    <input type="radio" value="3"  name="brand">&nbsp;&nbsp;小肥羊
+                                    <input type="radio" value="4"  name="brand">&nbsp;&nbsp;塔可贝尔
+                                    <input type="radio" value="5"  name="brand">&nbsp;&nbsp;咖啡
+                                </label>
                             </div>
 
                             <label class="col-sm-1 control-label">运营状态</label>
                             <div class="col-sm-3">
                                 <label class="">
-                                    <input type="radio" value="0"  name="status">停运&nbsp&nbsp
-                                    <input type="radio" value="1"  name="status">运营
+                                    {{/*新店 IE 关店 转加盟  完成 准备*/}}
+                                    <input type="radio" value="1"  name="status">&nbsp;&nbsp;新店
+                                    <input  type="radio" value="2"  name="status">&nbsp;&nbsp;IE
+                                    <input  type="radio" value="3"  name="status">&nbsp;&nbsp;关店
+                                    <input  type="radio" value="4"  name="status">&nbsp;&nbsp;转加盟
+                                    <input  type="radio" value="5"  name="status">&nbsp;&nbsp;完成
+                                    <input  type="radio" value="6"  name="status">&nbsp;&nbsp;准备
                                 </label>
                             </div>
+
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">餐厅经理</label>
@@ -96,7 +103,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">开业时间</label>
                             <div class="col-sm-4">
-                                <input id="openTime" name="openTime" class="form-control" type="datetime-local">
+                                <input id="openTime" name="openTime" class="form-control" type="date">
                             </div>
                             <label class="col-sm-1 control-label">停业时间</label>
                             <div class="col-sm-3">
@@ -167,20 +174,21 @@
                     data : {
                         storeName   : $('#storeName').val(),
                         number      : $('#number').val(),
-                        brand       : $('#brand').val(),
-                        status      : $('#status').val(),
-                        manager      : $('#manager').val(),
-                        managerPhone      : $('#managerPhone').val(),
-                        areaManager      : $('#areaManager').val(),
+                        brand       : $("input[name='brand']:checked").val(),
+                        status      : $("input[name='status']:checked").val(),
+                        manager     : $('#manager').val(),
+                        managerPhone : $('#managerPhone').val(),
+                        areaManager : $('#areaManager').val(),
                         regionalManager  : $('#regionalManager').val(),
+                        ip          : $('#ip').val(),
                         address     : $('#address').val(),
-                        network     : $('#network').val(),
-                        openTime     : $('#openTime').val(),
-                        closeTime     : $('#closeTime').val(),
-                        waitTime     : $('#waitTime').val(),
-                        decorationTime   : $('#decorationTime').val(),
+                        network     :  $("input[name='network']:checked").val(),
+                        openTime    : $('#openTime').val(),
+                        closeTime   : $('#closeTime').val(),
+                        waitTime    : $('#waitTime').val(),
+                        decorationTime  : $('#decorationTime').val(),
                         bookStartTime   : $('#bookStartTime').val(),
-                        employeeStartTime   : $('#employeeStartTime').val(),
+                        employeeStartTime  : $('#employeeStartTime').val(),
                     },
                     success : function(data) {
                         console.log(data);
