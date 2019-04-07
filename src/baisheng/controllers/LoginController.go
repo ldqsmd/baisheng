@@ -33,7 +33,7 @@ func (this *LoginController)Login() {
 			}
 
 			//判断用户名密码
-			err :=  admin.Login()
+			err :=  admin.GetAdminInfo()
 			if err != nil{
 				this.ReturnJson(-1,"登录失败,账号或密码错误！",nil)
 			}else if admin.Status == 1{

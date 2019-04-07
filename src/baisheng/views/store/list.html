@@ -1,0 +1,148 @@
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <a class="btn btn-primary" href="{{ urlfor "StoreController.AddStore"}}">添加</a>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-striped table-bordered table-hover dataTables-example ">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>名称</th>
+                            <th>品牌</th>
+                            <th>状态</th>
+                            <th>餐厅经理</th>
+                            <th>经理手机</th>
+                            <th>区经理</th>
+                            <th>区域经理</th>
+                            <th>地址</th>
+                            <th>IP</th>
+                            <th>宽带</th>
+                            <th>开业时间</th>
+                            <th>关业时间</th>
+                            <th>待开业时间</th>
+                            <th>装修时间</th>
+                            <th>IMS</th>
+                            <th>CMS</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{range $key, $val := .list}}
+                            <tr class="gradeX">
+                                <td>{{$val.Number}}</td>
+                                <td>{{$val.StoreName}}</td>
+                                {{/*<td>{{$val.Brand}}</td>*/}}
+
+                                <td>
+                                    {{range $brandKey, $brand := $.brandList}}
+                                        {{if eq $brandKey $val.Brand}}
+                                            {{$brand}}
+                                        {{end}}
+                                    {{end}}
+                                <td>
+                                {{range $status, $des := $.storeStatus}}
+                                    {{if eq $status $val.Status}}
+                                         {{$des}}
+                                    {{end}}
+                                {{end}}
+                                </td>
+                                <td>{{$val.Manager}}</td>
+                                <td>{{$val.ManagerPhone}}</td>
+                                <td>{{$val.AreaManager}}</td>
+                                <td>{{$val.RegionalManager}}</td>
+                                <td>{{$val.Address}}</td>
+                                <td>{{$val.Ip}}</td>
+                                <td>
+                                {{range $netKey, $netContent := $.network}}
+                                    {{if eq $netKey $val.Network}}
+                                        {{$netContent}}
+                                    {{end}}
+                                {{end}}
+                                </td>
+                                {{/*<td>{{$val.Network}}</td>*/}}
+                                <td>{{$val.OpenTime}}</td>
+                                <td>{{$val.CloseTime}}</td>
+                                <td>{{$val.WaitTime}}</td>
+                                <td>{{$val.DecorationTime}}</td>
+                                <td>{{$val.BookStartTime}}</td>
+                                <td>{{$val.EmployeeStartTime}}</td>
+                                <td>
+                                    <a id="edit"href="/store/edit?storeId={{$val.Id}}"  class="btn btn-primary btn-xs m-l-sm"type="button">编辑</a>
+                                    <span storeId="{{$val.Id}}" class="btn btn-danger btn-xs m-l-sm delStore"type="button">删除</span>
+                                </td>
+                            </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page-Level Scripts -->
+<script>
+    $(document).ready(function () {
+        $('.dataTables-example').dataTable(
+            {
+                "ordering": false,
+                "bAutoWidth":false,
+                "columns": [
+                    //给第一列指定宽度为表格整个宽度的20%
+                    { "width": "0%" },
+                    { "width": "7%" },
+                    { "width": "3%" },
+                    { "width": "3%" },
+                    { "width": "5%" },
+                    { "width": "4%" },
+                    { "width": "4%" },
+                    { "width": "5%" },
+                    { "width": "10%" },
+                    { "width": "1%" },
+
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    { "width": "0%" },
+                    { "width": "1%" },
+                ]
+            }
+        );
+
+        $(".delStore").click(function(){
+            var url = '{{urlfor "StoreController.DeleteStore"}}';
+            var storeId = $(this).attr("storeId")
+
+            $.ajax({
+                url : url,
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    storeId :storeId,
+                },
+                success : function(data) {
+                    console.log(data);
+                    if(data.code == 0){
+                        layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                            window.location.href='{{ urlfor "StoreController.StoreList"}}'
+                        });
+                    }else{
+                        layer.msg(data.message, {icon: 5,offset: '400px'});
+                    }
+                }
+            });
+        });
+
+
+
+
+    });
+
+</script>

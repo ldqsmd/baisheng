@@ -64,31 +64,41 @@
         var icon = "<i class='fa fa-times-circle'></i> ";
         $("#signupForm").validate({
             rules: {
-                account: "required",
-                password: "required",
+                firstname: "required",
+                password: {
+                    required: true,
+                    minlength: 5
+                },
                 confirm_password: {
                     required: true,
+                    minlength: 5,
                     equalTo: "#password"
                 },
                 email: {
                     required: true,
                     email: true
+                },
+                topic: {
+                    required: "#newsletter:checked",
+                    minlength: 2
                 }
             },
             messages: {
                 firstname: icon + "请输入你的登录账户",
                 password: {
                     required: icon + "请输入您的密码",
+                    minlength: icon + "密码必须5个字符以上"
                 },
                 confirm_password: {
                     required: icon + "请再次输入密码",
+                    minlength: icon + "密码必须5个字符以上",
                     equalTo: icon + "两次输入的密码不一致"
                 },
                 email: icon + "请输入您的E-mail"
             },
             submitHandler:function(form){
 
-                var url = '{{urlfor "AdminController.AddAdmin"}}';
+                var url = '{{urlfor "LoginController.Login"}}';
 
                 $.ajax({
                     url : url,
@@ -103,7 +113,7 @@
                     success : function(data) {
                         console.log(data);
                         if(data.code == 0){
-                            window.location.href='{{ urlfor "AdminController.List"}}'
+                            window.location.href='{{ urlfor "HomeController.Index"}}'
                         }else{
                             layer.msg(data.message, {icon: 5,offset: '400px'});
                         }

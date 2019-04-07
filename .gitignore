@@ -3,3 +3,5 @@ bin/
 pkg/
 *.exe
 *.exe~
+src/opms/
+src/sdrms/
