@@ -24,6 +24,10 @@ type Store struct {
 	BookStartTime	string  `form:"bookStartTime"`
 	EmployeeStartTime	string  `form:"employeeStartTime"`
 	WaitTime        string	`form:"waitTime"`
+	DeviceTime 		string	`form:"deviceTime"`
+	BuildName 		string	`form:"buildName"`
+	TempCloseTime 	string	`form:"tempCloseTime"`
+	Remark			string	`form:"remark"`
 	ForbiddenStatus int	`form:"forbiddenStatus"`
 	CreateTime 		string  `form:"createTime"`
 }

@@ -30,7 +30,7 @@
                             </div>
 
                             <label class="col-sm-1 control-label">经理手机</label>
-                            <div class="col-sm-1">
+                            <div class="col-sm-2">
                                 <input id="managerPhone" name="managerPhone" class="form-control" type="text">
                             </div>
 
@@ -40,6 +40,7 @@
                             <label class="col-sm-2 control-label">餐厅品牌</label>
                             <div class="col-sm-1">
                                 <select class="form-control m-b" name="brand">
+                                    <option value="0">请选择</option>
                                     <option value="1">肯德基</option>
                                     <option value="2">必胜客</option>
                                     <option value="3">小肥羊</option>
@@ -50,7 +51,8 @@
 
                             <label class="col-sm-1 control-label">运营状态</label>
                             <div class="col-sm-1">
-                                <select class="form-control m-b" name="brand">
+                                <select class="form-control m-b" name="brand" id="brand">
+                                    <option value="0">请选择</option>
                                     <option value="1">新店</option>
                                     <option value="2">IE</option>
                                     <option value="3">关店</option>
@@ -62,8 +64,8 @@
 
                             <label class="col-sm-1 control-label">餐厅宽带</label>
                             <div class="col-sm-1">
-                                <select class="form-control m-b" name="network">
-                                    <option value="0">请选择宽带</option>
+                                <select class="form-control m-b" name="network" id="network">
+                                    <option value="0">请选择</option>
                                     <option value="1">联通</option>
                                     <option value="2">电信</option>
                                     <option value="3">移动</option>
@@ -72,96 +74,79 @@
                             </div>
 
                             <label class="col-sm-1 control-label">IP</label>
-                            <div class="col-sm-1">
+                            <div class="col-sm-2">
                                 <input id="ip" name="ip" class="form-control" type="text">
                             </div>
-                        </div>
-                        <div class="form-group">
-
                         </div>
 
                         {{/*餐厅宽带\n1 联通\n2 电信\n3 移动\n4 小运营商\n*/}}
                         <div class="form-group">
                             <label class="col-sm-2 control-label">区经理</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-1">
                                 <input id="areaManager" name="areaManager" class="form-control" type="text">
                             </div>
                             <label class="col-sm-1 control-label">区域经理</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-1">
                                 <input id="regionalManager" name="regionalManager" class="form-control" type="text">
                             </div>
-
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">餐厅地址</label>
-                            <div class="col-sm-4">
+                            <label class="col-sm-1 control-label">营建工程师</label>
+                            <div class="col-sm-1">
+                                <input id="buildName" name="buildName" class="form-control" type="text">
+                            </div>
+                            <label class="col-sm-1 control-label">餐厅地址</label>
+                            <div class="col-sm-2">
                                 <input id="address" name="address" class="form-control" type="text">
                             </div>
-                        </div>
-                        <div class="form-group">
-
 
                         </div>
+
+
                         <div class="form-group">
                             <label class="col-sm-2 control-label">开业时间</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-2">
                                 <input id="openTime" name="openTime" class="form-control" type="date">
                             </div>
                             <label class="col-sm-1 control-label">停业时间</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <input id="closeTime" name="closeTime" class="form-control" type="date">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">餐厅待开业时间</label>
-                            <div class="col-sm-4">
+                            <label class="col-sm-1 control-label">待开业时间</label>
+                            <div class="col-sm-2">
                                 <input id="waitTime" name="waitTime" class="form-control" type="date">
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">临时闭店时间</label>
+                            <div class="col-sm-2">
+                                <input id="tempCloseTime" name="tempCloseTime" class="form-control" type="date">
+                            </div>
                             <label class="col-sm-1 control-label">装修时间</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <input id="decorationTime" name="decorationTime" class="form-control" type="date">
                             </div>
+                            <label class="col-sm-1 control-label">设备进场时间</label>
+                            <div class="col-sm-2">
+                                <input id="deviceTime" name="deviceTime" class="form-control" type="date">
+                            </div>
                         </div>
+
                         <div class="form-group">
                             <label class="col-sm-2 control-label">IMS</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-2">
                                 <input id="bookStartTime" name="bookStartTime" class="form-control" type="date">
                             </div>
 
                             <label class="col-sm-1 control-label">CMS</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <input id="employeeStartTime" name="employeeStartTime" class="form-control" type="date">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Select1</label>
+                            <label class="col-sm-1 control-label">备注</label>
                             <div class="col-sm-2">
-                                <select class="form-control m-b" name="account">
-                                    <option>选项 1</option>
-                                    <option>选项 2</option>
-                                    <option>选项 3</option>
-                                    <option>选项 4</option>
-                                </select>
-                            </div>
-                            <label class="col-sm-1 control-label">Select2</label>
-                            <div class="col-sm-2">
-                                <select class="form-control m-b" name="account">
-                                    <option>选项 1</option>
-                                    <option>选项 2</option>
-                                    <option>选项 3</option>
-                                    <option>选项 4</option>
-                                </select>
-                            </div>
-                            <label class="col-sm-1 control-label">Select2</label>
-                            <div class="col-sm-2">
-                                <select class="form-control m-b" name="account">
-                                    <option>选项 1</option>
-                                    <option>选项 2</option>
-                                    <option>选项 3</option>
-                                    <option>选项 4</option>
-                                </select>
+                                <input id="remark" name="remark" class="form-control" type="text">
                             </div>
                         </div>
+
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-2">
                                 <button class="btn btn-primary" type="submit">提交</button>
@@ -219,11 +204,16 @@
                         decorationTime  : $('#decorationTime').val(),
                         bookStartTime   : $('#bookStartTime').val(),
                         employeeStartTime  : $('#employeeStartTime').val(),
+                        remark  : $('#remark').val(),
+                        deviceTime  : $('#deviceTime').val(),
+                        tempCloseTime  : $('#tempCloseTime').val(),
                     },
                     success : function(data) {
                         console.log(data);
                         if(data.code == 0){
-                            window.location.href='{{ urlfor "StoreController.StoreList"}}'
+                            layer.msg(data.message, {icon: 1,time:2000,offset: '400px'},function () {
+                                window.location.href='{{ urlfor "StoreController.StoreList"}}'
+                            });
                         }else{
                             layer.msg(data.message, {icon: 5,offset: '400px'});
                         }

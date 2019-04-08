@@ -17,120 +17,131 @@
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label">餐厅名称</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-1">
                                 <input value="{{.storeInfo.StoreName}}" id="storeName" name="storeName" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
                             </div>
 
                             <label class="col-sm-1 control-label">餐厅编号</label>
-                            <div class="col-sm-3" style="text-align: left">
+                            <div class="col-sm-1" style="text-align: left">
                                 <input value="{{.storeInfo.Number}}" id="number"  name="number" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">餐厅品牌</label>
-                            <div class="col-sm-4">
-                                <label class="">
-                                    {{/*KFC 肯德基 PHDI 必胜客 LS 小肥羊   TB 塔可贝尔 CJ 咖啡*/}}
-                                    <input {{if eq 1 .storeInfo.Brand }} checked {{end}} type="radio" value="1"  name="brand">&nbsp;&nbsp;肯德基
-                                    <input {{if eq 2 .storeInfo.Brand }} checked {{end}} type="radio" value="2"  name="brand">&nbsp;&nbsp;必胜客
-                                    <input {{if eq 3 .storeInfo.Brand }} checked {{end}} type="radio" value="3"  name="brand">&nbsp;&nbsp;小肥羊
-                                    <input {{if eq 4 .storeInfo.Brand }} checked {{end}} type="radio" value="4"  name="brand">&nbsp;&nbsp;塔可贝尔
-                                    <input {{if eq 5 .storeInfo.Brand }} checked {{end}} type="radio" value="5"  name="brand">&nbsp;&nbsp;咖啡
-                                </label>
-                            </div>
-
-                            <label class="col-sm-1 control-label">运营状态</label>
-                            <div class="col-sm-3">
-                                <label class="">
-                                    {{/*新店 IE 关店 转加盟  完成 准备*/}}
-                                    <input {{if eq 1 .storeInfo.Status }} checked {{end}} type="radio" value="1"  name="status">&nbsp;&nbsp;新店
-                                    <input {{if eq 2 .storeInfo.Status }} checked {{end}} type="radio" value="2"  name="status">&nbsp;&nbsp;IE
-                                    <input {{if eq 3 .storeInfo.Status }} checked {{end}} type="radio" value="3"  name="status">&nbsp;&nbsp;关店
-                                    <input {{if eq 4 .storeInfo.Status }} checked {{end}} type="radio" value="4"  name="status">&nbsp;&nbsp;转加盟
-                                    <input {{if eq 5 .storeInfo.Status }} checked {{end}} type="radio" value="5"  name="status">&nbsp;&nbsp;完成
-                                    <input {{if eq 6 .storeInfo.Status }} checked {{end}} type="radio" value="6"  name="status">&nbsp;&nbsp;准备
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">餐厅经理</label>
-                            <div class="col-sm-4">
+                            <label class="col-sm-1 control-label">餐厅经理</label>
+                            <div class="col-sm-1">
                                 <input value="{{.storeInfo.Manager}}"  id="manager" name="manager" class="form-control" type="text">
                             </div>
 
                             <label class="col-sm-1 control-label">经理手机</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <input value="{{.storeInfo.ManagerPhone}}"  id="managerPhone" name="managerPhone" class="form-control" type="text">
                             </div>
                         </div>
 
-                        {{/*餐厅宽带\n1 联通\n2 电信\n3 移动\n4 小运营商\n*/}}
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">餐厅品牌</label>
+                            <div class="col-sm-1">
+                                <select class="form-control m-b" name="brand" id="brand">
+                                    <option value="0">请选择</option>
+                                    <option  {{if eq 1 .storeInfo.Brand }} selected {{end}} value="1">肯德基</option>
+                                    <option  {{if eq 2 .storeInfo.Brand }} selected {{end}} value="2">必胜客</option>
+                                    <option  {{if eq 3 .storeInfo.Brand }} selected {{end}} value="3">小肥羊</option>
+                                    <option  {{if eq 4 .storeInfo.Brand }} selected {{end}} value="4">塔可贝尔</option>
+                                    <option  {{if eq 5 .storeInfo.Brand }} selected {{end}} value="5">咖啡</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-1 control-label">运营状态</label>
+                            <div class="col-sm-1">
+                                <select class="form-control m-b" name="status" id="status">
+                                    <option value="0">请选择</option>
+                                    <option {{if eq 1 .storeInfo.Status }} selected {{end}}  value="1">新店</option>
+                                    <option {{if eq 2 .storeInfo.Status }} selected {{end}}  value="2">IE</option>
+                                    <option {{if eq 3 .storeInfo.Status }} selected {{end}}  value="3">关店</option>
+                                    <option {{if eq 4 .storeInfo.Status }} selected {{end}}  value="4">转加盟</option>
+                                    <option {{if eq 5 .storeInfo.Status }} selected {{end}}  value="5">完成</option>
+                                    <option {{if eq 6 .storeInfo.Status }} selected {{end}}  value="6">准备</option>
+                                </select>
+                            </div>
+
+                            <label class="col-sm-1 control-label">餐厅宽带</label>
+                            <div class="col-sm-1">
+                                <select class="form-control m-b" name="network" id="network">
+                                    <option  value="0">请选择</option>
+                                    <option {{if eq 1 .storeInfo.Network }} selected {{end}}  value="1">联通</option>
+                                    <option {{if eq 2 .storeInfo.Network }} selected {{end}}  value="2">电信</option>
+                                    <option {{if eq 3 .storeInfo.Network }} selected {{end}} value="3">移动</option>
+                                    <option {{if eq 4 .storeInfo.Network }} selected {{end}} value="4">小运营商</option>
+                                </select>
+                            </div>
+
+                            <label class="col-sm-1 control-label">IP</label>
+                            <div class="col-sm-2">
+                                <input id="ip" value="{{.storeInfo.Ip}}" name="ip" class="form-control" type="text">
+                            </div>
+                        </div>
+
+
                         <div class="form-group">
                             <label class="col-sm-2 control-label">区经理</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-1">
                                 <input value="{{.storeInfo.AreaManager}}" id="areaManager" name="areaManager" class="form-control" type="text">
                             </div>
                             <label class="col-sm-1 control-label">区域经理</label>
-                            <div class="col-sm-3">
-                                <input value="{{.storeInfo.RegionalManager}}"   id="regionalManager" name="regionalManager" class="form-control" type="text">
+                            <div class="col-sm-1">
+                                <input  value="{{.storeInfo.RegionalManager}}" id="regionalManager" name="regionalManager" class="form-control" type="text">
                             </div>
-
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">餐厅地址</label>
-                            <div class="col-sm-4">
-                                <input value="{{.storeInfo.Address}}"   id="address" name="address" class="form-control" type="text">
+                            <label class="col-sm-1 control-label">营建工程师</label>
+                            <div class="col-sm-1">
+                                <input value="{{.storeInfo.BuildName}}" id="buildName" name="buildName" class="form-control" type="text">
                             </div>
-                        </div>
-                        <div class="form-group">
-
-                            <label class="col-sm-2 control-label">IP</label>
-                            <div class="col-sm-3">
-                                <input value="{{.storeInfo.Ip}}" id="ip" name="ip" class="form-control" type="text">
-                            </div>
-                            <label class="col-sm-2 control-label">餐厅宽带</label>
-                            <div class="col-sm-4">
-                                <label class="">
-                                    <input {{if eq 1 .storeInfo.Network }} checked {{end}} type="radio" value="1"  name="network">&nbsp&nbsp联通&nbsp&nbsp
-                                    <input {{if eq 2 .storeInfo.Network }} checked {{end}} type="radio" value="2"  name="network">&nbsp&nbsp电信&nbsp&nbsp
-                                    <input {{if eq 3 .storeInfo.Network }} checked {{end}} type="radio" value="3"  name="network">&nbsp&nbsp移动&nbsp&nbsp
-                                    <input {{if eq 4 .storeInfo.Network }} checked {{end}} type="radio" value="4"  name="network">&nbsp&nbsp小运营商&nbsp&nbsp
-                                </label>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label">餐厅地址</label>
+                                <div class="col-sm-2">
+                                    <input value="{{.storeInfo.Address}}"  id="address" name="address" class="form-control" type="text">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">开业时间</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-2">
                                 <input value="{{.storeInfo.OpenTime}}" id="openTime" name="openTime" class="form-control" type="date">
                             </div>
                             <label class="col-sm-1 control-label">停业时间</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <input value="{{.storeInfo.CloseTime}}" id="closeTime" name="closeTime" class="form-control" type="date">
+                            </div>
+                            <label class="col-sm-1 control-label">餐厅待开业时间</label>
+                            <div class="col-sm-2">
+                                <input value="{{.storeInfo.WaitTime}}" id="waitTime" name="waitTime" class="form-control" type="date">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">餐厅待开业时间</label>
-                            <div class="col-sm-4">
-                                <input value="{{.storeInfo.WaitTime}}" id="waitTime" name="waitTime" class="form-control" type="date">
+                            <label class="col-sm-2 control-label">临时闭店时间</label>
+                            <div class="col-sm-2">
+                                <input value="{{.storeInfo.TempCloseTime}}" id="tempCloseTime" name="tempCloseTime" class="form-control" type="date">
                             </div>
                             <label class="col-sm-1 control-label">装修时间</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <input value="{{.storeInfo.DecorationTime}}"  id="decorationTime" name="decorationTime" class="form-control" type="date">
+                            </div>
+                            <label class="col-sm-1 control-label">设备进场时间</label>
+                            <div class="col-sm-2">
+                                <input value="{{.storeInfo.DeviceTime}}"  id="deviceTime" name="deviceTime" class="form-control" type="date">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">IMS</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-2">
                                 <input value="{{.storeInfo.BookStartTime}}"  id="bookStartTime" name="bookStartTime" class="form-control" type="date">
                             </div>
-
                             <label class="col-sm-1 control-label">CMS</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <input value="{{.storeInfo.EmployeeStartTime}}"   id="employeeStartTime" name="employeeStartTime" class="form-control" type="date">
                             </div>
+                            <label class="col-sm-1 control-label">备注</label>
+                            <div class="col-sm-2">
+                                <input value="{{.storeInfo.Remark}}" id="remark" name="remark" class="form-control" type="text">
+                            </div>
                         </div>
-
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-2">
                                 <button class="btn btn-primary" type="submit">提交</button>
@@ -175,14 +186,14 @@
                         storeId     : storeId,
                         storeName   : $('#storeName').val(),
                         number      : $('#number').val(),
-                        brand       : $("input[name='brand']:checked").val(),
-                        status      :$("input[name='status']:checked").val(),
+                        brand       : $("#brand").val(),
+                        status      :$("#status").val(),
                         manager      : $('#manager').val(),
                         managerPhone      : $('#managerPhone').val(),
                         areaManager      : $('#areaManager').val(),
                         regionalManager  : $('#regionalManager').val(),
                         address     : $('#address').val(),
-                        network     : $("input[name='network']:checked").val(),
+                        network     : $("#network").val(),
                         openTime     : $('#openTime').val(),
                         ip          : $('#ip').val(),
                         closeTime     : $('#closeTime').val(),
@@ -190,6 +201,9 @@
                         decorationTime   : $('#decorationTime').val(),
                         bookStartTime   : $('#bookStartTime').val(),
                         employeeStartTime   : $('#employeeStartTime').val(),
+                        remark  : $('#remark').val(),
+                        deviceTime  : $('#deviceTime').val(),
+                        tempCloseTime  : $('#tempCloseTime').val(),
                     },
                     success : function(data) {
                         console.log(data);
