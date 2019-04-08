@@ -1,8 +1,6 @@
 
 <div class="wrapper wrapper-content animated fadeInRight">
-
     <div class="row">
-
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -17,53 +15,69 @@
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label">餐厅名称</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-1">
                                 <input id="storeName" name="storeName" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
                             </div>
 
                             <label class="col-sm-1 control-label">餐厅编号</label>
-                            <div class="col-sm-3" style="text-align: left">
+                            <div class="col-sm-1" style="text-align: left">
                                 <input id="number"  name="number" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">餐厅品牌</label>
-                            <div class="col-sm-4">
-                                <label class="">
-                                    {{/*KFC 肯德基 PHDI 必胜客 LS 小肥羊   TB 塔可贝尔 CJ 咖啡*/}}
-                                    <input type="radio" value="1"  name="brand">&nbsp;&nbsp;肯德基
-                                    <input type="radio" value="2"  name="brand">&nbsp;&nbsp;必胜客
-                                    <input type="radio" value="3"  name="brand">&nbsp;&nbsp;小肥羊
-                                    <input type="radio" value="4"  name="brand">&nbsp;&nbsp;塔可贝尔
-                                    <input type="radio" value="5"  name="brand">&nbsp;&nbsp;咖啡
-                                </label>
-                            </div>
-
-                            <label class="col-sm-1 control-label">运营状态</label>
-                            <div class="col-sm-3">
-                                <label class="">
-                                    {{/*新店 IE 关店 转加盟  完成 准备*/}}
-                                    <input type="radio" value="1"  name="status">&nbsp;&nbsp;新店
-                                    <input  type="radio" value="2"  name="status">&nbsp;&nbsp;IE
-                                    <input  type="radio" value="3"  name="status">&nbsp;&nbsp;关店
-                                    <input  type="radio" value="4"  name="status">&nbsp;&nbsp;转加盟
-                                    <input  type="radio" value="5"  name="status">&nbsp;&nbsp;完成
-                                    <input  type="radio" value="6"  name="status">&nbsp;&nbsp;准备
-                                </label>
-                            </div>
-
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">餐厅经理</label>
-                            <div class="col-sm-4">
+                            <label class="col-sm-1 control-label">餐厅经理</label>
+                            <div class="col-sm-1">
                                 <input id="manager" name="manager" class="form-control" type="text">
                             </div>
 
                             <label class="col-sm-1 control-label">经理手机</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-1">
                                 <input id="managerPhone" name="managerPhone" class="form-control" type="text">
                             </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">餐厅品牌</label>
+                            <div class="col-sm-1">
+                                <select class="form-control m-b" name="brand">
+                                    <option value="1">肯德基</option>
+                                    <option value="2">必胜客</option>
+                                    <option value="3">小肥羊</option>
+                                    <option value="4">塔可贝尔</option>
+                                    <option value="5">咖啡</option>
+                                </select>
+                            </div>
+
+                            <label class="col-sm-1 control-label">运营状态</label>
+                            <div class="col-sm-1">
+                                <select class="form-control m-b" name="brand">
+                                    <option value="1">新店</option>
+                                    <option value="2">IE</option>
+                                    <option value="3">关店</option>
+                                    <option value="4">转加盟</option>
+                                    <option value="5">完成</option>
+                                    <option value="6">准备</option>
+                                </select>
+                            </div>
+
+                            <label class="col-sm-1 control-label">餐厅宽带</label>
+                            <div class="col-sm-1">
+                                <select class="form-control m-b" name="network">
+                                    <option value="0">请选择宽带</option>
+                                    <option value="1">联通</option>
+                                    <option value="2">电信</option>
+                                    <option value="3">移动</option>
+                                    <option value="4">小运营商</option>
+                                </select>
+                            </div>
+
+                            <label class="col-sm-1 control-label">IP</label>
+                            <div class="col-sm-1">
+                                <input id="ip" name="ip" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+
                         </div>
 
                         {{/*餐厅宽带\n1 联通\n2 电信\n3 移动\n4 小运营商\n*/}}
@@ -86,19 +100,7 @@
                         </div>
                         <div class="form-group">
 
-                            <label class="col-sm-2 control-label">IP</label>
-                            <div class="col-sm-3">
-                                <input id="ip" name="ip" class="form-control" type="text">
-                            </div>
-                            <label class="col-sm-2 control-label">餐厅宽带</label>
-                            <div class="col-sm-3">
-                                <label class="">
-                                    <input type="radio" value="1"  name="network">&nbsp&nbsp联通&nbsp&nbsp
-                                    <input type="radio" value="2"  name="network">&nbsp&nbsp电信&nbsp&nbsp
-                                    <input type="radio" value="3"  name="network">&nbsp&nbsp移动&nbsp&nbsp
-                                    <input type="radio" value="4"  name="network">&nbsp&nbsp小运营商&nbsp&nbsp
-                                </label>
-                            </div>
+
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">开业时间</label>
@@ -131,7 +133,35 @@
                                 <input id="employeeStartTime" name="employeeStartTime" class="form-control" type="date">
                             </div>
                         </div>
-
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Select1</label>
+                            <div class="col-sm-2">
+                                <select class="form-control m-b" name="account">
+                                    <option>选项 1</option>
+                                    <option>选项 2</option>
+                                    <option>选项 3</option>
+                                    <option>选项 4</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-1 control-label">Select2</label>
+                            <div class="col-sm-2">
+                                <select class="form-control m-b" name="account">
+                                    <option>选项 1</option>
+                                    <option>选项 2</option>
+                                    <option>选项 3</option>
+                                    <option>选项 4</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-1 control-label">Select2</label>
+                            <div class="col-sm-2">
+                                <select class="form-control m-b" name="account">
+                                    <option>选项 1</option>
+                                    <option>选项 2</option>
+                                    <option>选项 3</option>
+                                    <option>选项 4</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-2">
                                 <button class="btn btn-primary" type="submit">提交</button>
@@ -174,15 +204,15 @@
                     data : {
                         storeName   : $('#storeName').val(),
                         number      : $('#number').val(),
-                        brand       : $("input[name='brand']:checked").val(),
-                        status      : $("input[name='status']:checked").val(),
+                        brand       : $("#brand").val(),
+                        status      : $("#status").val(),
                         manager     : $('#manager').val(),
                         managerPhone : $('#managerPhone').val(),
                         areaManager : $('#areaManager').val(),
                         regionalManager  : $('#regionalManager').val(),
                         ip          : $('#ip').val(),
                         address     : $('#address').val(),
-                        network     :  $("input[name='network']:checked").val(),
+                        network     :  $("#network").val(),
                         openTime    : $('#openTime').val(),
                         closeTime   : $('#closeTime').val(),
                         waitTime    : $('#waitTime').val(),
