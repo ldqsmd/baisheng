@@ -1,0 +1,126 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="content">
+                    <form class="form-horizontal" id="signupForm" method="post" >
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">开业时间</label>
+                            <div class="col-sm-2">
+                                <input id="openTime" name="openTime" class="form-control" type="date">
+                            </div>
+                            <label class="col-sm-1 control-label">停业时间</label>
+                            <div class="col-sm-2">
+                                <input id="closeTime" name="closeTime" class="form-control" type="date">
+                            </div>
+                            <label class="col-sm-1 control-label">待开业时间</label>
+                            <div class="col-sm-2">
+                                <input id="waitTime" name="waitTime" class="form-control" type="date">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">临时闭店时间</label>
+                            <div class="col-sm-2">
+                                <input id="tempCloseTime" name="tempCloseTime" class="form-control" type="date">
+                            </div>
+                            <label class="col-sm-1 control-label">装修时间</label>
+                            <div class="col-sm-2">
+                                <input id="decorationTime" name="decorationTime" class="form-control" type="date">
+                            </div>
+                            <label class="col-sm-1 control-label">设备进场时间</label>
+                            <div class="col-sm-2">
+                                <input id="deviceTime" name="deviceTime" class="form-control" type="date">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">IMS</label>
+                            <div class="col-sm-2">
+                                <input id="bookStartTime" name="bookStartTime" class="form-control" type="date">
+                            </div>
+
+                            <label class="col-sm-1 control-label">CMS</label>
+                            <div class="col-sm-2">
+                                <input id="employeeStartTime" name="employeeStartTime" class="form-control" type="date">
+                            </div>
+                            <label class="col-sm-1 control-label">备注</label>
+                            <div class="col-sm-2">
+                                <input id="remark" name="remark" class="form-control" type="text">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/*<script src="/static/js/demo/form-validate-demo.js"></script>*/}}
+<script>
+    //以下为官方示例
+    $().ready(function () {
+        // validate the comment form when it is submitted
+        $("#commentForm").validate();
+
+        // validate signup form on keyup and submit
+        var icon = "<i class='fa fa-times-circle'></i> ";
+        $("#signupForm").validate({
+            rules: {
+                storeName: "required",
+                number: {
+                    required: true,
+                },
+            },
+            messages: {
+                storeName: icon + "请输入餐厅名称",
+                number: icon + "请输入餐厅编号",
+            },
+            submitHandler:function(form){
+
+                var url = '{{urlfor "StoreController.AddStore"}}';
+
+                $.ajax({
+                    url : url,
+                    type : 'POST',
+                    dataType : 'json',
+                    data : {
+                        storeName   : $('#storeName').val(),
+                        number      : $('#number').val(),
+                        brand       : $("#brand").val(),
+                        status      : $("#status").val(),
+                        manager     : $('#manager').val(),
+                        managerPhone : $('#managerPhone').val(),
+                        areaManager : $('#areaManager').val(),
+                        regionalManager  : $('#regionalManager').val(),
+                        ip          : $('#ip').val(),
+                        address     : $('#address').val(),
+                        network     :  $("#network").val(),
+                        openTime    : $('#openTime').val(),
+                        closeTime   : $('#closeTime').val(),
+                        waitTime    : $('#waitTime').val(),
+                        decorationTime  : $('#decorationTime').val(),
+                        bookStartTime   : $('#bookStartTime').val(),
+                        employeeStartTime  : $('#employeeStartTime').val(),
+                        remark  : $('#remark').val(),
+                        deviceTime  : $('#deviceTime').val(),
+                        tempCloseTime  : $('#tempCloseTime').val(),
+                    },
+                    success : function(data) {
+                        console.log(data);
+                        if(data.code == 0){
+                            layer.msg(data.message, {icon: 1,time:2000,offset: '400px'},function () {
+                                window.location.href='{{ urlfor "StoreController.StoreList"}}'
+                            });
+                        }else{
+                            layer.msg(data.message, {icon: 5,offset: '400px'});
+                        }
+                    }
+                });
+            }
+        });
+
+    });
+
+
+</script>
