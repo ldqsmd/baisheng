@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strconv"
 	"time"
 )
 
@@ -22,7 +23,7 @@ type Store struct {
 }
 
 
-func (this *Store)AddStore()(int64,error) {
+func (this *Store)AddStore()(error) {
 
 	var publicStore PublicStore
 
@@ -49,7 +50,26 @@ func (this *Store)AddStore()(int64,error) {
 	publicStore.ForbiddenStatus	= this.ForbiddenStatus
 	publicStore.Remark			= this.StoreRemark
 	publicStore.CreateTime = time.Now().Format("2006-01-02 15:04:05")
-	return publicStore.AddStore()
+	storeId,err := publicStore.AddStore()
+
+	if err != nil{
+		return err
+	}
+
+	//IE store
+	if  publicStore.Status  == 3 {
+		var ieStore IEStore
+
+		ieStore.StoreId 	= strconv.Itoa(int(storeId))
+		ieStore.SmallNoticeTime = this.IeStoreSmallNoticeTime
+		ieStore.SmallNoticeTime = this.IeStoreSmallNoticeTime
+
+			ieStore.AddIEStore()
+
+	}
+
+	return nil
+
 }
 
 
@@ -79,6 +99,7 @@ func (this *Store)UpdateStore()error  {
 	publicStore.BuildName	  	= this.BuildName
 	publicStore.TempCloseTime	= this.TempCloseTime
 	publicStore.ForbiddenStatus	= this.ForbiddenStatus
+
 
 	return publicStore.UpdateStore()
 }

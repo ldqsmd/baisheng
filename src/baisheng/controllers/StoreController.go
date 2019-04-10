@@ -113,8 +113,7 @@ func (this *StoreController)AddStore() {
 			}
 			//校验必填参数
 			this.filterParams(store)
-
-			_,err := store.AddStore()
+			err := store.AddStore()
 			if err != nil{
 				this.ReturnJson(-1,err.Error(),nil)
 			}

@@ -6,7 +6,7 @@ import (
 )
 
 type IEStore  struct {
-	Id          			int			`form:"id"`
+	Id          			int		`form:"id"`
 	StoreId		    		string		`form:"storeId"`
 	SmallNoticeTime		    string		`form:"smallNoticeTime"`
 	CreateTime				string	    `form:"createTime"`
@@ -42,7 +42,7 @@ func (this *IEStore) GetIeList()([]IEStore,error){
 	return ieStoreList, nil
 }
 
-func (this *IEStore)AddIeStore()(int64,error) {
+func (this *IEStore)AddIEStore()(int64,error) {
 	this.CreateTime = time.Now().Format("2006-01-02 15:04:05")
 	return orm.NewOrm().Insert(this)
 }
