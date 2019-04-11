@@ -6,7 +6,7 @@ import (
 
 type CloseStore struct {
 	Id          	int			`form:"id"`
-	StoreId		    string		`form:"storeId"`
+	StoreId		    int		`form:"storeId"`
 	CreateTime		string		`form:"createTime"`
 	Remark			string		`form:"closeStoreRemark"`
 	DmbDispatchTime	string		`form:"closeStoreDmbDispatchTime"`

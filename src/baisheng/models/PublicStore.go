@@ -9,6 +9,7 @@ type PublicStore struct {
 	Id          	int		`form:"storeId"`
 	CreateTime 		string  `form:"createTime"`
 	Remark			string	`form:"remark"`
+	UpdateTime		string  `form:"_"`
 	PublicStoreInfo
 }
 
@@ -36,7 +37,6 @@ type PublicStoreInfo struct {
 	TempCloseTime 	string	`form:"tempCloseTime"`
 	ForbiddenStatus int	`form:"forbiddenStatus"`
 }
-
 
 func (this *PublicStore) TableName() string {
 	return "store"
@@ -69,6 +69,7 @@ func (this *PublicStore)DeleteStore()error  {
 	_,err :=  orm.NewOrm().Update(this,"forbidden_status")
 	return err
 }
+
 
 
 

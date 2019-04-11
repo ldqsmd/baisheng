@@ -16,6 +16,11 @@
                     <form class="form-horizontal m-t" id="signupForm" method="post" >
 
                         <div class="form-group">
+                            <input value="{{.storeInfo.Id}}"       name="storeId"      type="hidden">
+                            <input value="{{.newStoreInfo.Id}}"    name="newStoreId"   type="hidden">
+                            <input value="{{.ieStoreInfo.Id}}"     name="ieStoreId"    type="hidden">
+                            <input value="{{.closeStoreInfo.Id}}"  name="closeStoreId" type="hidden">
+
                             <label class="col-sm-2 control-label">餐厅名称</label>
                             <div class="col-sm-1">
                                 <input value="{{.storeInfo.StoreName}}" id="storeName" name="storeName" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
@@ -156,17 +161,17 @@
                                         <div class="tab-content ">
                                             <div id="tab-8" class="tab-pane statusTab status1 ">
                                                 <div class="panel-body">
-                                                    {{template "store/editNewStore.html" .}}
+                                                    {{template "newStore/editNewStore.html" .}}
                                                 </div>
                                             </div>
                                             <div id="tab-9" class="tab-pane statusTab status2 ">
                                                 <div class="panel-body">
-                                                    {{template "store/editIeStore.html" .}}
+                                                    {{template "ieStore/editIeStore.html" .}}
                                                 </div>
                                             </div>
                                             <div id="tab-10" class="tab-pane statusTab status3 active">
                                                 <div class="panel-body">
-                                                    {{template "store/editCloseStore.html" .}}
+                                                    {{template "closeStore/editCloseStore.html" .}}
 
                                                 </div>
                                             </div>

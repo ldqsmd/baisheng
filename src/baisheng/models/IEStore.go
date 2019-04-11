@@ -7,7 +7,7 @@ import (
 
 type IEStore  struct {
 	Id          			int		`form:"id"`
-	StoreId		    		string		`form:"storeId"`
+	StoreId		    		int			`form:"storeId"`
 	SmallNoticeTime		    string		`form:"smallNoticeTime"`
 	CreateTime				string	    `form:"createTime"`
 	Remark					string	    `form:"remark"`
@@ -51,7 +51,7 @@ func (this *IEStore)AddIEStore()(int64,error) {
 	return orm.NewOrm().Insert(this)
 }
 
-func (this *IEStore)UpdateIeStore()error  {
+func (this *IEStore)UpdateIEStore()error  {
 	_,err :=  orm.NewOrm().Update(this)
 	return err
 }

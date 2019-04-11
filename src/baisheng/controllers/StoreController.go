@@ -15,77 +15,75 @@ type StoreController struct {
 func (this *StoreController)filterParams(store *models.Store) {
 	//表单验证
 	valid := validation.Validation{}
-	if this.actionName == "AddStore"{
 
-		valid.Required(store.StoreName, "餐厅名称").Message("不能为空")
-		valid.Required(store.Number, "餐厅编号").Message("不能为空")
-		valid.Required(store.Brand, "餐厅品牌").Message("不能为空")
-		valid.Required(store.Status, "餐厅状态").Message("不能为空")
-		//新店
-		if store.Status == 1 {
-			//新店：必选 邮箱申请、派单时间 （三星、LG 、HP）
-			//IE:必选报废评估、派单时间 （HP、三星、LG）
-			//关店：不用了
-			valid.Required(store.ApplyEmailTime, "申请邮箱时间").Message("不能为空")
-			valid.Required(store.DmbDispatchTime, "DMB派单时间").Message("不能为空")
-			valid.Required(store.CallNumTime, "叫号屏派单时间").Message("不能为空")
+	valid.Required(store.StoreName, "餐厅名称").Message("不能为空")
+	valid.Required(store.Number, "餐厅编号").Message("不能为空")
+	valid.Required(store.Brand, "餐厅品牌").Message("不能为空")
+	valid.Required(store.Status, "餐厅状态").Message("不能为空")
+	//新店
+	if store.Status == 1 {
+		if this.actionName == "EditStore" {
+			valid.Required(store.StoreId, "餐厅ID").Message("不能为空")
+			valid.Required(store.NewStoreId, "新店ID").Message("不能为空")
 		}
-		//IE
-		if store.Status == 2 {
-			//新店：必选 邮箱申请、派单时间 （三星、LG 、HP）
-			//IE:必选报废评估、派单时间 （HP、三星、LG）
-			//关店：不用了
-			valid.Required(store.OpenImacTime, "开店IMAC派单时间").Message("不能为空")
-			valid.Required(store.CloseImacTime, "关店IMAC派单时间").Message("不能为空")
-			valid.Required(store.DmbUninstallTime, "DMB拆除派单时间").Message("不能为空")
-			valid.Required(store.DmbInstallTime, "DMB安装派单时间").Message("不能为空")
-			valid.Required(store.SamsungIntallTime, "DMB三星安装派单时间").Message("不能为空")
-			valid.Required(store.SamsungUnintallTime, "DMB三星拆除派单时间").Message("不能为空")
+		//新店：必选 邮箱申请、派单时间 （三星、LG 、HP）
+		//IE:必选报废评估、派单时间 （HP、三星、LG）
+		//关店：不用了
+		valid.Required(store.ApplyEmailTime, "申请邮箱时间").Message("不能为空")
+		valid.Required(store.NewStoreDmbDispatchTime, "DMB派单时间").Message("不能为空")
+		valid.Required(store.CallNumTime, "叫号屏派单时间").Message("不能为空")
+	}
+	//IE
+	if store.Status == 2 {
+		//新店：必选 邮箱申请、派单时间 （三星、LG 、HP）
+		//IE:必选报废评估、派单时间 （HP、三星、LG）
+		//关店：不用了
+		if this.actionName == "EditStore" {
+			valid.Required(store.StoreId, "餐厅ID").Message("不能为空")
+			valid.Required(store.IeStoreId, "IEID").Message("不能为空")
 		}
+		valid.Required(store.OpenImacTime, "开店IMAC派单时间").Message("不能为空")
+		valid.Required(store.CloseImacTime, "关店IMAC派单时间").Message("不能为空")
+		valid.Required(store.DmbUninstallTime, "DMB拆除派单时间").Message("不能为空")
+		valid.Required(store.DmbInstallTime, "DMB安装派单时间").Message("不能为空")
+		valid.Required(store.SamsungIntallTime, "DMB三星安装派单时间").Message("不能为空")
+		valid.Required(store.SamsungUnintallTime, "DMB三星拆除派单时间").Message("不能为空")
+	}
 
-		if store.Status == 3 {
+	if store.Status == 3 {
+		if this.actionName == "EditStore" {
+			valid.Required(store.StoreId, "餐厅ID").Message("不能为空")
+			valid.Required(store.IeStoreId, "IEID").Message("不能为空")
+		}
+		var closeStoreInfo models.CloseStoreInfo
+		//判断是否有文件上传
+		uploadStr := this.GetString("uploadList")
+		if  uploadStr != ""{
+			uploadList := FilterStrSlice(strings.Split(uploadStr,","))
+			//遍历结构体赋值
+			storeType  		:= reflect.TypeOf(closeStoreInfo)
+			storeTypeVal  	:= reflect.New(storeType)
+			//遍历上传文件
+			for _,formFile  := range uploadList{
 
-			var closeStoreInfo models.CloseStoreInfo
-			//判断是否有文件上传
-			uploadStr := this.GetString("uploadList")
-			if  uploadStr != ""{
-				uploadList := FilterStrSlice(strings.Split(uploadStr,","))
-				//遍历结构体赋值
-				storeType  		:= reflect.TypeOf(closeStoreInfo)
-				storeTypeVal  	:= reflect.New(storeType)
-				//遍历上传文件
-				for _,formFile  := range uploadList{
-
-					if filePath,err := this.UpFileTable(formFile); err != nil {
-						this.ReturnJson(-1,formFile+":"+err.Error(),nil)
-					}else{
-						for k := 0; k < storeType.NumField(); k++ {
-							if   strings.ToLower(storeType.Field(k).Name) == strings.ToLower(formFile){
-								storeTypeVal.Elem().Field(k).SetString(filePath)
-							}
+				if filePath,err := this.UpFileTable(formFile); err != nil {
+					this.ReturnJson(-1,formFile+":"+err.Error(),nil)
+				}else{
+					for k := 0; k < storeType.NumField(); k++ {
+						if   strings.ToLower(storeType.Field(k).Name) == strings.ToLower(formFile){
+							storeTypeVal.Elem().Field(k).SetString(filePath)
 						}
 					}
 				}
-				closeStoreInfo = storeTypeVal.Elem().Interface().(models.CloseStoreInfo)
-				store.DeviceLcTogoTable = closeStoreInfo.DeviceLcTogoTable
-				store.DeviceHpTogoTable = closeStoreInfo.DeviceHpTogoTable
-				store.ToLcPropertyTable = closeStoreInfo.ToLcPropertyTable
-				store.PropertyDestroyTable = closeStoreInfo.PropertyDestroyTable
-				store.DeviceReturnLcApply = closeStoreInfo.DeviceReturnLcApply
 			}
-
+			closeStoreInfo = storeTypeVal.Elem().Interface().(models.CloseStoreInfo)
+			store.DeviceLcTogoTable = closeStoreInfo.DeviceLcTogoTable
+			store.DeviceHpTogoTable = closeStoreInfo.DeviceHpTogoTable
+			store.ToLcPropertyTable = closeStoreInfo.ToLcPropertyTable
+			store.PropertyDestroyTable = closeStoreInfo.PropertyDestroyTable
+			store.DeviceReturnLcApply = closeStoreInfo.DeviceReturnLcApply
 		}
-	}
 
-	if this.actionName == "EditStore"{
-		//编辑的时候 必填 adminId
-		valid.Required(store.StoreId, "餐厅ID").Message("不能为空")
-
-		if this.requestMethod == "POST"{
-			valid.Required(store.StoreName, "餐厅名称").Message("不能为空")
-			valid.Required(store.Number, "餐厅编号").Message("不能为空")
-			valid.Required(store.Brand, "餐厅品牌").Message("不能为空")
-		}
 	}
 
 	if valid.HasErrors() {
@@ -125,7 +123,6 @@ func (this *StoreController)AddStore() {
 
 	switch this.requestMethod {
 		case "GET":
-
 			this.Data["titleName"]  = "添加餐厅信息"
 			this.Data["statusList"] = GetStatusList()
 			this.SetTpl("base/layout_page.html","store/add.html")
@@ -140,7 +137,7 @@ func (this *StoreController)AddStore() {
 			this.filterParams(&store)
 
 			if err := store.AddStore();err != nil{
-				this.ReturnJson(-1,err.Error(),nil)
+				this.ReturnJson(-2,err.Error(),nil)
 			}
 			this.ReturnJson(0,"添加成功",nil)
 	}
@@ -161,9 +158,9 @@ func (this *StoreController)EditStore() {
 				this.Abort("404")
 			}
 
-			this.Data["statusList"] =  GetStatusList()
-			this.Data["titleName"] 	= "编辑餐厅信息"
-			this.Data["storeInfo"] 	= pubStore.GetStoreInfo(storeId)
+			this.Data["statusList"] 	=  GetStatusList()
+			this.Data["titleName"] 		= "编辑餐厅信息"
+			this.Data["storeInfo"] 		= pubStore.GetStoreInfo(storeId)
 			this.Data["newStoreInfo"] 	= newStore.GetNewStoreInfo(storeId)
 			this.Data["ieStoreInfo"] 	= ieStore.GetIeStoreInfo(storeId)
 			this.Data["closeStoreInfo"] = closeStore.GetCloseStoreInfo(storeId)

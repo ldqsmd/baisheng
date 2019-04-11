@@ -7,7 +7,7 @@ import (
 
 type NewStore struct {
 	Id          	int			`form:"id"`
-	StoreId		    string		`form:"storeId"`
+	StoreId		    int		`form:"storeId"`
 	SmallNoticeTime	string		`form:"smallNoticeTime"`
 	CreateTime		string		`form:"createTime"`
 	Remark				string 	`form:"remark"`
@@ -47,7 +47,22 @@ func (this *NewStore)AddNewStore()(int64,error) {
 }
 
 func (this *NewStore)UpdateStore()error  {
-	_,err :=  orm.NewOrm().Update(this)
+	_,err :=  orm.NewOrm().Update(this,
+		"ApplyEmailTime",
+		"BookDeviceTime",
+		"Notice2gTime",
+		"Open2gImsTime",
+		"Open2gCmsTime",
+		"ItsmRelationTime",
+		"ItspTime",
+		"DmbDispatchTime",
+		"CallNumTime",
+		"DeviceDebug",
+		"SmallNoticeTime",
+		"Remark",
+		"ItDebugTime",
+		"ImacDispatchTime",
+		)
 	return err
 }
 
