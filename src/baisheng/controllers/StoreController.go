@@ -9,14 +9,11 @@ type StoreController struct {
 	BaseController
 }
 
-
-
 //参数过滤
 func (this *StoreController)filterParams(store models.Store) error {
 	//表单验证
 	valid := validation.Validation{}
-
-	if this.requestMethod == "AddStore"{
+	if this.actionName == "AddStore"{
 
 		valid.Required(store.StoreName, "餐厅名称").Message("不能为空")
 		valid.Required(store.Number, "餐厅编号").Message("不能为空")
@@ -30,7 +27,6 @@ func (this *StoreController)filterParams(store models.Store) error {
 			valid.Required(store.DmbDispatchTime, "DMB派单时间").Message("不能为空")
 			valid.Required(store.CallNumTime, "叫号屏派单时间").Message("不能为空")
 		}
-
 		//IE
 		if store.Status == 2 {
 			//新店：必选 邮箱申请、派单时间 （三星、LG 、HP）
@@ -40,8 +36,8 @@ func (this *StoreController)filterParams(store models.Store) error {
 			valid.Required(store.CloseImacTime, "关店IMAC派单时间").Message("不能为空")
 			valid.Required(store.DmbUninstallTime, "DMB拆除派单时间").Message("不能为空")
 			valid.Required(store.DmbInstallTime, "DMB安装派单时间").Message("不能为空")
-			valid.Required(store.SamsungIntallTime, "三星安装派单时间").Message("不能为空")
-			valid.Required(store.SamsungUnintallTime, "三星拆除派单时间").Message("不能为空")
+			valid.Required(store.SamsungIntallTime, "DMB三星安装派单时间").Message("不能为空")
+			valid.Required(store.SamsungUnintallTime, "DMB三星拆除派单时间").Message("不能为空")
 		}
 	}
 
@@ -55,8 +51,6 @@ func (this *StoreController)filterParams(store models.Store) error {
 			valid.Required(store.Brand, "餐厅品牌").Message("不能为空")
 		}
 	}
-
-
 
 	if valid.HasErrors() {
 		for _, err := range valid.Errors {
@@ -117,7 +111,7 @@ func (this *StoreController)AddStore() {
 			if err != nil{
 				this.ReturnJson(-1,err.Error(),nil)
 			}
-			this.ReturnJson(0,"添加成功",nil)
+			//this.ReturnJson(0,"添加成功",nil)
 	}
 }
 

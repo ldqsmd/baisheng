@@ -149,26 +149,25 @@
                                 <div class="tabs-container">
                                     <div class="tabs-up">
                                         <ul class="nav nav-tabs">
-                                            <li class="statusTab status1"><a data-toggle="tab" href="#tab-8">新店</a></li>
-                                            <li class="statusTab status2 active"><a data-toggle="tab" href="#tab-9">IE</a></li>
-                                            <li class="statusTab status3"><a data-toggle="tab" href="#tab-10">关店</a></li>
+                                            <li class="statusTab status1 "><a data-toggle="tab" href="#tab-8">新店</a></li>
+                                            <li class="statusTab status2 "><a data-toggle="tab" href="#tab-9">IE</a></li>
+                                            <li class="statusTab status3 active"><a data-toggle="tab" href="#tab-10">关店</a></li>
                                         </ul>
                                         <div class="tab-content ">
-                                            <div id="tab-8" class="tab-pane statusTab status1">
+                                            <div id="tab-8" class="tab-pane statusTab status1 ">
                                                 <div class="panel-body">
-                                                    {{/*{{template "store/newStore.html"}}*/}}
+                                                    {{template "store/newStore.html"}}
                                                 </div>
                                             </div>
-                                            <div id="tab-9" class="tab-pane statusTab status2 active">
+                                            <div id="tab-9" class="tab-pane statusTab status2 ">
                                                 <div class="panel-body">
                                                     {{template "store/ieStore.html"}}
                                                 </div>
                                             </div>
-                                            <div id="tab-10" class="tab-pane statusTab status3">
+                                            <div id="tab-10" class="tab-pane statusTab status3 active">
                                                 <div class="panel-body">
-                                                    <strong>栅格系统</strong>
+                                                    {{template "store/closeStore.html"}}
 
-                                                    <p>Bootstrap 提供了一套响应式、移动设备优先的流式栅格系统，随着屏幕或视口（viewport）尺寸的增加，系统会自动分为最多12列。它包含了易于使用的预定义类，还有强大的mixin 用于生成更具语义的布局。</p>
                                                 </div>
                                             </div>
                                         </div>

@@ -32,6 +32,10 @@ type IEStoreInfo struct {
 
 }
 
+func (this *IEStore) TableName() string {
+	return "ie_store"
+}
+
 func (this *IEStore) GetIeList()([]IEStore,error){
 
 	var ieStoreList []IEStore

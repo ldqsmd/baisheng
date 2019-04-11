@@ -10,8 +10,9 @@ type NewStore struct {
 	StoreId		    string		`form:"storeId"`
 	SmallNoticeTime	string		`form:"smallNoticeTime"`
 	CreateTime		string		`form:"createTime"`
-	Remark				string		`form:"remark"`
-	ItDebugTime			string		`form:"itDebugTime"`
+	Remark				string 	`form:"remark"`
+	ItDebugTime			string  `form:"newStoreItDebugTime"`
+	ImacDispatchTime	string	`form:"newStoreImacDispatchTime"`
 	NewStoreInfo
 }
 
@@ -20,14 +21,13 @@ type NewStoreInfo struct {
 	ApplyEmailTime	string		`form:"applyEmailTime"`
 	BookDeviceTime	string		`form:"bookDeviceTime"`
 	Notice2gTime	string		`form:"notice2gTime"`
-	Open2gimsTime	string		`form:"open2gimsTime"`
-	Open2gcmsTime	string		`form:"open2gcmsTime"`
+	Open2gImsTime	string		`form:"open2gimsTime"`
+	Open2gCmsTime	string		`form:"open2gcmsTime"`
 	ItsmRelationTime	string		`form:"itsmRelationTime"`
-	ItspTime			string		`form:"itspTime"`
-	ImacDispatchTime	string		`form:"imacDispatchTime"`
-	DmbDispatchTime		string		`form:"DmbDispatchTime"`
-	CallNumTime			string		`form:"callNumTime"`
-	DeviceDebug			string		`form:"deviceDebug"`
+	ItspTime		string		`form:"itspTime"`
+	DmbDispatchTime	string		`form:"dmbDispatchTime"`
+	CallNumTime		string		`form:"callNumTime"`
+	DeviceDebug		string		`form:"deviceDebug"`
 
 }
 
