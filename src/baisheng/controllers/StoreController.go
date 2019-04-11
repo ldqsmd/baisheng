@@ -3,6 +3,8 @@ package controllers
 import (
 	"baisheng/models"
 	"github.com/astaxie/beego/validation"
+	"reflect"
+	"strings"
 )
 
 type StoreController struct {
@@ -10,7 +12,7 @@ type StoreController struct {
 }
 
 //参数过滤
-func (this *StoreController)filterParams(store models.Store) error {
+func (this *StoreController)filterParams(store *models.Store) {
 	//表单验证
 	valid := validation.Validation{}
 	if this.actionName == "AddStore"{
@@ -18,6 +20,7 @@ func (this *StoreController)filterParams(store models.Store) error {
 		valid.Required(store.StoreName, "餐厅名称").Message("不能为空")
 		valid.Required(store.Number, "餐厅编号").Message("不能为空")
 		valid.Required(store.Brand, "餐厅品牌").Message("不能为空")
+		valid.Required(store.Status, "餐厅状态").Message("不能为空")
 		//新店
 		if store.Status == 1 {
 			//新店：必选 邮箱申请、派单时间 （三星、LG 、HP）
@@ -39,6 +42,39 @@ func (this *StoreController)filterParams(store models.Store) error {
 			valid.Required(store.SamsungIntallTime, "DMB三星安装派单时间").Message("不能为空")
 			valid.Required(store.SamsungUnintallTime, "DMB三星拆除派单时间").Message("不能为空")
 		}
+
+		if store.Status == 3 {
+
+			var closeStoreInfo models.CloseStoreInfo
+			//判断是否有文件上传
+			uploadStr := this.GetString("uploadList")
+			if  uploadStr != ""{
+				uploadList := FilterStrSlice(strings.Split(uploadStr,","))
+				//遍历结构体赋值
+				storeType  		:= reflect.TypeOf(closeStoreInfo)
+				storeTypeVal  	:= reflect.New(storeType)
+				//遍历上传文件
+				for _,formFile  := range uploadList{
+
+					if filePath,err := this.UpFileTable(formFile); err != nil {
+						this.ReturnJson(-1,formFile+":"+err.Error(),nil)
+					}else{
+						for k := 0; k < storeType.NumField(); k++ {
+							if   strings.ToLower(storeType.Field(k).Name) == strings.ToLower(formFile){
+								storeTypeVal.Elem().Field(k).SetString(filePath)
+							}
+						}
+					}
+				}
+				closeStoreInfo = storeTypeVal.Elem().Interface().(models.CloseStoreInfo)
+				store.DeviceLcTogoTable = closeStoreInfo.DeviceLcTogoTable
+				store.DeviceHpTogoTable = closeStoreInfo.DeviceHpTogoTable
+				store.ToLcPropertyTable = closeStoreInfo.ToLcPropertyTable
+				store.PropertyDestroyTable = closeStoreInfo.PropertyDestroyTable
+				store.DeviceReturnLcApply = closeStoreInfo.DeviceReturnLcApply
+			}
+
+		}
 	}
 
 	if this.actionName == "EditStore"{
@@ -59,20 +95,16 @@ func (this *StoreController)filterParams(store models.Store) error {
 				this.ReturnJson(-1,err.Key+err.Message,nil)
 			}else{
 				this.Data["error"] = err.Key+err.Message
-				this.Error404()
-				return  err
+				this.Abort("404")
 			}
 		}
 	}
-	return nil
 }
 
 
 func (this *StoreController)StoreList() {
 
 	var store	models.PublicStore
-	var status	models.StoreStatus
-	statusList,_ := status.GetStatusList()
 	var network 	= map[int]string{1:"餐厅宽带",2:"联通",3:"电信",4:"移动",5:"小运营商"}
 	var storeStatus = []string{1:"新店",2:"IE",3:"关店",4:"转加盟",5:"完成",6:"准备"}
 	var brandList 	= []string{1:"肯德基",2:"必胜客",3:"小肥羊",4:"塔可贝尔",5:"咖啡"}
@@ -80,7 +112,7 @@ func (this *StoreController)StoreList() {
 	list,total := store.GetStoreList()
 	//{{/*新店 IE 关店 转加盟  完成 准备*/}}
 	this.Data["storeStatus"]=  storeStatus
-	this.Data["statusList"]=  statusList
+	this.Data["statusList"] =  GetStatusList()
 	this.Data["network"]  	=  network
 	this.Data["brandList"]	=  brandList
 	this.Data["list"]  		= list
@@ -93,10 +125,9 @@ func (this *StoreController)AddStore() {
 
 	switch this.requestMethod {
 		case "GET":
-			var storeStatus models.StoreStatus
-			statusList,_ := storeStatus.GetStatusList()
+
 			this.Data["titleName"]  = "添加餐厅信息"
-			this.Data["statusList"] = statusList
+			this.Data["statusList"] = GetStatusList()
 			this.SetTpl("base/layout_page.html","store/add.html")
 
 		case "POST":
@@ -106,45 +137,52 @@ func (this *StoreController)AddStore() {
 				this.ReturnJson(-1,err.Error(),nil)
 			}
 			//校验必填参数
-			this.filterParams(store)
-			err := store.AddStore()
-			if err != nil{
+			this.filterParams(&store)
+
+			if err := store.AddStore();err != nil{
 				this.ReturnJson(-1,err.Error(),nil)
 			}
-			//this.ReturnJson(0,"添加成功",nil)
+			this.ReturnJson(0,"添加成功",nil)
 	}
 }
 
 //编辑餐厅信息
 func (this *StoreController)EditStore() {
 
-	//switch this.requestMethod {
-	//	case "GET":
-	//		var  store models.Store
-	//		store.Id,_ = strconv.Atoi(this.GetString("storeId"))
-	//		err :=  this.filterParams(store)
-	//		if err != nil{
-	//			this.StopRun()
-	//		}
-	//		store.GetStoreInfo()
-	//
-	//		this.Data["titleName"] = "编辑餐厅信息"
-	//		this.Data["storeInfo"] = store
-	//		this.SetTpl("base/layout_page.html","store/edit.html")
-	//
-	//	case "POST":
-	//		var store 	 models.Store
-	//		if err := this.ParseForm(&store); err != nil {
-	//			this.ReturnJson(-1,err.Error(),nil)
-	//		}
-	//		//校验必填参数
-	//		this.filterParams(store)
-	//		err := store.UpdateStore()
-	//		if err != nil{
-	//			this.ReturnJson(-1,err.Error(),nil)
-	//		}
-	//		this.ReturnJson(0,"修改成功",nil)
-	//}
+	switch this.requestMethod {
+		case "GET":
+			var  pubStore 	models.PublicStore
+			var  newStore 	models.NewStore
+			var  ieStore 	models.IEStore
+			var  closeStore models.CloseStore
+
+			storeId := this.GetString("storeId")
+			if storeId == ""{
+				this.Abort("404")
+			}
+
+			this.Data["statusList"] =  GetStatusList()
+			this.Data["titleName"] 	= "编辑餐厅信息"
+			this.Data["storeInfo"] 	= pubStore.GetStoreInfo(storeId)
+			this.Data["newStoreInfo"] 	= newStore.GetNewStoreInfo(storeId)
+			this.Data["ieStoreInfo"] 	= ieStore.GetIeStoreInfo(storeId)
+			this.Data["closeStoreInfo"] = closeStore.GetCloseStoreInfo(storeId)
+
+			this.SetTpl("base/layout_page.html","store/edit.html")
+
+		case "POST":
+			var store 	 models.Store
+			if err := this.ParseForm(&store); err != nil {
+				this.ReturnJson(-1,err.Error(),nil)
+			}
+			//校验必填参数
+			this.filterParams(&store)
+			err := store.UpdateStore()
+			if err != nil{
+				this.ReturnJson(-1,err.Error(),nil)
+			}
+			this.ReturnJson(0,"修改成功",nil)
+	}
 }
 
 

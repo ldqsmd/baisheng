@@ -142,6 +142,43 @@
                                 <input value="{{.storeInfo.Remark}}" id="remark" name="remark" class="form-control" type="text">
                             </div>
                         </div>
+
+                        <div class="form-group  " id="status-detail">
+                            <label class="col-sm-1 control-label"></label>
+                            <div class="col-sm-9">
+                                <div class="tabs-container">
+                                    <div class="tabs-up">
+                                        <ul class="nav nav-tabs">
+                                            <li class="statusTab status1 "><a data-toggle="tab" href="#tab-8">新店</a></li>
+                                            <li class="statusTab status2 "><a data-toggle="tab" href="#tab-9">IE</a></li>
+                                            <li class="statusTab status3 active"><a data-toggle="tab" href="#tab-10">关店</a></li>
+                                        </ul>
+                                        <div class="tab-content ">
+                                            <div id="tab-8" class="tab-pane statusTab status1 ">
+                                                <div class="panel-body">
+                                                    {{template "store/editNewStore.html" .}}
+                                                </div>
+                                            </div>
+                                            <div id="tab-9" class="tab-pane statusTab status2 ">
+                                                <div class="panel-body">
+                                                    {{template "store/editIeStore.html" .}}
+                                                </div>
+                                            </div>
+                                            <div id="tab-10" class="tab-pane statusTab status3 active">
+                                                <div class="panel-body">
+                                                    {{template "store/editCloseStore.html" .}}
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-2">
                                 <button class="btn btn-primary" type="submit">提交</button>
@@ -155,10 +192,50 @@
 </div>
 {{/*<script src="/static/js/demo/form-validate-demo.js"></script>*/}}
 <script>
+
     //以下为官方示例
     $().ready(function () {
-        // validate the comment form when it is submitted
-        $("#commentForm").validate();
+
+        var uploadList = []
+        //判断是否有文件上传
+        $(".fileTable").change(function(){
+            var fileName =  $(this).attr("name")
+            uploadList.push(fileName)
+        });
+
+        //编辑页面根据 store status默认显示 tab
+        var editStatus = {{.storeInfo.Status}}
+        if (editStatus>= 1 && editStatus<= 3){
+
+            $("#status-detail").removeClass("hidden")
+            // $("#status-detail").show()
+
+            $(".statusTab").removeClass("active")
+            $(".status"+editStatus).addClass("active")
+        }else{
+            $("#status-detail").addClass("hidden")
+        }
+
+
+        $("#status").change(function(){
+
+        });
+
+
+        //随状态切换tab
+        $("#status").change(function(){
+            var status =  $(this).val()
+            if (status>= 1 && status<= 3){
+
+                $("#status-detail").removeClass("hidden")
+                // $("#status-detail").show()
+
+                $(".statusTab").removeClass("active")
+                $(".status"+status).addClass("active")
+            }else{
+                $("#status-detail").addClass("hidden")
+            }
+        });
 
         // validate signup form on keyup and submit
         var icon = "<i class='fa fa-times-circle'></i> ";
@@ -174,39 +251,19 @@
                 number: icon + "请输入餐厅编号",
             },
             submitHandler:function(form){
+                var form = new FormData(document.getElementById("signupForm"));
 
+                form.append("uploadList",uploadList)
                 var url = '{{urlfor "StoreController.EditStore"}}';
-                var  storeId  = '{{.storeInfo.Id}}'
 
                 $.ajax({
-                    url : url,
-                    type : 'POST',
-                    dataType : 'json',
-                    data : {
-                        storeId     : storeId,
-                        storeName   : $('#storeName').val(),
-                        number      : $('#number').val(),
-                        brand       : $("#brand").val(),
-                        status      :$("#status").val(),
-                        manager      : $('#manager').val(),
-                        managerPhone      : $('#managerPhone').val(),
-                        areaManager      : $('#areaManager').val(),
-                        regionalManager  : $('#regionalManager').val(),
-                        address     : $('#address').val(),
-                        network     : $("#network").val(),
-                        openTime     : $('#openTime').val(),
-                        ip          : $('#ip').val(),
-                        closeTime     : $('#closeTime').val(),
-                        waitTime     : $('#waitTime').val(),
-                        decorationTime   : $('#decorationTime').val(),
-                        bookStartTime   : $('#bookStartTime').val(),
-                        employeeStartTime   : $('#employeeStartTime').val(),
-                        remark  : $('#remark').val(),
-                        deviceTime  : $('#deviceTime').val(),
-                        tempCloseTime  : $('#tempCloseTime').val(),
-                    },
-                    success : function(data) {
-                        console.log(data);
+                    url:url,
+                    type:"post",
+                    data:form,
+                    processData:false,
+                    contentType:false,
+                    success:function(data){
+
                         if(data.code == 0){
                             layer.msg(data.message, {icon: 1,time:2000,offset: '400px'},function () {
                                 window.location.href='{{ urlfor "StoreController.StoreList"}}'
@@ -220,6 +277,4 @@
         });
 
     });
-
-
 </script>

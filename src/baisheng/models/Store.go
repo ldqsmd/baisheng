@@ -7,6 +7,7 @@ import (
 )
 
 type Store struct {
+
 	StoreId          		int		`form:"storeId"`
 	NewStoreId        		int		`form:"newStoreId"`
 	IeStoreId        		int		`form:"ieStoreId"`
@@ -20,8 +21,8 @@ type Store struct {
 	NewStoreItDebugTime 	string  `form:"newStoreItDebugTime"`
 	NewStoreImacDispatchTime 	string  `form:"newStoreImacDispatchTime"`
 	NewStoreDmbDispatchTime 	string  `form:"newStoreDmbDispatchTime"`
-	CloseStoreDmbDispatchTime 	string  `form:"closeDmbDispatchTime"`
-	CloseStoreImacDispatchTime 	string  `form:"closeImacDispatchTime"`
+	CloseStoreDmbDispatchTime 	string  `form:"closeStoreDmbDispatchTime"`
+	CloseStoreImacDispatchTime 	string  `form:"closeStoreImacDispatchTime"`
 
 
 	PublicStoreInfo
@@ -29,6 +30,7 @@ type Store struct {
 	IEStoreInfo
 	CloseStoreInfo
 }
+
 
 
 func (this *Store)AddStore()(error) {
@@ -173,7 +175,6 @@ func (this *Store)UpdateStore()error  {
 	publicStore.BuildName	  	= this.BuildName
 	publicStore.TempCloseTime	= this.TempCloseTime
 	publicStore.ForbiddenStatus	= this.ForbiddenStatus
-
 
 	return publicStore.UpdateStore()
 }

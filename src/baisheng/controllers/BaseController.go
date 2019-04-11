@@ -2,9 +2,14 @@ package controllers
 
 import (
 	"baisheng/models"
+	"errors"
 	"fmt"
 	"github.com/astaxie/beego"
+	"math/rand"
+	"os"
+	"path"
 	"strings"
+	"time"
 )
 
 type BaseController struct {
@@ -59,7 +64,6 @@ func (this *BaseController) checkLogin() {
 
 }
 
-
 // 设置模板
 // 第一个参数模板，第二个参数为layout
 func (this *BaseController) SetTpl(template ...string) {
@@ -95,11 +99,48 @@ func (this *BaseController) ReturnJson(code int,message string,data interface{})
 	this.StopRun()
 }
 
+//上传excel
+func (this *BaseController) UpFileTable(formFile string)(string,error){
+
+	var  filePath string
+ 	f, h,err := this.GetFile(formFile)//获取上传的文件
+	if err != nil {
+		return filePath,err
+	}
+	ext := path.Ext(h.Filename)
+	//验证后缀名是否符合要求
+	var AllowExtMap map[string]bool = map[string]bool{
+		".xls":true,
+		".csv":true,
+		".xlsx":true,
+	}
+	if _,ok:=AllowExtMap[ext];!ok{
+		return filePath,errors.New("文件格式不正确,允许文件格式(.xls/.csv/.xlsx)")
+	}
+	//创建目录
+	uploadDir := "static/upload/"+formFile+"/"
+	err = os.MkdirAll( uploadDir , 777)
+	if err != nil {
+		return filePath,err
+	}
+	//构造文件名称
+	fileName := time.Now().Format("20060102150405_") + fmt.Sprintf("%d", rand.Intn(9999)+1000 ) + ext
+	defer f.Close()//关闭上传的文件，不然的话会出现临时文件不能清除的情况
+
+	err = this.SaveToFile(formFile, uploadDir + fileName)
+	if err != nil {
+		return filePath,err
+	}
+	filePath = uploadDir + fileName
+	return filePath,nil
+}
+
 //
 func (this *BaseController) Error404() {
 	//this.Data["content"] = "page not found"
 	this.TplName = "error/404.html"
 }
+
 
 func (c *BaseController) Error501() {
 	c.Data["content"] = "server error"

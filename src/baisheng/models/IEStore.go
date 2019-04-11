@@ -58,10 +58,11 @@ func (this *IEStore)UpdateIeStore()error  {
 
 
 //获取新店ID
-func (this *NewStore)GetIeStoreInfo(){
+func (this *IEStore)GetIeStoreInfo(storeId string)IEStore{
 	//获取
-	orm.NewOrm().Raw("SELECT * FROM ie_store WHERE store_id=?", this.StoreId).QueryRow(&this)
+	orm.NewOrm().Raw("SELECT * FROM ie_store WHERE store_id=?", storeId).QueryRow(&this)
 
+	return *this
 }
 
 

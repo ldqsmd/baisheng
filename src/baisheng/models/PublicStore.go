@@ -73,10 +73,11 @@ func (this *PublicStore)DeleteStore()error  {
 
 
 //获取管理员信息
-func (this *PublicStore)GetStoreInfo(){
+func (this *PublicStore)GetStoreInfo(storeId string)PublicStore{
 	//获取
-	orm.NewOrm().Raw("SELECT * FROM store WHERE id=?", this.Id).QueryRow(&this)
+	orm.NewOrm().Raw("SELECT * FROM store WHERE id=?",storeId).QueryRow(&this)
 
+	return *this
 }
 
 

@@ -53,9 +53,11 @@ func (this *NewStore)UpdateStore()error  {
 
 
 //获取新店ID
-func (this *NewStore)GetStoreInfo(){
+func (this *NewStore)GetNewStoreInfo(storeId string)NewStore{
 	//获取
-	orm.NewOrm().Raw("SELECT * FROM new_store WHERE store_id=?", this.StoreId).QueryRow(&this)
+	orm.NewOrm().Raw("SELECT * FROM new_store WHERE store_id=?", storeId).QueryRow(&this)
+
+	return *this
 
 }
 

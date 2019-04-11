@@ -50,12 +50,11 @@ func (this *CloseStore)UpdateCloseStore()error  {
 	return err
 }
 
-
 //获取新店ID
-func (this *CloseStore)GetCloseStoreInfo(){
+func (this *CloseStore)GetCloseStoreInfo(storeId string)CloseStore{
 	//获取
-	orm.NewOrm().Raw("SELECT * FROM close_store WHERE store_id=?", this.StoreId).QueryRow(&this)
-
+	orm.NewOrm().Raw("SELECT * FROM close_store WHERE store_id=?", storeId).QueryRow(&this)
+	return *this
 }
 
 
