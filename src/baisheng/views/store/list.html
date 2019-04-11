@@ -12,21 +12,12 @@
                         <tr>
                             <th>编号</th>
                             <th>名称</th>
-                            <th>品牌</th>
                             <th>状态</th>
-                            <th>餐厅经理</th>
-                            <th>经理手机</th>
-                            <th>区经理</th>
-                            <th>区域经理</th>
-                            <th>地址</th>
-                            <th>IP</th>
-                            <th>宽带</th>
                             <th>开业时间</th>
                             <th>关业时间</th>
                             <th>待开业时间</th>
-                            <th>装修时间</th>
-                            <th>IMS</th>
-                            <th>CMS</th>
+                            <th>临时闭店时间</th>
+                            <th>备注</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -35,14 +26,6 @@
                             <tr class="gradeX">
                                 <td>{{$val.Number}}</td>
                                 <td>{{$val.StoreName}}</td>
-                                {{/*<td>{{$val.Brand}}</td>*/}}
-
-                                <td>
-                                    {{range $brandKey, $brand := $.brandList}}
-                                        {{if eq $brandKey $val.Brand}}
-                                            {{$brand}}
-                                        {{end}}
-                                    {{end}}
                                 <td>
                                 {{range $status, $des := $.storeStatus}}
                                     {{if eq $status $val.Status}}
@@ -50,26 +33,11 @@
                                     {{end}}
                                 {{end}}
                                 </td>
-                                <td>{{$val.Manager}}</td>
-                                <td>{{$val.ManagerPhone}}</td>
-                                <td>{{$val.AreaManager}}</td>
-                                <td>{{$val.RegionalManager}}</td>
-                                <td>{{$val.Address}}</td>
-                                <td>{{$val.Ip}}</td>
-                                <td>
-                                {{range $netKey, $netContent := $.network}}
-                                    {{if eq $netKey $val.Network}}
-                                        {{$netContent}}
-                                    {{end}}
-                                {{end}}
-                                </td>
-                                {{/*<td>{{$val.Network}}</td>*/}}
                                 <td>{{$val.OpenTime}}</td>
                                 <td>{{$val.CloseTime}}</td>
                                 <td>{{$val.WaitTime}}</td>
-                                <td>{{$val.DecorationTime}}</td>
-                                <td>{{$val.BookStartTime}}</td>
-                                <td>{{$val.EmployeeStartTime}}</td>
+                                <td>{{$val.TempCloseTime}}</td>
+                                <td>{{$val.Remark}}</td>
                                 <td>
                                     <a id="edit"href="/store/edit?storeId={{$val.Id}}"  class="btn btn-primary btn-xs m-l-sm"type="button">编辑</a>
                                     <span storeId="{{$val.Id}}" class="btn btn-danger btn-xs m-l-sm delStore"type="button">删除</span>
@@ -89,29 +57,20 @@
     $(document).ready(function () {
         $('.dataTables-example').dataTable(
             {
-                "ordering": false,
+                "ordering": true,
                 "bAutoWidth":false,
                 "columns": [
                     //给第一列指定宽度为表格整个宽度的20%
-                    { "width": "0%" },
-                    { "width": "7%" },
-                    { "width": "3%" },
-                    { "width": "3%" },
-                    { "width": "5%" },
-                    { "width": "4%" },
-                    { "width": "4%" },
-                    { "width": "5%" },
+                    { "width": "2%" },
                     { "width": "10%" },
-                    { "width": "1%" },
+                    { "width": "2%" },
+                    { "width": "4%" },
+                    { "width": "4%" },
+                    { "width": "4%" },
+                    { "width": "4%" },
+                    { "width": "10%" },
+                    { "width": "4%" },
 
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    { "width": "0%" },
-                    { "width": "1%" },
                 ]
             }
         );
