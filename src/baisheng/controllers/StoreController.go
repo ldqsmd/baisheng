@@ -20,6 +20,8 @@ func (this *StoreController)filterParams(store *models.Store) {
 	valid.Required(store.Number, "餐厅编号").Message("不能为空")
 	valid.Required(store.Brand, "餐厅品牌").Message("不能为空")
 	valid.Required(store.Status, "餐厅状态").Message("不能为空")
+
+
 	//新店
 	if store.Status == 1 {
 		if this.actionName == "EditStore" {
@@ -99,7 +101,6 @@ func (this *StoreController)filterParams(store *models.Store) {
 	}
 }
 
-
 func (this *StoreController)StoreList() {
 
 	var store	models.PublicStore
@@ -157,14 +158,12 @@ func (this *StoreController)EditStore() {
 			if storeId == ""{
 				this.Abort("404")
 			}
-
 			this.Data["statusList"] 	=  GetStatusList()
 			this.Data["titleName"] 		= "编辑餐厅信息"
 			this.Data["storeInfo"] 		= pubStore.GetStoreInfo(storeId)
 			this.Data["newStoreInfo"] 	= newStore.GetNewStoreInfo(storeId)
 			this.Data["ieStoreInfo"] 	= ieStore.GetIeStoreInfo(storeId)
 			this.Data["closeStoreInfo"] = closeStore.GetCloseStoreInfo(storeId)
-
 			this.SetTpl("base/layout_page.html","store/edit.html")
 
 		case "POST":

@@ -41,29 +41,42 @@ func (this *NewStore) GetStoreList()([]NewStore,error){
 	return newStoreList, nil
 }
 
-func (this *NewStore)AddNewStore()(int64,error) {
-	this.CreateTime = time.Now().Format("2006-01-02 15:04:05")
-	return orm.NewOrm().Insert(this)
-}
+//新增或者更新
+func (this *NewStore)CreateOrUpdateNewStore(store Store)error  {
 
-func (this *NewStore)UpdateStore()error  {
-	_,err :=  orm.NewOrm().Update(this,
-		"ApplyEmailTime",
-		"BookDeviceTime",
-		"Notice2gTime",
-		"Open2gImsTime",
-		"Open2gCmsTime",
-		"ItsmRelationTime",
-		"ItspTime",
-		"DmbDispatchTime",
-		"CallNumTime",
-		"DeviceDebug",
-		"SmallNoticeTime",
-		"Remark",
-		"ItDebugTime",
-		"ImacDispatchTime",
-		)
-	return err
+	o := orm.NewOrm()
+	nowTime := time.Now().Format("2006-01-02 15:04:05")
+	//新增
+	if  store.NewStoreId == 0 {
+		_, err := o.Raw("INSERT INTO  new_store (store_id,apply_email_time,book_device_time,small_notice_time,notice2g_time,open2g_ims_time," +
+			"open2g_cms_time,itsm_relation_time,itsp_time,imac_dispatch_time,dmb_dispatch_time,call_num_time,it_debug_time,device_debug,remark,create_time) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+			store.StoreId, store.ApplyEmailTime,store.BookDeviceTime,store.NewStoreSmallNoticeTime,store.Notice2gTime,store.Open2gImsTime,store.Open2gCmsTime,store.ItsmRelationTime, store.ItspTime,store.NewStoreImacDispatchTime,store.NewStoreDmbDispatchTime,store.CallNumTime,store.NewStoreItDebugTime,store.DeviceDebug,store.NewStoreRemark,nowTime).Exec()
+		if err != nil {
+			return  err
+		}
+	}else{
+		//更新
+		_, err := o.Raw("UPDATE new_store SET  " +
+			"apply_email_time=?," +
+			"book_device_time=?," +
+			"small_notice_time=?," +
+			"notice2g_time=?," +
+			"open2g_ims_time=?," +
+			"open2g_cms_time=?," +
+			"itsm_relation_time=?," +
+			"itsp_time=?," +
+			"imac_dispatch_time=?," +
+			"dmb_dispatch_time=?," +
+			"call_num_time=?," +
+			"it_debug_time=?," +
+			"device_debug=?," +
+			"remark=? where id=?" +
+			"", store.ApplyEmailTime,store.BookDeviceTime,store.NewStoreSmallNoticeTime,store.Notice2gTime,store.Open2gImsTime,store.Open2gCmsTime,store.ItsmRelationTime, store.ItspTime,store.NewStoreImacDispatchTime,store.NewStoreDmbDispatchTime,store.CallNumTime,store.NewStoreItDebugTime,store.DeviceDebug,store.NewStoreRemark,store.NewStoreId).Exec()
+		if err != nil {
+			return  err
+		}
+	}
+	return nil
 }
 
 

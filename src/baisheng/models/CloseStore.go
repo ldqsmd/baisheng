@@ -46,7 +46,21 @@ func (this *CloseStore)AddCloseStore()(int64,error) {
 }
 
 func (this *CloseStore)UpdateCloseStore()error  {
-	_,err :=  orm.NewOrm().Update(this)
+	_,err :=  orm.NewOrm().Update(this,
+		"Remark",
+		"DmbDispatchTime",
+		"ImacDispatchTime",
+		"PropertyEvaluateTime",
+		"BusinessRecoveryTime",
+		"BusinessCloseTime",
+		"DmbUninstallNumber",
+		"DispatchSamsungTime",
+		"DeviceHpTogoTable",
+		"DeviceLcTogoTable",
+		"ToLcPropertyTable",
+		"DeviceReturnLcApply",
+		"PropertyDestroyTable",
+		)
 	return err
 }
 
