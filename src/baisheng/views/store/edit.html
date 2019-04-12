@@ -12,12 +12,11 @@
                 <div class="ibox-content">
 
                     <form class="form-horizontal m-t" id="signupForm" method="post" >
-
                         <div class="form-group">
-                            <input value="{{.storeInfo.Id}}"       name="storeId"      type="hidden">
-                            <input value="{{.newStoreInfo.Id}}"    name="newStoreId"   type="hidden">
-                            <input value="{{.ieStoreInfo.Id}}"     name="ieStoreId"    type="hidden">
-                            <input value="{{.closeStoreInfo.Id}}"  name="closeStoreId" type="hidden">
+                            <input value="{{.storeInfo.StoreId}}"   name="storeId"      type="hidden">
+                            <input value="{{.newStoreInfo.NewId}}"  name="newId"        type="hidden">
+                            <input value="{{.ieStoreInfo.IeId}}"    name="ieId"         type="hidden">
+                            <input value="{{.closeStoreInfo.CloseId}}"  name="closeId"  type="hidden">
 
                             <label class="col-sm-2 control-label">餐厅名称</label>
                             <div class="col-sm-1">
@@ -142,7 +141,7 @@
                             </div>
                             <label class="col-sm-1 control-label">餐厅备注</label>
                             <div class="col-sm-2">
-                                <input value="{{.storeInfo.Remark}}" id="storeRemark" name="storeRemark" class="form-control" type="text">
+                                <input value="{{.storeInfo.StoreRemark}}" id="storeRemark" name="storeRemark" class="form-control" type="text">
                             </div>
                         </div>
 

@@ -18,24 +18,25 @@
                             <div class="col-sm-1">
                                 <input id="storeName" name="storeName" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
                             </div>
-
                             <label class="col-sm-1 control-label">餐厅编号</label>
                             <div class="col-sm-1" style="text-align: left">
                                 <input id="number"  name="number" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
                             </div>
-
-                            <label class="col-sm-1 control-label">餐厅经理</label>
+                            <label class="col-sm-1 control-label">运营状态</label>
                             <div class="col-sm-1">
-                                <input id="manager" name="manager" class="form-control" type="text">
-                            </div>
+                                <select class="form-control m-b" name="status" id="status">
+                                    <option value="0">请选择</option>
+                                    {{range $key, $val := .statusList}}
+                                        <option value="{{$val.Status}}">{{$val.Content}}</option>
 
+                                    {{end}}
+                                </select>
+                            </div>
                             <label class="col-sm-1 control-label">经理手机</label>
                             <div class="col-sm-2">
                                 <input id="managerPhone" name="managerPhone" class="form-control" type="text">
                             </div>
-
                         </div>
-
                         <div class="form-group">
                             <label class="col-sm-2 control-label">餐厅品牌</label>
                             <div class="col-sm-1">
@@ -48,16 +49,9 @@
                                     <option value="5">咖啡</option>
                                 </select>
                             </div>
-
-                            <label class="col-sm-1 control-label">运营状态</label>
+                            <label class="col-sm-1 control-label">餐厅经理</label>
                             <div class="col-sm-1">
-                                <select class="form-control m-b" name="status" id="status">
-                                    <option value="0">请选择</option>
-                                    {{range $key, $val := .statusList}}
-                                        <option value="{{$val.Status}}">{{$val.Content}}</option>
-
-                                    {{end}}
-                                </select>
+                                <input id="manager" name="manager" class="form-control" type="text">
                             </div>
                             <label class="col-sm-1 control-label">餐厅宽带</label>
                             <div class="col-sm-1">

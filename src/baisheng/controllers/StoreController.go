@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"baisheng/models"
+	"fmt"
 	"github.com/astaxie/beego/validation"
 	"reflect"
 	"strings"
@@ -24,15 +25,11 @@ func (this *StoreController)filterParams(store *models.Store) {
 
 	//新店
 	if store.Status == 1 {
-		if this.actionName == "EditStore" {
-			valid.Required(store.StoreId, "餐厅ID").Message("不能为空")
-			valid.Required(store.NewStoreId, "新店ID").Message("不能为空")
-		}
 		//新店：必选 邮箱申请、派单时间 （三星、LG 、HP）
 		//IE:必选报废评估、派单时间 （HP、三星、LG）
 		//关店：不用了
 		valid.Required(store.ApplyEmailTime, "申请邮箱时间").Message("不能为空")
-		valid.Required(store.NewStoreDmbDispatchTime, "DMB派单时间").Message("不能为空")
+		valid.Required(store.NewDmbDispatchTime, "DMB派单时间").Message("不能为空")
 		valid.Required(store.CallNumTime, "叫号屏派单时间").Message("不能为空")
 	}
 	//IE
@@ -40,10 +37,7 @@ func (this *StoreController)filterParams(store *models.Store) {
 		//新店：必选 邮箱申请、派单时间 （三星、LG 、HP）
 		//IE:必选报废评估、派单时间 （HP、三星、LG）
 		//关店：不用了
-		if this.actionName == "EditStore" {
-			valid.Required(store.StoreId, "餐厅ID").Message("不能为空")
-			valid.Required(store.IeStoreId, "IEID").Message("不能为空")
-		}
+
 		valid.Required(store.OpenImacTime, "开店IMAC派单时间").Message("不能为空")
 		valid.Required(store.CloseImacTime, "关店IMAC派单时间").Message("不能为空")
 		valid.Required(store.DmbUninstallTime, "DMB拆除派单时间").Message("不能为空")
@@ -57,7 +51,7 @@ func (this *StoreController)filterParams(store *models.Store) {
 			valid.Required(store.StoreId, "餐厅ID").Message("不能为空")
 			valid.Required(store.IeStoreId, "IEID").Message("不能为空")
 		}
-		var closeStoreInfo models.CloseStoreInfo
+		var closeStoreInfo models.CloseStore
 		//判断是否有文件上传
 		uploadStr := this.GetString("uploadList")
 		if  uploadStr != ""{
@@ -78,7 +72,7 @@ func (this *StoreController)filterParams(store *models.Store) {
 					}
 				}
 			}
-			closeStoreInfo = storeTypeVal.Elem().Interface().(models.CloseStoreInfo)
+			closeStoreInfo = storeTypeVal.Elem().Interface().(models.CloseStore)
 			store.DeviceLcTogoTable = closeStoreInfo.DeviceLcTogoTable
 			store.DeviceHpTogoTable = closeStoreInfo.DeviceHpTogoTable
 			store.ToLcPropertyTable = closeStoreInfo.ToLcPropertyTable
@@ -129,15 +123,14 @@ func (this *StoreController)AddStore() {
 			this.SetTpl("base/layout_page.html","store/add.html")
 
 		case "POST":
-			var store models.Store
 
+			var store models.Store
 			if err := this.ParseForm(&store); err != nil {
 				this.ReturnJson(-1,err.Error(),nil)
 			}
 			//校验必填参数
 			this.filterParams(&store)
-
-			if err := store.AddStore();err != nil{
+			if err := store.InsertOrUpdate();err != nil{
 				this.ReturnJson(-2,err.Error(),nil)
 			}
 			this.ReturnJson(0,"添加成功",nil)
@@ -149,21 +142,20 @@ func (this *StoreController)EditStore() {
 
 	switch this.requestMethod {
 		case "GET":
-			var  pubStore 	models.PublicStore
-			var  newStore 	models.NewStore
-			var  ieStore 	models.IEStore
-			var  closeStore models.CloseStore
+			var  store models.Store
 
 			storeId := this.GetString("storeId")
 			if storeId == ""{
 				this.Abort("404")
 			}
+			fmt.Println(store.GetStoreInfo(storeId))
+
 			this.Data["statusList"] 	=  GetStatusList()
 			this.Data["titleName"] 		= "编辑餐厅信息"
-			this.Data["storeInfo"] 		= pubStore.GetStoreInfo(storeId)
-			this.Data["newStoreInfo"] 	= newStore.GetNewStoreInfo(storeId)
-			this.Data["ieStoreInfo"] 	= ieStore.GetIeStoreInfo(storeId)
-			this.Data["closeStoreInfo"] = closeStore.GetCloseStoreInfo(storeId)
+			this.Data["storeInfo"] 		= store.PublicStore.GetStoreInfo(storeId)
+			this.Data["newStoreInfo"] 	= store.NewStore.GetNewStoreInfo(storeId)
+			this.Data["ieStoreInfo"] 	= store.IeStore.GetIeStoreInfo(storeId)
+			this.Data["closeStoreInfo"] = store.CloseStore.GetCloseStoreInfo(storeId)
 			this.SetTpl("base/layout_page.html","store/edit.html")
 
 		case "POST":
@@ -173,8 +165,8 @@ func (this *StoreController)EditStore() {
 			}
 			//校验必填参数
 			this.filterParams(&store)
-			err := store.UpdateStore()
-			if err != nil{
+
+			if err := store.InsertOrUpdate(); err != nil{
 				this.ReturnJson(-1,err.Error(),nil)
 			}
 			this.ReturnJson(0,"修改成功",nil)

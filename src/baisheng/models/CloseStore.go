@@ -5,17 +5,13 @@ import (
 )
 
 type CloseStore struct {
-	Id          	int			`form:"id"`
-	StoreId		    int		`form:"storeId"`
-	CreateTime		string		`form:"createTime"`
-	Remark			string		`form:"closeStoreRemark"`
-	DmbDispatchTime	string		`form:"closeStoreDmbDispatchTime"`
-	ImacDispatchTime string		`form:"closeStoreimacDispatchTime"`
+	CloseId          		int			`form:"closeId" orm:"pk"`
+	CloseStoreId		    int			`form:"closeStoreId"`
+	CloseCreateTime			string		`form:"closeCreateTime"`
+	CloseRemark				string		`form:"closeRemark"`
+	CloseDmbDispatchTime	string		`form:"closeDmbDispatchTime"`
+	CloseImacDispatchTime string		`form:"closeImacDispatchTime"`
 
-	CloseStoreInfo
-}
-
-type CloseStoreInfo struct {
 
 	PropertyEvaluateTime	string		`form:"propertyEvaluateTime"`
 	BusinessRecoveryTime	string		`form:"businessRecoveryTime"`
@@ -34,15 +30,15 @@ type CloseStoreInfo struct {
 func (this *CloseStore) GetNewStoreList()([]CloseStore,error){
 
 	var closeStoreList []CloseStore
-	_, err := orm.NewOrm().Raw("SELECT * from close_store where store_id=?",this.StoreId).QueryRows(&closeStoreList)
+	_, err := orm.NewOrm().Raw("SELECT * from close_store where store_id=?",this.CloseStoreId).QueryRows(&closeStoreList)
 	if err == nil {
 		return closeStoreList,err
 	}
 	return closeStoreList, nil
 }
 
-func (this *CloseStore)AddCloseStore()(int64,error) {
-	return orm.NewOrm().Insert(this)
+func (this *CloseStore)InsertOrUpdate()(error) {
+	return nil
 }
 
 func (this *CloseStore)UpdateCloseStore()error  {

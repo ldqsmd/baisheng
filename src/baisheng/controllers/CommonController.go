@@ -21,8 +21,6 @@ func FilterStrSlice(slc []string) []string {
 }
 
 
-
-
 func GetStatusList()[]models.StoreStatus{
 
 	var statusList []models.StoreStatus
@@ -32,3 +30,4 @@ func GetStatusList()[]models.StoreStatus{
 	}
 	return statusList
 }
+

@@ -5,16 +5,13 @@ import (
 	"time"
 )
 
+
 type PublicStore struct {
-	Id          	int		`form:"storeId"`
-	CreateTime 		string  `form:"createTime"`
-	Remark			string	`form:"remark"`
-	UpdateTime		string  `form:"_"`
-	PublicStoreInfo
-}
 
-type PublicStoreInfo struct {
-
+	StoreId         int		`form:"storeId" orm:"pk"`
+	StoreRemark 	string	`form:"storeRemark"`
+	StoreCreateTime string  `form:"storeCreateTime"`
+	StoreUpdateTime	string  `form:"_"`
 	StoreName       string	`form:"storeName"`
 	Number        	string	`form:"number"`
 	Brand        	int		`form:"brand"`
@@ -40,10 +37,9 @@ type PublicStoreInfo struct {
 
 func (this *PublicStore) TableName() string {
 	return "store"
-
 }
-func (this *PublicStore) GetStoreList()([]PublicStore,error){
 
+func (this *PublicStore) GetStoreList()([]PublicStore,error){
 	var storeList []PublicStore
 	_, err := orm.NewOrm().Raw("SELECT * from store where forbidden_status= 0").QueryRows(&storeList)
 	if err == nil {
@@ -52,16 +48,24 @@ func (this *PublicStore) GetStoreList()([]PublicStore,error){
 	return storeList, nil
 }
 
-func (this *PublicStore)AddStore()(int64,error) {
-	this.CreateTime = time.Now().Format("2006-01-02 15:04:05")
-	return orm.NewOrm().Insert(this)
-}
+func (this *PublicStore)InsertOrUpdate()error {
 
-func (this *PublicStore)UpdateStore()error  {
-	_,err :=  orm.NewOrm().Update(this)
-	return err
+	if this.StoreId == 0 {
+		this.StoreCreateTime  = time.Now().Format("2006-01-02 15:04:05")
+		storeId,err :=  orm.NewOrm().Insert(this)
+		if err != nil{
+			return err
+		}
+		this.StoreId = int(storeId)
+	}else {
+		this.StoreUpdateTime  = time.Now().Format("2006-01-02 15:04:05")
+		_,err :=  orm.NewOrm().Update(this)
+		if err != nil{
+			return err
+		}
+	}
+	return  nil
 }
-
 //软删除
 func (this *PublicStore)DeleteStore()error  {
 
@@ -69,15 +73,10 @@ func (this *PublicStore)DeleteStore()error  {
 	_,err :=  orm.NewOrm().Update(this,"forbidden_status")
 	return err
 }
-
-
-
-
 //获取管理员信息
 func (this *PublicStore)GetStoreInfo(storeId string)PublicStore{
 	//获取
-	orm.NewOrm().Raw("SELECT * FROM store WHERE id=?",storeId).QueryRow(&this)
-
+	orm.NewOrm().Raw("SELECT * FROM store WHERE store_id=?",storeId).QueryRow(&this)
 	return *this
 }
 
