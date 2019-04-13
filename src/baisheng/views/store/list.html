@@ -24,8 +24,10 @@
                         </thead>
                         <tbody>
                         {{range $key, $val := .list}}
-                            <tr class="gradeX">
-                                <td>{{$val.StoreId}}</td>
+                            <tr class="gradeX"  {{if eq $val.SignFlag 2}} style="color:red;font-weight: bold" {{end}}  >
+                                <td>
+                                   <button  signFlag="{{$val.SignFlag}}"  storeId="{{$val.StoreId}}" class="btn btn-primary {{if eq $val.SignFlag 1}} btn-outline {{else}} btn-danger {{end}}  btn-xs signStore"><i class="fa fa-check"></i></button>
+                                </td>
                                 <td>{{$val.Number}}</td>
                                 <td>{{$val.StoreName}}</td>
                                 <td>
@@ -41,8 +43,8 @@
                                 <td>{{$val.TempCloseTime}}</td>
                                 <td>{{$val.StoreRemark}}</td>
                                 <td>
-                                    <a id="edit"href="/store/edit?storeId={{$val.StoreId}}"  class="btn btn-primary btn-xs m-l-sm"type="button">编辑</a>
-                                    <span storeId="{{$val.StoreId}}" class="btn btn-danger btn-xs m-l-sm delStore"type="button">删除</span>
+                                    <a href="/store/edit?storeId={{$val.StoreId}}"  class=" btn btn-outline btn-success btn-xs" type="button">编辑</a>
+                                    <span storeId="{{$val.StoreId}}" class=" btn btn-outline btn-danger btn-xs" type="button">删除</span>
                                 </td>
                             </tr>
                         {{end}}
@@ -59,7 +61,7 @@
     $(document).ready(function () {
         $('.dataTables-example').dataTable(
             {
-                "ordering": true,
+                "ordering": false,
                 "bAutoWidth":false,
                 "columns": [
                     //给第一列指定宽度为表格整个宽度的20%
@@ -78,6 +80,8 @@
             }
         );
 
+
+        //删除 软删除
         $(".delStore").click(function(){
             var url = '{{urlfor "StoreController.DeleteStore"}}';
             var storeId = $(this).attr("storeId")
@@ -104,7 +108,38 @@
 
 
 
+        //标记餐厅为 重要
+        $(".signStore").click(function(){
+            var url     = '{{urlfor "StoreController.SignStore"}}';
+            var storeId = $(this).attr("storeId")
+            var signFlag= $(this).attr("signFlag")
 
+            if(signFlag == 1){
+                signFlag = 2
+            }else{
+                signFlag = 1
+            }
+
+            $.ajax({
+                url : url,
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    storeId :storeId,
+                    signFlag :signFlag,
+                },
+                success : function(data) {
+                    console.log(data);
+                    if(data.code == 0){
+                        layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                            window.location.reload()
+                        });
+                    }else{
+                        layer.msg(data.message, {icon: 5,offset: '400px'});
+                    }
+                }
+            });
+        });
     });
 
 </script>

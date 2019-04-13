@@ -32,7 +32,8 @@ type PublicStore struct {
 	DeviceTime 		string	`form:"deviceTime"`
 	BuildName 		string	`form:"buildName"`
 	TempCloseTime 	string	`form:"tempCloseTime"`
-	ForbiddenStatus int	`form:"forbiddenStatus"`
+	ForbiddenStatus int		`form:"forbiddenStatus"`
+	SignFlag			int		`form:"signFlag"`
 }
 
 func (this *PublicStore) TableName() string {
@@ -41,7 +42,7 @@ func (this *PublicStore) TableName() string {
 
 func (this *PublicStore) GetStoreList()([]PublicStore,error){
 	var storeList []PublicStore
-	_, err := orm.NewOrm().Raw("SELECT * from store where forbidden_status= 0").QueryRows(&storeList)
+	_, err := orm.NewOrm().Raw("SELECT * from store where forbidden_status= 0 order by open_time,close_time desc").QueryRows(&storeList)
 	if err == nil {
 		return storeList,err
 	}
@@ -68,9 +69,15 @@ func (this *PublicStore)InsertOrUpdate()error {
 }
 //软删除
 func (this *PublicStore)DeleteStore()error  {
-
 	this.ForbiddenStatus = 1
 	_,err :=  orm.NewOrm().Update(this,"forbidden_status")
+	return err
+}
+
+//标记店为重要
+func (this *PublicStore)SignStore()error  {
+
+	_,err :=  orm.NewOrm().Update(this,"SignFlag")
 	return err
 }
 //获取管理员信息

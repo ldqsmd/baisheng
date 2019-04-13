@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"baisheng/models"
-	"fmt"
 	"github.com/astaxie/beego/validation"
 	"reflect"
 	"strings"
@@ -47,37 +46,34 @@ func (this *StoreController)filterParams(store *models.Store) {
 	}
 
 	if store.Status == 3 {
-		if this.actionName == "EditStore" {
-			valid.Required(store.StoreId, "餐厅ID").Message("不能为空")
-			valid.Required(store.IeStoreId, "IEID").Message("不能为空")
-		}
-		var closeStoreInfo models.CloseStore
+
 		//判断是否有文件上传
 		uploadStr := this.GetString("uploadList")
+		var closeStore models.CloseStore
 		if  uploadStr != ""{
 			uploadList := FilterStrSlice(strings.Split(uploadStr,","))
 			//遍历结构体赋值
-			storeType  		:= reflect.TypeOf(closeStoreInfo)
+			storeType  		:= reflect.TypeOf(closeStore)
 			storeTypeVal  	:= reflect.New(storeType)
 			//遍历上传文件
 			for _,formFile  := range uploadList{
-
 				if filePath,err := this.UpFileTable(formFile); err != nil {
 					this.ReturnJson(-1,formFile+":"+err.Error(),nil)
 				}else{
 					for k := 0; k < storeType.NumField(); k++ {
-						if   strings.ToLower(storeType.Field(k).Name) == strings.ToLower(formFile){
+						if   strings.ToLower(storeType.Field(k).Name) == strings.ToLower(formFile[5:]){
 							storeTypeVal.Elem().Field(k).SetString(filePath)
 						}
 					}
 				}
 			}
-			closeStoreInfo = storeTypeVal.Elem().Interface().(models.CloseStore)
-			store.DeviceLcTogoTable = closeStoreInfo.DeviceLcTogoTable
-			store.DeviceHpTogoTable = closeStoreInfo.DeviceHpTogoTable
-			store.ToLcPropertyTable = closeStoreInfo.ToLcPropertyTable
-			store.PropertyDestroyTable = closeStoreInfo.PropertyDestroyTable
-			store.DeviceReturnLcApply = closeStoreInfo.DeviceReturnLcApply
+			closeStore = storeTypeVal.Elem().Interface().(models.CloseStore)
+
+			store.DeviceLcTogoTable = closeStore.DeviceLcTogoTable
+			store.DeviceHpTogoTable = closeStore.DeviceHpTogoTable
+			store.ToLcPropertyTable = closeStore.ToLcPropertyTable
+			store.PropertyDestroyTable = closeStore.PropertyDestroyTable
+			store.DeviceReturnLcApply = closeStore.DeviceReturnLcApply
 		}
 
 	}
@@ -99,7 +95,7 @@ func (this *StoreController)StoreList() {
 
 	var store	models.PublicStore
 	var network 	= map[int]string{1:"餐厅宽带",2:"联通",3:"电信",4:"移动",5:"小运营商"}
-	var storeStatus = []string{1:"新店",2:"IE",3:"关店",4:"转加盟",5:"完成",6:"准备"}
+	var storeStatus = []string{1:"新店",2:"IE",3:"关店",4:"临时关店",5:"外送",6:"CPOS",7:"转加盟"}
 	var brandList 	= []string{1:"肯德基",2:"必胜客",3:"小肥羊",4:"塔可贝尔",5:"咖啡"}
 
 	list,total := store.GetStoreList()
@@ -128,6 +124,7 @@ func (this *StoreController)AddStore() {
 			if err := this.ParseForm(&store); err != nil {
 				this.ReturnJson(-1,err.Error(),nil)
 			}
+
 			//校验必填参数
 			this.filterParams(&store)
 			if err := store.InsertOrUpdate();err != nil{
@@ -148,8 +145,6 @@ func (this *StoreController)EditStore() {
 			if storeId == ""{
 				this.Abort("404")
 			}
-			fmt.Println(store.GetStoreInfo(storeId))
-
 			this.Data["statusList"] 	=  GetStatusList()
 			this.Data["titleName"] 		= "编辑餐厅信息"
 			this.Data["storeInfo"] 		= store.PublicStore.GetStoreInfo(storeId)
@@ -165,7 +160,6 @@ func (this *StoreController)EditStore() {
 			}
 			//校验必填参数
 			this.filterParams(&store)
-
 			if err := store.InsertOrUpdate(); err != nil{
 				this.ReturnJson(-1,err.Error(),nil)
 			}
@@ -186,7 +180,6 @@ func (this *StoreController)DeleteStore() {
 	if  this.GetString("storeId") == ""{
 		this.ReturnJson(-1,"餐厅ID不能为空",nil)
 	}
-
 	err := store.DeleteStore()
 	if err != nil{
 		this.ReturnJson(-1,err.Error(),nil)
@@ -194,3 +187,25 @@ func (this *StoreController)DeleteStore() {
 	this.ReturnJson(0,"删除成功",nil)
 }
 
+//标记店为特别关注
+func (this *StoreController)SignStore() {
+	var store models.PublicStore
+
+	if err := this.ParseForm(&store); err != nil {
+		this.ReturnJson(-1,err.Error(),nil)
+	}
+
+	if  this.GetString("storeId") == ""{
+		this.ReturnJson(-1,"餐厅ID不能为空",nil)
+	}
+	//校验必填参数
+	if  this.GetString("signFlag") == ""{
+		this.ReturnJson(-2,"标识不能为空",nil)
+	}
+
+	err := store.SignStore()
+	if err != nil{
+		this.ReturnJson(-1,err.Error(),nil)
+	}
+	this.ReturnJson(0,"操作成功",nil)
+}

@@ -6,3 +6,4 @@ pkg/
 src/opms/
 src/sdrms/
 *.gz
+src/baisheng/static/upload/

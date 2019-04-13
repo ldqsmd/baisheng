@@ -28,8 +28,6 @@ func (this *BaseController) Prepare() {
 	this.adapterAdminInfo()
 	//this.checkLogin()
 }
-
-
 //获取session admin信息
 //适配到BaseController
 func (this *BaseController) adapterAdminInfo() {

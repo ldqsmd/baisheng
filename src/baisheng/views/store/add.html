@@ -132,12 +132,12 @@
                                 <input id="employeeStartTime" name="employeeStartTime" class="form-control" type="date">
                             </div>
                             <label class="col-sm-1 control-label">餐厅备注</label>
-                            <div class="col-sm-2">
+                            <div class="col-sm-4">
                                 <input id="storeRemark" name="storeRemark" class="form-control" type="text">
                             </div>
                         </div>
 
-                        <div class="form-group  " id="status-detail">
+                        <div class="form-group hidden " id="status-detail">
                             <label class="col-sm-1 control-label"></label>
                             <div class="col-sm-9">
                                 <div class="tabs-container">
@@ -145,7 +145,7 @@
                                         <ul class="nav nav-tabs">
                                             <li class="statusTab status1 "><a data-toggle="tab" href="#tab-8">新店</a></li>
                                             <li class="statusTab status2 "><a data-toggle="tab" href="#tab-9">IE</a></li>
-                                            <li class="statusTab status3 active"><a data-toggle="tab" href="#tab-10">关店</a></li>
+                                            <li class="statusTab status3 "><a data-toggle="tab" href="#tab-10">关店</a></li>
                                         </ul>
                                         <div class="tab-content ">
                                             <div id="tab-8" class="tab-pane statusTab status1 ">
@@ -158,7 +158,7 @@
                                                     {{template "ieStore/ieStore.html"}}
                                                 </div>
                                             </div>
-                                            <div id="tab-10" class="tab-pane statusTab status3 active">
+                                            <div id="tab-10" class="tab-pane statusTab status3 ">
                                                 <div class="panel-body">
                                                     {{template "closeStore/closeStore.html"}}
                                                 </div>
@@ -252,7 +252,8 @@
 
                         if(data.code == 0){
                             layer.msg(data.message, {icon: 1,time:2000,offset: '400px'},function () {
-                                window.location.href='{{ urlfor "StoreController.StoreList"}}'
+                                window.location.reload()
+                                {{/*window.location.href='{{ urlfor "StoreController.StoreList"}}'*/}}
                             });
                         }else{
                             layer.msg(data.message, {icon: 5,offset: '400px'});
