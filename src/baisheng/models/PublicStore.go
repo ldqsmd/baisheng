@@ -42,7 +42,7 @@ func (this *PublicStore) TableName() string {
 
 func (this *PublicStore) GetStoreList()([]PublicStore,error){
 	var storeList []PublicStore
-	_, err := orm.NewOrm().Raw("SELECT * from store where forbidden_status= 0 order by open_time,close_time desc").QueryRows(&storeList)
+	_, err := orm.NewOrm().Raw("SELECT * from store order by forbidden_status, sign_flag desc,open_time desc,wait_time desc").QueryRows(&storeList)
 	if err == nil {
 		return storeList,err
 	}
