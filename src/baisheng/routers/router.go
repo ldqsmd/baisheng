@@ -26,6 +26,7 @@ func init() {
 	beego.Router("/store/delete",&controllers.StoreController{},"POST:DeleteStore")
 	beego.Router("/store/sign",&controllers.StoreController{},"POST:SignStore")
 
-
+	//newStore
+	beego.Router("/debug/list",&controllers.DebugController{},"GET:DebugList")
 
 }

@@ -1,0 +1,138 @@
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <a class="btn btn-primary" href="{{ urlfor "StoreController.AddStore"}}">添加</a>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-striped table-bordered table-hover dataTables-example ">
+                        <thead>
+                        <tr>
+                            <th>餐厅编号</th>
+                            <th>餐厅状态</th>
+                            <th>调试人</th>
+                            <th>完成时间</th>
+                            <th>状态</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{range $key, $val := .debugList}}
+                            <tr class="gradeX">
+                                <td>{{$val.Number}}</td>
+                                <td>
+                                    {{range $status, $des := $.storeStatus}}
+                                        {{if eq $status $val.StoreStatus}}
+                                            {{$des.Content}}
+                                        {{end}}
+                                    {{end}}
+                                </td>
+                                <td>{{$val.UserName}}</td>
+                                <td>{{$val.CompleteTime}}</td>
+                                <td>
+                                    {{if eq $val.ConfirmStatus 1 }}
+                                        已完成
+                                        {{else}}
+                                        进行中
+                                    {{end}}
+                                </td>
+                                <td>{{$val.ConfirmRemark}}</td>
+                                <td>
+                                    <a href="/debug/edit?confirmId={{$val.ConfirmId}}"  class=" btn   btn-xs" type="button">编辑</a>
+                                </td>
+                            </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page-Level Scripts -->
+<script>
+
+    //标记餐厅为 重要
+    function signStore(storeId,signFlag){
+        var url     = '{{urlfor "StoreController.SignStore"}}';
+
+        if(signFlag == 1){
+            signFlag = 2
+        }else{
+            signFlag = 1
+        }
+
+        $.ajax({
+            url : url,
+            type : 'POST',
+            dataType : 'json',
+            data : {
+                storeId :storeId,
+                signFlag :signFlag,
+            },
+            success : function(data) {
+                console.log(data);
+                if(data.code == 0){
+                    layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                        window.location.reload()
+                    });
+                }else{
+                    layer.msg(data.message, {icon: 5,offset: '400px'});
+                }
+            }
+        });
+    }
+
+    function forbidStore(storeId){
+        var url = '{{urlfor "StoreController.DeleteStore"}}';
+
+        $.ajax({
+            url : url,
+            type : 'POST',
+            dataType : 'json',
+            data : {
+                storeId :storeId,
+            },
+            success : function(data) {
+                console.log(data);
+                if(data.code == 0){
+                    layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                        window.location.href='{{ urlfor "StoreController.StoreList"}}'
+                    });
+                }else{
+                    layer.msg(data.message, {icon: 5,offset: '400px'});
+                }
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('.dataTables-example').dataTable(
+            {
+                "ordering": false,
+                "bAutoWidth":false,
+                "columns": [
+                    //给第一列指定宽度为表格整个宽度的20%
+                    { "width": "4%" },
+                    { "width": "3%" },
+                    { "width": "3%" },
+                    { "width": "4%" },
+                    { "width": "3%" },
+                    { "width": "4%" },
+                    { "width": "4%" },
+
+
+                ]
+            }
+        );
+
+
+        //删除 软删除
+        $(".delStore").click();
+    });
+
+</script>
