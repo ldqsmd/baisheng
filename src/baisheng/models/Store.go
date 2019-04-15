@@ -24,6 +24,8 @@ func (this *Store)InsertOrUpdate()(error) {
 
 	//NEW store
 	if  this.PublicStore.Status   == 1 {
+		//默认 不标记
+		this.SignFlag = 1
 		 if err := this.NewStore.InsertOrUpdate();err != nil {
 			return  err
 		}
