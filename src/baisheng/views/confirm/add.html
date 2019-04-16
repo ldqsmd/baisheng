@@ -1,0 +1,90 @@
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 ">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{.titleName}}</h5>
+                    <div class="ibox-tools">
+                        <a href="{{ urlfor "ConfirmController.ConfirmList"}}"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm" method="post" >
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">调试餐厅</label>
+
+                            <div class="col-sm-3">
+                                <select class="form-control m-b" name="storeId" id="storeId" >
+                                    <option value="">请选择</option>
+                                    {{range $key, $val := .storeList}}
+                                        <option value="{{$val.StoreId}}">{{$val.StoreName}}</option>
+                                    {{end}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">备注信息</label>
+                            <div class="col-sm-3">
+                                <input id="remark" name="remark" class="form-control" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <button class="btn btn-primary" type="submit">提交</button>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //以下为官方示例
+    $().ready(function () {
+
+        // validate signup form on keyup and submit
+        var icon = "<i class='fa fa-times-circle'></i> ";
+        $("#signupForm").validate({
+            rules: {
+                storeId: "required",
+            },
+            messages: {
+                storeId: icon + "请选择调试餐厅",
+            },
+            submitHandler:function(form){
+                var form = new FormData(document.getElementById("signupForm"));
+
+                var url = '{{urlfor "ConfirmController.AddConfirm"}}';
+
+                $.ajax({
+                    url:url,
+                    type:"post",
+                    data:form,
+                    processData:false,
+                    contentType:false,
+                    success:function(data){
+
+                        if(data.code == 0){
+                            layer.msg(data.message, {icon: 1,time:2000,offset: '400px'},function () {
+                                window.location.href='{{ urlfor "ConfirmController.ConfirmList"}}'
+                            });
+                        }else{
+                            layer.msg(data.message, {icon: 5,offset: '400px'});
+                        }
+                    }
+                });
+            }
+        });
+
+    });
+
+
+</script>

@@ -4,31 +4,51 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type Debug struct {
+type Confirm struct {
+	ConfirmId   	int			`form:"confirmId" orm:"pk"`
+	AdminId   		int			`form:"adminId" `
+	StoreId   		int			`form:"storeId" `
 
-	ConfirmId   	int			`form:"confirmId" `
+}
+type ConfirmList struct {
+	Confirm
 	Number     		string		`form:"number" `
-	UserName   		string		`form:"userName" `
+	UserName   		string		`form:"userName"`
 	CompleteTime   	string		`form:"completeTime" `
-	ConfirmStatus  	int		`form:"confirmStatus" ` // 0 进行中1 已完成
+	ConfirmStatus  	int			`form:"confirmStatus" ` // 0 进行中1 已完成
 	ConfirmRemark  	string		`form:"confirmRemark" `
-	StoreStatus  	int		`form:"storeStatus" `
+	StoreStatus  	int			`form:"storeStatus" `
 
 }
 
-func (this *Debug) GetDebugList()([]Debug,error){
+func (this *Confirm) GetConfirmList()([]ConfirmList,error){
 
-	var debugList []Debug
-	_, err := orm.NewOrm().Raw("SELECT store.status as store_status, confirm.id as confirm_id,store.number,admin.user_name,confirm.complete_time,confirm.confirm_status,confirm.remark as confirm_remark  FROM  confirm   inner join  store   on  confirm.store_id = store.store_id inner join admin on confirm.admin_id = admin.id").QueryRows(&debugList)
+	var confirmList []ConfirmList
+	_, err := orm.NewOrm().Raw("SELECT store.status as store_status, confirm.id as confirm_id,store.number,admin.user_name,confirm.complete_time,confirm.confirm_status,confirm.remark as confirm_remark  FROM  confirm   inner join  store   on  confirm.store_id = store.store_id inner join admin on confirm.admin_id = admin.id").QueryRows(&confirmList)
 	if err == nil {
-		return debugList,err
+		return confirmList,err
 	}
-	return debugList, nil
+	return confirmList, nil
 }
 
 
+func (this *Confirm)InsertOrUpdate()error  {
 
+	if this.ConfirmId == 0 {
 
+		conformId,err :=  orm.NewOrm().Insert(this)
+		if err != nil{
+			return err
+		}
+		this.ConfirmId = int(conformId)
+	}else {
+		if  _,err :=  orm.NewOrm().Update(this); err != nil{
+			return err
+		}
+	}
+
+	return nil
+}
 
 
 
