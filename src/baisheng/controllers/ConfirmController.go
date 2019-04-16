@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"baisheng/models"
+	"fmt"
 	"github.com/astaxie/beego/validation"
 )
 
@@ -36,6 +37,8 @@ func (this *ConfirmController)ConfirmList() {
 	//新店 IE 关店 转加盟  完成 准备
 
 	this.Data["confirmList"] , _ = confirm.GetConfirmList()
+
+fmt.Println(this.Data["confirmList"])
 	this.Data["storeStatus"] =  GetStatusList()
 	this.SetTpl("base/layout_page.html","confirm/list.html")
 }

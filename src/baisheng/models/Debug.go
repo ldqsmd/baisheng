@@ -8,6 +8,7 @@ type Confirm struct {
 	ConfirmId   	int			`form:"confirmId" orm:"pk"`
 	AdminId   		int			`form:"adminId" `
 	StoreId   		int			`form:"storeId" `
+	Remark   		string		 `form:"remark" `
 
 }
 type ConfirmList struct {
@@ -24,7 +25,7 @@ type ConfirmList struct {
 func (this *Confirm) GetConfirmList()([]ConfirmList,error){
 
 	var confirmList []ConfirmList
-	_, err := orm.NewOrm().Raw("SELECT store.status as store_status, confirm.id as confirm_id,store.number,admin.user_name,confirm.complete_time,confirm.confirm_status,confirm.remark as confirm_remark  FROM  confirm   inner join  store   on  confirm.store_id = store.store_id inner join admin on confirm.admin_id = admin.id").QueryRows(&confirmList)
+	_, err := orm.NewOrm().Raw("SELECT store.status as store_status, confirm_id,store.number,admin.user_name,confirm.complete_time,confirm.confirm_status,confirm.remark as confirm_remark  FROM  confirm   inner join  store   on  confirm.store_id = store.store_id inner join admin on confirm.admin_id = admin.id").QueryRows(&confirmList)
 	if err == nil {
 		return confirmList,err
 	}
