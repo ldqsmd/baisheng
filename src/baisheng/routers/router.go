@@ -12,7 +12,7 @@ func init() {
 
 
 	beego.Router("/",&controllers.HomeController{},"GET:Index")
-	beego.Router("/index_v1",&controllers.HomeController{},"GET:Content")
+	beego.Router("/page404",&controllers.HomeController{},"GET:Page404")
 
 	//admin
 	beego.Router("/admin/list",&controllers.AdminController{},"GET:AdminList")
@@ -26,8 +26,15 @@ func init() {
 	beego.Router("/store/delete",&controllers.StoreController{},"POST:DeleteStore")
 	beego.Router("/store/sign",&controllers.StoreController{},"POST:SignStore")
 
-	//newStore
+	//confirm
 	beego.Router("/confirm/list",&controllers.ConfirmController{},"GET:ConfirmList")
 	beego.Router("/confirm/add",&controllers.ConfirmController{},"*:AddConfirm")
+	beego.Router("/confirm/sign",&controllers.ConfirmController{},"POST:SignConfirm")
+	beego.Router("/confirm/edit",&controllers.ConfirmController{},"*:EditConfirm")
 
+	//software
+	beego.Router("/software/list",&controllers.SoftwareController{},"GET:SoftwareList")
+	beego.Router("/software/del",&controllers.SoftwareController{},"POST:DelSoftware")
+	beego.Router("/software/add",&controllers.SoftwareController{},"*:AddSoftware")
+	beego.Router("/software/sign",&controllers.SoftwareController{},"POST:SignSoftware")
 }

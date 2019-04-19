@@ -49,7 +49,7 @@ func (this *AdminController)filterParams(admin models.Admin)  {
 				this.ReturnJson(-1,err.Key+err.Message,nil)
 			}else{
 				this.Data["error"] = err.Key+err.Message
-				this.Error404()
+				this.Abort("404")
 			}
 		}
 	}

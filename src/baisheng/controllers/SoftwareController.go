@@ -2,25 +2,23 @@ package controllers
 
 import (
 	"baisheng/models"
-	"fmt"
 	"github.com/astaxie/beego/validation"
+	"strconv"
 )
 
-type ConfirmController struct {
+type SoftwareController struct {
 	BaseController
 }
 
 //参数过滤
-func (this *ConfirmController)filterParams(confirm models.Confirm) {
+func (this *SoftwareController)filterParams(software models.Software) {
 	//表单验证
 	valid := validation.Validation{}
 
-	if this.actionName == "EditConfirm"{
-		valid.Required(confirm.ConfirmId, "调试ID").Message("不能为空")
-	}
 
-	valid.Required(confirm.AdminId, "管理员Id").Message("不能为空")
-	valid.Required(confirm.StoreId, "餐厅编号").Message("不能为空")
+	valid.Required(software.SoftwareName, "软件名称").Message("不能为空")
+	valid.Required(software.Version, "软件版本").Message("不能为空")
+	valid.Required(software.ConfirmId, "confimId").Message("不能为空")
 
 	if valid.HasErrors() {
 		for _, err := range valid.Errors {
@@ -35,17 +33,21 @@ func (this *ConfirmController)filterParams(confirm models.Confirm) {
 	}
 }
 
-func (this *ConfirmController)ConfirmList() {
+func (this *SoftwareController)SoftwareList() {
 
-	var confirm	models.Confirm
-	this.Data["confirmList"] , _ = confirm.GetConfirmList()
-	//新店 IE 关店 转加盟  完成 准备
-	this.Data["storeStatus"] =  GetStatusList()
-	this.SetTpl("base/layout_page.html","confirm/list.html")
+	var software	models.Software
+	confirmId := this.GetString("confirmId")
+	if confirmId == "" {
+		this.Abort("404")
+	}
+	this.Data["titleName"]  = "调试餐厅"
+	this.Data["confirmId"]  = confirmId
+	this.Data["softwareList"] , _ = software.GetSoftwareList(confirmId)
+	this.SetTpl("base/layout_page.html","software/list.html")
 }
 
 //餐厅信息
-func (this *ConfirmController)AddConfirm() {
+func (this *SoftwareController)AddSoftware() {
 
 	switch this.requestMethod {
 		case "GET":
@@ -57,16 +59,16 @@ func (this *ConfirmController)AddConfirm() {
 
 		case "POST":
 
-			var confirm models.Confirm
+			var software models.Software
 
-			if err := this.ParseForm(&confirm); err != nil {
+			if err := this.ParseForm(&software); err != nil {
 				this.ReturnJson(-1,err.Error(),nil)
 			}
-			confirm.AdminId = this.adminInfo.Id
 			//校验必填参数
-			this.filterParams(confirm)
+			this.filterParams(software)
 
-			if err := confirm.InsertOrUpdate();err != nil{
+			software.AdminId  = this.adminInfo.Id
+			if err := software.InsertOrUpdate();err != nil{
 				this.ReturnJson(-2,err.Error(),nil)
 			}
 			this.ReturnJson(0,"添加成功",nil)
@@ -74,7 +76,7 @@ func (this *ConfirmController)AddConfirm() {
 }
 
 //编辑餐厅信息
-func (this *ConfirmController)EditConfirm() {
+func (this *SoftwareController)EditSoftware() {
 
 	switch this.requestMethod {
 		case "GET":
@@ -86,14 +88,13 @@ func (this *ConfirmController)EditConfirm() {
 				this.Abort("404")
 			}
 
-		fmt.Println(this.Data["confirmInfo"] )
 			this.Data["storeList"] 	 , _ = store.GetStoreList()
 			this.Data["confirmInfo"] , _ =  confirm.GetConfirmInfo(confirmId)
 			this.Data["titleName"] 		= "编辑调试信息"
 			this.SetTpl("base/layout_page.html","confirm/edit.html")
 
 		case "POST":
-			var confirm  models.Confirm
+			var confirm  models.Software
 			if err := this.ParseForm(&confirm); err != nil {
 				this.ReturnJson(-1,err.Error(),nil)
 			}
@@ -107,24 +108,21 @@ func (this *ConfirmController)EditConfirm() {
 			this.ReturnJson(0,"修改成功",nil)
 	}
 }
+func (this *SoftwareController)DelSoftware() {
+
+}
+
 
 //标记店为特别关注
-func (this *ConfirmController)SignConfirm() {
-	var confirm models.Confirm
+func (this *SoftwareController)SignSoftware() {
+	var software models.Software
 
-	if err := this.ParseForm(&confirm); err != nil {
-		this.ReturnJson(-1,err.Error(),nil)
+	softwareId := this.GetString("softwareId")
+	if  softwareId == ""{
+		this.ReturnJson(-1,"软件ID",nil)
 	}
-
-	if  this.GetString("confirmId") == ""{
-		this.ReturnJson(-1,"调试ID不能为空",nil)
-	}
-	//校验必填参数
-	if  this.GetString("confirmStatus") == ""{
-		this.ReturnJson(-2,"调试状态不能为空",nil)
-	}
-
-	err := confirm.SignCofirm()
+	software.SoftwareId,_ = strconv.Atoi(softwareId)
+	err := software.SignSoftware()
 	if err != nil{
 		this.ReturnJson(-1,err.Error(),nil)
 	}

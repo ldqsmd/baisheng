@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -49,7 +48,6 @@ func (this *Store)InsertOrUpdate()(error) {
 func (this *Store)GetStoreInfo(storeId string)(Store) {
 
 	orm.NewOrm().Raw("SELECT * FROM store as s left join ie_store as i on s.store_id = i.ie_store_id  left join new_store as n on s.store_id=n.new_store_id WHERE s.store_id=?", storeId).QueryRow(this)
-fmt.Println(*this)
 	return *this
 }
 

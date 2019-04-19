@@ -1,13 +1,18 @@
 package controllers
 
+import "fmt"
+
 type HomeController struct {
 	BaseController
 }
 
-func (home *HomeController) Index() {
-	home.SetTpl()
+func (this *HomeController) Index() {
+	this.SetTpl()
 }
 
-func (home *HomeController)Content() {
-	home.SetTpl()
+func (this *HomeController)Page404() {
+	this.Data["returnUrl"] =    this.GetString("returnUrl")
+
+	fmt.Println( this.GetString("returnUrl"))
+	this.TplName = "error/404.html"
 }

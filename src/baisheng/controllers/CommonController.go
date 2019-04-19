@@ -20,7 +20,6 @@ func FilterStrSlice(slc []string) []string {
 	return result
 }
 
-
 func GetStatusList()[]models.StoreStatus{
 
 	var statusList []models.StoreStatus

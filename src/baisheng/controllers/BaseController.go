@@ -28,6 +28,7 @@ func (this *BaseController) Prepare() {
 	this.adapterAdminInfo()
 	//this.checkLogin()
 }
+
 //获取session admin信息
 //适配到BaseController
 func (this *BaseController) adapterAdminInfo() {
@@ -135,8 +136,10 @@ func (this *BaseController) UpFileTable(formFile string)(string,error){
 
 //
 func (this *BaseController) Error404() {
-	//this.Data["content"] = "page not found"
-	this.TplName = "error/404.html"
+
+	page404Url := this.URLFor("HomeController.Page404")+"?returnUrl="+this.Ctx.Request.URL.Path
+	this.Redirect(page404Url, 302)
+	this.StopRun()
 }
 
 
