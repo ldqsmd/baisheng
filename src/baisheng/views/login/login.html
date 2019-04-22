@@ -75,8 +75,13 @@
                         password : password
                     },
                     success : function(data) {
-                        console.log(data);
                         if(data.code == 0){
+                           returnUrl = $.getUrlParam = function (name) {
+                                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                                var r = window.location.search.substr(1).match(reg);
+                                if (r != null) return unescape(r[2]); return null;
+                            }
+
                             window.location.href='{{ urlfor "HomeController.Index"}}'
                         }else{
                             layer.msg(data.message, {icon: 5,offset: '400px'});
@@ -87,6 +92,9 @@
         });
 
     });
+
+
+
 </script>
 
 </body>

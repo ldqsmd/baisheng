@@ -38,7 +38,11 @@ func (this *ConfirmController)filterParams(confirm models.Confirm) {
 func (this *ConfirmController)ConfirmList() {
 
 	var confirm	models.Confirm
-	this.Data["confirmList"] , _ = confirm.GetConfirmList()
+
+	confirmList , _ := confirm.GetConfirmList()
+
+
+	this.Data["confirmList"]  = confirmList
 	//新店 IE 关店 转加盟  完成 准备
 	this.Data["storeStatus"] =  GetStatusList()
 	this.SetTpl("base/layout_page.html","confirm/list.html")
@@ -108,25 +112,3 @@ func (this *ConfirmController)EditConfirm() {
 	}
 }
 
-//标记店为特别关注
-func (this *ConfirmController)SignConfirm() {
-	var confirm models.Confirm
-
-	if err := this.ParseForm(&confirm); err != nil {
-		this.ReturnJson(-1,err.Error(),nil)
-	}
-
-	if  this.GetString("confirmId") == ""{
-		this.ReturnJson(-1,"调试ID不能为空",nil)
-	}
-	//校验必填参数
-	if  this.GetString("confirmStatus") == ""{
-		this.ReturnJson(-2,"调试状态不能为空",nil)
-	}
-
-	err := confirm.SignCofirm()
-	if err != nil{
-		this.ReturnJson(-1,err.Error(),nil)
-	}
-	this.ReturnJson(0,"操作成功",nil)
-}

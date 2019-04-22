@@ -15,12 +15,15 @@ type Confirm struct {
 	CreateTime		string		`form:"_" `
 
 }
+
 type ConfirmList struct {
 	Confirm
 	Number     		string		`form:"number" ` //餐厅编号
 	UserName   		string		`form:"userName"`
 	ConfirmRemark  	string		`form:"confirmRemark" `
 	StoreStatus  	int			`form:"storeStatus" `
+	CompleteNum		string
+	TotalNum		string
 
 }
 
@@ -28,8 +31,19 @@ func (this *Confirm) GetConfirmList()([]ConfirmList,error){
 
 	var confirmList []ConfirmList
 	_, err := orm.NewOrm().Raw("SELECT store.status as store_status, confirm_id,store.number,admin.user_name,confirm.complete_time,confirm.confirm_status,confirm.remark as confirm_remark  FROM  confirm   inner join  store   on  confirm.store_id = store.store_id inner join admin on confirm.admin_id = admin.id order by confirm.create_time desc").QueryRows(&confirmList)
-	if err == nil {
+	if err != nil {
 		return confirmList,err
+	}
+
+	//遍历添加 完成数 和未完成数
+	for k,confirm :=  range confirmList {
+
+		var completeNum []orm.Params
+		var totalNum []orm.Params
+		orm.NewOrm().Raw("select count(*) as completeNum  from software where status = 1 and confirm_id= ?", confirm.ConfirmId).Values(&completeNum)
+		orm.NewOrm().Raw("select count(*) as  totalNum  from software where confirm_id= ?", confirm.ConfirmId).Values(&totalNum)
+		confirmList[k].CompleteNum = completeNum[0]["completeNum"].(string)
+		confirmList[k].TotalNum = totalNum[0]["totalNum"].(string)
 	}
 	return confirmList, nil
 }
@@ -59,11 +73,6 @@ func (this *Confirm)InsertOrUpdate()error  {
 	return nil
 }
 
-func (this *Confirm)SignCofirm()error  {
-
-	_,err :=  orm.NewOrm().Update(this,"ConfirmFlag")
-	return err
-}
 
 
 

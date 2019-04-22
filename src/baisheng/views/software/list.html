@@ -33,9 +33,11 @@
                             <tr class="gradeX">
 
 
-                                <td>{{$val.SoftwareName}}</td>
+                                <td>
+
+                                    {{$val.SoftwareName}}</td>
                                 <td>{{$val.Version}}</td>
-                                <td>{{$val.AdminId}}</td>
+                                <td>{{$val.AdminName}}</td>
                                 <td>
                                     {{if eq $val.Status 1 }}
                                         {{$val.CheckTime}}
@@ -52,11 +54,12 @@
                                 </td>
                                 <td>{{$val.Remark}}</td>
                                 <td>
-                                    <a href="/confirm/edit?confirmId={{$val.ConfirmId}}"  class=" btn   btn-xs" type="button">编辑</a>
-
                                     {{if eq $val.Status 0}}
-                                        <button onclick="signOk({{$val.SoftwareId}})"  class="btn btn-outline  btn-primary   btn-xs"><i class="fa fa-check"></i></button>
+                                        <button onclick="signOk({{$val.SoftwareId}})"  class="btn btn-outline  btn-primary   btn-xs">完成<i class="fa fa-check"></i></button>
                                     {{end}}
+                                    <button  onclick="editSoftware({{$val.SoftwareId}})" class=" btn   btn-xs btn-success" type="button">编辑</button>
+                                    <button  onclick="delSoftware({{$val.SoftwareId}})" class=" btn   btn-xs btn-danger" type="button">删除</button>
+
                                 </td>
                             </tr>
                         {{end}}
@@ -70,6 +73,21 @@
 <!-- Page-Level Scripts -->
 <script>
 
+    function editSoftware(softwareId) {
+        //iframe层
+        parent.layer.open({
+            type: 2,
+            title: '编辑软件信息',
+            shadeClose: true,
+            shade: 0.3,
+            area: ['40%', '45%'],
+            content: ["/software/edit?softwareId="+softwareId ,"no"],
+            end:function () {
+               location.reload()
+            }
+        });
+
+    }
     //标记餐厅为 重要
     function signOk(softwareId){
 
@@ -87,9 +105,8 @@
                     softwareId :softwareId,
                 },
                 success : function(data) {
-                    console.log(data);
                     if(data.code == 0){
-                        layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                        parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
                             window.location.reload()
                         });
                     }else{
@@ -97,16 +114,44 @@
                     }
                 }
             });
-            parent.layer.msg('的确很重要', {icon: 1});
         }, function(){
-            parent.layer.msg('是不是彪', {time:1000,shift: 6});
+            parent.layer.close()
+            // parent.layer.msg('是不是彪', {time:1000,shift: 6});
         });
-
-
-
-
     }
 
+
+    //标记餐厅为 重要
+    function delSoftware(softwareId){
+
+        //询问框
+        parent.layer.confirm('确认要删除软件信息么？', {
+            btn: ['确当','手滑'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            var url     = '{{urlfor "SoftwareController.DelSoftware"}}';
+            $.ajax({
+                url : url,
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    softwareId :softwareId,
+                },
+                success : function(data) {
+                    if(data.code == 0){
+                        parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                            window.location.reload()
+                        });
+                    }else{
+                        layer.msg(data.message, {icon: 5,time:1000,offset: '400px'});
+                    }
+                }
+            });
+        }, function(){
+            // parent.layer.close()
+            parent.layer.msg('彪啊，乱点啥！', {time:500,shift: 6});
+        });
+    }
     function forbidStore(storeId){
         var url = '{{urlfor "StoreController.DeleteStore"}}';
 
@@ -120,7 +165,7 @@
             success : function(data) {
                 console.log(data);
                 if(data.code == 0){
-                    layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                   layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
                         window.location.href='{{ urlfor "StoreController.StoreList"}}'
                     });
                 }else{

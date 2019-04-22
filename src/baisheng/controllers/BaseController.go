@@ -48,7 +48,7 @@ func (this *BaseController) checkLogin() {
 	if this.adminInfo.Id == 0 {
 
 		//登录页面地址
-		loginUrl := this.URLFor("LoginController.Login") + "?url="
+		loginUrl := this.URLFor("LoginController.Login") + "?returnURL="
 		//登录成功后返回的址为当前
 		returnURL := this.Ctx.Request.URL.Path
 		//如果ajax请求则返回相应的错码和跳转的地址

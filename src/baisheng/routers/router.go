@@ -29,11 +29,11 @@ func init() {
 	//confirm
 	beego.Router("/confirm/list",&controllers.ConfirmController{},"GET:ConfirmList")
 	beego.Router("/confirm/add",&controllers.ConfirmController{},"*:AddConfirm")
-	beego.Router("/confirm/sign",&controllers.ConfirmController{},"POST:SignConfirm")
 	beego.Router("/confirm/edit",&controllers.ConfirmController{},"*:EditConfirm")
 
 	//software
 	beego.Router("/software/list",&controllers.SoftwareController{},"GET:SoftwareList")
+	beego.Router("/software/edit",&controllers.SoftwareController{},"*:EditSoftware")
 	beego.Router("/software/del",&controllers.SoftwareController{},"POST:DelSoftware")
 	beego.Router("/software/add",&controllers.SoftwareController{},"*:AddSoftware")
 	beego.Router("/software/sign",&controllers.SoftwareController{},"POST:SignSoftware")

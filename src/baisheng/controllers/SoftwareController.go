@@ -80,29 +80,26 @@ func (this *SoftwareController)EditSoftware() {
 
 	switch this.requestMethod {
 		case "GET":
-			var  confirm	models.Confirm
-			var  store		models.PublicStore
 
-			confirmId := this.GetString("confirmId")
-			if confirmId == ""{
+			softwareId := this.GetString("softwareId")
+			if softwareId == ""{
 				this.Abort("404")
 			}
 
-			this.Data["storeList"] 	 , _ = store.GetStoreList()
-			this.Data["confirmInfo"] , _ =  confirm.GetConfirmInfo(confirmId)
-			this.Data["titleName"] 		= "编辑调试信息"
-			this.SetTpl("base/layout_page.html","confirm/edit.html")
+			var software models.Software
+
+			this.Data["softwareInfo"] , _ =  software.GetSoftwareInfo(softwareId)
+			this.Data["titleName"] 		= "编辑软件信息"
+			this.SetTpl("base/layout_page.html","software/edit.html")
 
 		case "POST":
-			var confirm  models.Software
-			if err := this.ParseForm(&confirm); err != nil {
+			var software  models.Software
+			if err := this.ParseForm(&software); err != nil {
 				this.ReturnJson(-1,err.Error(),nil)
 			}
 			//校验必填参数
-			confirm.AdminId = this.adminInfo.Id
-
-			this.filterParams(confirm)
-			if err := confirm.InsertOrUpdate(); err != nil{
+			this.filterParams(software)
+			if err := software.InsertOrUpdate(); err != nil{
 				this.ReturnJson(-1,err.Error(),nil)
 			}
 			this.ReturnJson(0,"修改成功",nil)
@@ -110,6 +107,17 @@ func (this *SoftwareController)EditSoftware() {
 }
 func (this *SoftwareController)DelSoftware() {
 
+	var software  models.Software
+		if err := this.ParseForm(&software); err != nil {
+	}
+	if software.SoftwareId == 0 {
+		this.ReturnJson(-1,"软件ID不能我空",nil)
+	}
+
+	if err := software.DeleteSofeware(); err != nil{
+		this.ReturnJson(-1,err.Error(),nil)
+	}
+	this.ReturnJson(0,"删除成功",nil)
 }
 
 
@@ -121,6 +129,7 @@ func (this *SoftwareController)SignSoftware() {
 	if  softwareId == ""{
 		this.ReturnJson(-1,"软件ID",nil)
 	}
+	software.AdminId = this.adminInfo.Id
 	software.SoftwareId,_ = strconv.Atoi(softwareId)
 	err := software.SignSoftware()
 	if err != nil{

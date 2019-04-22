@@ -3,55 +3,35 @@
     <div class="row">
         <div class="col-sm-12 col-md-12 ">
             <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>{{.titleName}}</h5>
-                    <div class="ibox-tools">
-                        <a href="{{ urlfor "ConfirmController.ConfirmList"}}"><i class="fa fa-times"></i></a>
-                    </div>
-                </div>
+                {{/*<div class="ibox-title">*/}}
+                    {{/*<h5>{{.titleName}}</h5>*/}}
+                {{/*</div>*/}}
                 <div class="ibox-content">
                     <form class="form-horizontal m-t" id="signupForm" method="post" >
-
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">调试餐厅</label>
-
+                            <label class="col-sm-4 control-label">软件名称</label>
                             <div class="col-sm-3">
-                                <select class="form-control m-b" name="storeId" id="storeId" >
-                                    <option value="">请选择</option>
-                                    {{range $key, $val := .storeList}}
-                                        <option
-                                                {{if eq $val.StoreId $.confirmInfo.StoreId}}
-                                                    selected
-                                                {{end}}
-                                                value="{{$val.StoreId}}">{{$val.StoreName}}
-                                        </option>
-                                    {{end}}
-                                </select>
+                                <input  value="{{.softwareInfo.SoftwareName}}" id="softwareName" name="softwareName" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">软件版本</label>
+                            <div class="col-sm-3">
+                                <input  value="{{.softwareInfo.Version}}" id="version" name="version" class="form-control" type="text">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">备注信息</label>
                             <div class="col-sm-3">
-                                <input  value="{{.confirmInfo.Remark}}" id="remark" name="remark" class="form-control" type="text">
+                                <input  value="{{.softwareInfo.Remark}}" id="remark" name="remark" class="form-control" type="text">
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">状态</label>
-                            <div class="col-sm-3">
-                                <input {{if eq 0 .confirmInfo.ConfirmStatus}} checked {{end}}  type="radio"    value="0" name="confirmStatus"> <i></i>进行中</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input {{if eq 1 .confirmInfo.ConfirmStatus}} checked {{end}}  type="radio"    value="1" name="confirmStatus"> <i></i>已完成</label>
-                            </div>
-                        </div>
-
                         <div class="form-group">
                             <label class="col-sm-4 control-label">&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                            <input value="{{.confirmInfo.ConfirmId}}" id="confirmId" name="confirmId" class="form-control" type="hidden">
+                            <input value="{{.softwareInfo.SoftwareId}}" id="softwareId" name="softwareId" class="form-control" type="hidden">
+                            <input value="{{.softwareInfo.ConfirmId}}"  id="confirmId" name="confirmId" class="form-control" type="hidden">
                             <button class="btn btn-primary " type="submit">提交</button>
                         </div>
-                        <br>
-                        <br>
-                        <br>
                     </form>
                 </div>
             </div>
@@ -67,14 +47,16 @@
         var icon = "<i class='fa fa-times-circle'></i> ";
         $("#signupForm").validate({
             rules: {
-                storeId: "required",
+                softwareName: "required",
+                version: "required",
             },
             messages: {
-                storeId: icon + "请选择调试餐厅",
+                storeId: icon + "请填写软件名称",
+                version: icon + "请填写软件版本",
             },
             submitHandler:function(form){
                 var form = new FormData(document.getElementById("signupForm"));
-                var url = '{{urlfor "ConfirmController.EditConfirm"}}';
+                var url = '{{urlfor "SoftwareController.EditSoftware"}}';
 
                 $.ajax({
                     url:url,
@@ -85,8 +67,8 @@
                     success:function(data){
 
                         if(data.code == 0){
-                            layer.msg(data.message, {icon: 1,time:2000,offset: '400px'},function () {
-                                window.location.href='{{ urlfor "ConfirmController.ConfirmList"}}'
+                            parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                                parent.layer.closeAll()
                             });
                         }else{
                             layer.msg(data.message, {icon: 5,offset: '400px'});
