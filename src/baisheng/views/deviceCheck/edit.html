@@ -1,0 +1,134 @@
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 ">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{.titleName}}</h5>
+                    <div class="ibox-tools">
+                        <a href="{{ urlfor "DeviceCheckController.CheckList"}}"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm" method="post" enctype="multipart/form-data">
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">餐厅名称</label>
+
+                            <div class="col-sm-3">
+                                <select class="form-control m-b" name="storeId" id="storeId" >
+                                    {{range $key, $val := .storeList}}
+                                        <option
+                                                {{if eq $val.StoreId $.checkInfo.StoreId}}
+                                                    selected
+                                                {{end}}
+                                                value="{{$val.StoreId}}">{{$val.StoreName}}
+                                        </option>
+                                    {{end}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">确认回复时间</label>
+                            <div class="col-sm-3">
+                                <input id="replyDate" name="replyDate" class="form-control" value="{{.checkInfo.ReplyDate}}" type="date">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">备注信息</label>
+                            <div class="col-sm-3">
+                                <input id="remark" name="remark" class="form-control" value="{{.checkInfo.Remark}}" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">
+                                初始详情表
+                                {{if eq .checkInfo.ReadyFile ""}}
+                                    <span style="color: red">无</span>
+                                {{else}}
+                                    <a href="/{{.checkInfo.ReadyFile}}">下载   </a>
+                                {{end}}
+                            </label>
+
+                            <div class="col-sm-3">
+                                <input id="ready_file" name="file-ready_file" class="form-control fileTable" type="file">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">
+                                完成详情表
+                                {{if eq .checkInfo.CompleteFile ""}}
+                                    <span style="color: red">无</span>
+                                {{else}}
+                                    <a href="/{{.checkInfo.CompleteFile}}">下载   </a>
+                                {{end}}
+
+                            </label>
+
+                            <div class="col-sm-3">
+                                <input id="complete_file" name="file-complete_file" class="form-control fileTable" type="file">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <input  value="{{.checkInfo.CheckId}}" name="checkId" type="hidden">
+                                <input  value="{{.checkInfo.ReadyFile}}" name="readyFile" type="hidden">
+                                <input  value="{{.checkInfo.Status}}" name="status" type="hidden">
+                                <input  value="{{.checkInfo.CompleteFile}}" name="completeFile" type="hidden">
+                                <button class="btn btn-primary" type="submit">提交</button>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //以下为官方示例
+    $().ready(function () {
+
+        // validate signup form on keyup and submit
+        var icon = "<i class='fa fa-times-circle'></i> ";
+        $("#signupForm").validate({
+            rules: {
+                storeId: "required",
+                replyDate: "required",
+            },
+            messages: {
+                storeId: icon + "请选择调试餐厅",
+                replyDate: icon + "请填写确认回复时间",
+            },
+            submitHandler:function(form){
+                var form = new FormData(document.getElementById("signupForm"));
+                var url = '{{urlfor "DeviceCheckController.EditCheck"}}';
+
+                $.ajax({
+                    url:url,
+                    type:"post",
+                    data:form,
+                    processData:false,
+                    contentType:false,
+                    success:function(data){
+
+                        if(data.code == 0){
+                            layer.msg(data.message, {icon: 1,time:2000,offset: '400px'},function () {
+                                window.location.href='{{ urlfor "DeviceCheckController.CheckList"}}'
+                            });
+                        }else{
+                            layer.msg(data.message, {icon: 5,offset: '400px'});
+                        }
+                    }
+                });
+            }
+        });
+
+    });
+
+
+</script>

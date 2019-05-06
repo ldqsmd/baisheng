@@ -6,7 +6,7 @@ import (
 
 // init 初始化
 func init() {
-	orm.RegisterModel(new(Admin),new(PublicStore),new(IeStore),new(NewStore),new(CloseStore),new(Confirm),new(Software))
+	orm.RegisterModel(new(Admin),new(PublicStore),new(IeStore),new(NewStore),new(CloseStore),new(Confirm),new(Software),new(DeviceCheck))
 }
 
 

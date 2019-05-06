@@ -37,4 +37,10 @@ func init() {
 	beego.Router("/software/del",&controllers.SoftwareController{},"POST:DelSoftware")
 	beego.Router("/software/add",&controllers.SoftwareController{},"*:AddSoftware")
 	beego.Router("/software/sign",&controllers.SoftwareController{},"POST:SignSoftware")
+
+	//deviceCheck
+	beego.Router("/deviceCheck/list",&controllers.DeviceCheckController{},"GET:CheckList")
+	beego.Router("/deviceCheck/add",&controllers.DeviceCheckController{},"*:AddCheck")
+	beego.Router("/deviceCheck/edit",&controllers.DeviceCheckController{},"*:EditCheck")
+	beego.Router("/deviceCheck/del",&controllers.DeviceCheckController{},"*:DelCheck")
 }

@@ -26,7 +26,7 @@ func (this *BaseController) Prepare() {
 	this.requestMethod = this.Ctx.Request.Method  //当前接口请求方式
 	//从Session里获取数据 设置用户信息
 	this.adapterAdminInfo()
-	//this.checkLogin()
+	this.checkLogin()
 }
 
 //获取session admin信息
@@ -42,8 +42,6 @@ func (this *BaseController) adapterAdminInfo() {
 //检查用户是否登录
 //没有登录返回登录页面
 func (this *BaseController) checkLogin() {
-
-	fmt.Println(this.GetSession("adminInfo"))
 
 	if this.adminInfo.Id == 0 {
 

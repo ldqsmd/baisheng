@@ -250,11 +250,6 @@
             submitHandler:function(form){
                 var form = new FormData(document.getElementById("signupForm"));
 
-                {{/*form.append("oldDeviceHpTogoTable",{{.closeStoreInfo.DeviceHpTogoTable}})*/}}
-                {{/*form.append("oldDeviceLcTogoTable",{{.closeStoreInfo.DeviceLcTogoTable}})*/}}
-                {{/*form.append("oldToLcPropertyTable",{{.closeStoreInfo.ToLcPropertyTable}})*/}}
-                {{/*form.append("oldDeviceReturnLcApply",{{.closeStoreInfo.DeviceReturnLcApply}})*/}}
-                {{/*form.append("oldPropertyDestroyTable",{{.closeStoreInfo.PropertyDestroyTable}})*/}}
                 form.append("uploadList",uploadList)
 
                 var url = '{{urlfor "StoreController.EditStore"}}';
