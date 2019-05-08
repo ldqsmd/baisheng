@@ -29,13 +29,13 @@
                                 <input  value="{{.confirmInfo.Remark}}" id="remark" name="remark" class="form-control" type="text">
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label class="col-sm-4 control-label">状态</label>
-                            <div class="col-sm-3">
-                                <input {{if eq 0 .confirmInfo.ConfirmStatus}} checked {{end}}  type="radio"    value="0" name="confirmStatus"> <i></i>进行中</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input {{if eq 1 .confirmInfo.ConfirmStatus}} checked {{end}}  type="radio"    value="1" name="confirmStatus"> <i></i>已完成</label>
-                            </div>
+                            {{if eq 0 .confirmInfo.ConfirmStatus}}
+                                <span class="badge badge-warning">&nbsp;&nbsp;&nbsp;&nbsp;进行中 &nbsp;&nbsp;&nbsp;</span>
+                            {{else}}
+                                <span class="badge badge-primary">&nbsp;&nbsp;&nbsp;&nbsp;已完成&nbsp;&nbsp;&nbsp;</span>
+                            {{end}}
                         </div>
 
                         <div class="form-group">

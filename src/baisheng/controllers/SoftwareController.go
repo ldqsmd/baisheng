@@ -121,7 +121,7 @@ func (this *SoftwareController)DelSoftware() {
 }
 
 
-//标记店为特别关注
+//标记软件完成
 func (this *SoftwareController)SignSoftware() {
 	var software models.Software
 

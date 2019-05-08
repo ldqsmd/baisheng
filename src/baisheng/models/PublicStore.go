@@ -33,7 +33,7 @@ type PublicStore struct {
 	BuildName 		string	`form:"buildName"`
 	TempCloseTime 	string	`form:"tempCloseTime"`
 	ForbiddenStatus int		`form:"forbiddenStatus"`
-	SignFlag			int		`form:"signFlag"`
+	SignFlag		int		`form:"signFlag"`
 }
 
 func (this *PublicStore) TableName() string {

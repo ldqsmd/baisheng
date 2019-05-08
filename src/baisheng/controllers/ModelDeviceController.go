@@ -21,12 +21,13 @@ func (this *ModelDeviceController)filterParams(params *models.ModelDevice) {
 	valid.Required(params.DeviceModel, "设备型号").Message("不能为空")
 	valid.Required(params.ScrapModel, "报废型号").Message("不能为空")
 
-	if _, _,err := this.GetFile("devicePic");err == nil{
-		filePath,err := this.UpFileTable("devicePic",2)
+	if _, _,err := this.GetFile("file-devicePic");err == nil{
+		filePath,err := this.UpFileTable("file-devicePic",2)
 		if err != nil {
-			this.ReturnJson(-1,"devicePic"+":"+err.Error(),nil)
+			this.ReturnJson(-1,"file-devicePic"+":"+err.Error(),nil)
+		}else{
+			params.DevicePic = filePath
 		}
-		params.DevicePic = filePath
 	}
 
 	if valid.HasErrors() {

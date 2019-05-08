@@ -230,11 +230,13 @@
         $("#signupForm").validate({
             rules: {
                 storeName: "required",
+                waitTime: "required",
                 number: {
                     required: true,
                 },
             },
             messages: {
+                waitTime: icon + "待开业时间",
                 storeName: icon + "请输入餐厅名称",
                 number: icon + "请输入餐厅编号",
             },
@@ -254,7 +256,7 @@
 
                         if(data.code == 0){
                             parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
-                                parent.layer.closeAll()
+                                window.location.href='{{ urlfor "StoreController.StoreList"}}'
                             });
                         }else{
                             parent.layer.msg(data.message, {icon: 5,offset: '400px'},);

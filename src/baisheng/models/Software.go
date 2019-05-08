@@ -57,20 +57,23 @@ func (this *Software)InsertOrUpdate()error  {
 			return err
 		}
 	}
-	orm.NewOrm().Raw("UPDATE confirm SET confirm_status=0 WHERE confirm_id = ?", this.ConfirmId)
+	var confirm Confirm
+	confirm.ConfirmId = this.ConfirmId
+	confirm.ConfirmStatus = 0
+	orm.NewOrm().Update(&confirm,"ConfirmStatus")
 
 	return nil
 }
 
-
+//标记完成
 func (this *Software)SignSoftware()error  {
 
 	this.Status  = 1
 	this.CheckTime  = time.Now().Format("2006-01-02 15:04:05")
-
 	if  _,err :=  orm.NewOrm().Update(this,"Status","CheckTime","AdminId"); err != nil{
 		return err
 	}
+
 	return nil
 }
 

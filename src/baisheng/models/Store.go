@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -14,6 +15,13 @@ type Store struct {
 func (this *Store)InsertOrUpdate()(error) {
 
 	//public store
+	var numberCount  int
+	orm.NewOrm().Raw("SELECT count(*)  from store where number=?", this.Number).QueryRow(&numberCount)
+	if numberCount>0 {
+		return errors.New("餐厅编号已经存在")
+	}
+	//默认指定 标识为 特别关注
+	this.SignFlag = 2
 	if err := this.PublicStore.InsertOrUpdate(); err != nil{
 		return err
 	}

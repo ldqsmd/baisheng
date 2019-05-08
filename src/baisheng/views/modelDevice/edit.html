@@ -55,7 +55,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label"></label>
-                            <input type="file" name="devicePic" id="upload-file" class="col-sm-4  upload-file">
+                            <input type="file" name="file-devicePic" id="upload-file" class="col-sm-4  upload-file">
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -84,7 +84,6 @@
                 return;
             }
             var uploadFiles = e.target.files || e.dataTransfer.files;
-            console.log(file.type);
             var size=uploadFiles.length;
             for(var i=0;i<size;i++){
                 /*读取文件*/

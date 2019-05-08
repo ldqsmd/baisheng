@@ -27,7 +27,7 @@ func init() {
 	beego.Router("/store/delete",&controllers.StoreController{},"POST:DeleteStore")
 	beego.Router("/store/sign",&controllers.StoreController{},"POST:SignStore")
 
-	//confirm
+	//confirmSignSoftware
 	beego.Router("/confirm/list",&controllers.ConfirmController{},"GET:ConfirmList")
 	beego.Router("/confirm/add",&controllers.ConfirmController{},"*:AddConfirm")
 	beego.Router("/confirm/edit",&controllers.ConfirmController{},"*:EditConfirm")
