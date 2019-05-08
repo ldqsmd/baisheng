@@ -4,7 +4,9 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>{{.titleName}}</h5>
+                    <h5>
+                        <a href="{{ urlfor "StoreController.StoreList"}}">餐厅列表</a>>
+                        {{.titleName}}</h5>
                     <div class="ibox-tools">
                         <a href="{{ urlfor "StoreController.StoreList"}}"><i class="fa fa-times"></i></a>
                     </div>
@@ -251,12 +253,11 @@
                     success:function(data){
 
                         if(data.code == 0){
-                            layer.msg(data.message, {icon: 1,time:2000,offset: '400px'},function () {
-                                window.location.reload()
-                                {{/*window.location.href='{{ urlfor "StoreController.StoreList"}}'*/}}
+                            parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                                parent.layer.closeAll()
                             });
                         }else{
-                            layer.msg(data.message, {icon: 5,offset: '400px'});
+                            parent.layer.msg(data.message, {icon: 5,offset: '400px'},);
                         }
                     }
                 });

@@ -4,7 +4,9 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>{{.titleName}}</h5>
+                    <h5>
+                        <a href="{{ urlfor "StoreController.StoreList"}}">餐厅列表</a>>
+                        {{.titleName}}</h5>
                     <div class="ibox-tools">
                         <a href="{{ urlfor "StoreController.StoreList"}}"><i class="fa fa-times"></i></a>
                     </div>

@@ -19,7 +19,7 @@ func (this *ConfirmController)filterParams(confirm models.Confirm) {
 		valid.Required(confirm.ConfirmId, "调试ID").Message("不能为空")
 	}
 
-	valid.Required(confirm.AdminId, "管理员Id").Message("不能为空")
+	valid.Required(confirm.AdminId, "").Message("请先登录")
 	valid.Required(confirm.StoreId, "餐厅编号").Message("不能为空")
 
 	if valid.HasErrors() {
@@ -40,7 +40,6 @@ func (this *ConfirmController)ConfirmList() {
 	var confirm	models.Confirm
 
 	confirmList , _ := confirm.GetConfirmList()
-
 
 	this.Data["confirmList"]  = confirmList
 	//新店 IE 关店 转加盟  完成 准备

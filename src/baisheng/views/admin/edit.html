@@ -2,48 +2,31 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>{{.formTitle}}</h5>
-                    <div class="ibox-tools">
-                        <a href="/adminList"><i class="fa fa-times"></i></a>
-                    </div>
-                </div>
                 <div class="ibox-content">
                     <form class="form-horizontal m-t" id="signupForm" method="post" >
                         <div class="form-group">
                             <label class="col-sm-3 control-label">登录账号：</label>
                             <div class="col-sm-8">
-                                <input id="account" name="account" class="form-control" type="text">
-                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>用于登录后台的账号</span>
+                                <input readonly value="{{.adminInfo.Account}}" id="account" name="account" class="form-control" type="text">
+                                <span  class="help-block m-b-none"><i class="fa fa-info-circle"></i>用于登录后台的账号</span>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">用户名：</label>
                             <div class="col-sm-8">
-                                <input id="username" name="userName" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">密码：</label>
-                            <div class="col-sm-8">
-                                <input id="password" name="password" class="form-control" type="password">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">确认密码：</label>
-                            <div class="col-sm-8">
-                                <input id="confirm_password" name="confirm_password" class="form-control" type="password">
-                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 请再次输入您的密码</span>
+                                <input  value="{{.adminInfo.UserName}}" id="username" name="userName" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">E-mail：</label>
                             <div class="col-sm-8">
-                                <input id="email" name="email" class="form-control" type="email">
+                                <input  value="{{.adminInfo.Email}}" id="email" name="email" class="form-control" type="email">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-3">
+                                <input  value="{{.adminInfo.Id}}" id="adminId" name="adminId" class="form-control" type="hidden">
                                 <button class="btn btn-primary" type="submit">提交</button>
                             </div>
                         </div>
@@ -65,57 +48,34 @@
         $("#signupForm").validate({
             rules: {
                 firstname: "required",
-                password: {
-                    required: true,
-                    minlength: 5
-                },
-                confirm_password: {
-                    required: true,
-                    minlength: 5,
-                    equalTo: "#password"
-                },
                 email: {
                     required: true,
                     email: true
                 },
-                topic: {
-                    required: "#newsletter:checked",
-                    minlength: 2
-                }
+
             },
             messages: {
                 firstname: icon + "请输入你的登录账户",
-                password: {
-                    required: icon + "请输入您的密码",
-                    minlength: icon + "密码必须5个字符以上"
-                },
-                confirm_password: {
-                    required: icon + "请再次输入密码",
-                    minlength: icon + "密码必须5个字符以上",
-                    equalTo: icon + "两次输入的密码不一致"
-                },
                 email: icon + "请输入您的E-mail"
             },
             submitHandler:function(form){
-
-                var url = '{{urlfor "LoginController.Login"}}';
+                var form = new FormData(document.getElementById("signupForm"));
+                var url = '{{urlfor "AdminController.EditAdmin"}}';
 
                 $.ajax({
-                    url : url,
-                    type : 'POST',
-                    dataType : 'json',
-                    data : {
-                        account     : $('#account').val(),
-                        username    : $('#username').val(),
-                        password    : $('#password').val(),
-                        email       : $('#email').val(),
-                    },
-                    success : function(data) {
-                        console.log(data);
+                    url:url,
+                    type:"post",
+                    data:form,
+                    processData:false,
+                    contentType:false,
+                    success:function(data){
+
                         if(data.code == 0){
-                            window.location.href='{{ urlfor "HomeController.Index"}}'
+                            parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                                parent.layer.closeAll()
+                            });
                         }else{
-                            layer.msg(data.message, {icon: 5,offset: '400px'});
+                            parent.layer.msg(data.message, {icon: 5,offset: '400px'},);
                         }
                     }
                 });

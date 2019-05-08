@@ -1,0 +1,57 @@
+<div class="ibox-content " style="border-top:0px;padding-top: 0px;">
+    <form class="form-horizontal m-t" id="signupForm" method="post" style="border-top:0px;padding-top: 0px;" >
+        <div class="form-group">
+            <div class="col-sm-2">
+                <input placeholder="模板名称" id="modelName" name="modelName" class="form-control" type="text">
+            </div>
+            <div class="col-sm-2">
+                <input  placeholder="备注信息" id="remark" name="remark" class="form-control" type="text">
+            </div>
+            <button class="btn btn-primary" type="submit">添加模板信息</button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    //以下为官方示例
+    $().ready(function () {
+
+        // validate signup form on keyup and submit
+        var icon = "<i class='fa fa-times-circle'></i> ";
+        $("#signupForm").validate({
+            rules: {
+                modelName: "required",
+            },
+            messages: {
+                modelName: icon + "模板名称",
+            },
+            submitHandler:function(form){
+                var form = new FormData(document.getElementById("signupForm"));
+
+                var url = '{{urlfor "ModelController.AddModel"}}';
+
+                $.ajax({
+                    url:url,
+                    type:"post",
+                    data:form,
+                    processData:false,
+                    contentType:false,
+                    success:function(data){
+
+                        if(data.code == 0){
+                            layer.msg(data.message, {icon: 1,time:2000,offset: '400px'},function () {
+                                window.location.reload()
+                            });
+                        }else{
+                            layer.msg(data.message, {icon: 5,offset: '400px'});
+                        }
+                    }
+                });
+            }
+        });
+
+    });
+
+
+</script>

@@ -57,7 +57,7 @@ func (this *StoreController)filterParams(store *models.Store) {
 			storeTypeVal  	:= reflect.New(storeType)
 			//遍历上传文件
 			for _,formFile  := range uploadList{
-				if filePath,err := this.UpFileTable(formFile); err != nil {
+				if filePath,err := this.UpFileTable(formFile,1); err != nil {
 					this.ReturnJson(-1,formFile+":"+err.Error(),nil)
 				}else{
 					for k := 0; k < storeType.NumField(); k++ {

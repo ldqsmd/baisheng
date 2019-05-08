@@ -3,12 +3,6 @@
     <div class="row">
         <div class="col-sm-12 col-md-12 ">
             <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>{{.titleName}}</h5>
-                    <div class="ibox-tools">
-                        <a href="{{ urlfor "ConfirmController.ConfirmList"}}"><i class="fa fa-times"></i></a>
-                    </div>
-                </div>
                 <div class="ibox-content">
                     <form class="form-horizontal m-t" id="signupForm" method="post" >
 
@@ -73,11 +67,11 @@
                     success:function(data){
 
                         if(data.code == 0){
-                            layer.msg(data.message, {icon: 1,time:2000,offset: '400px'},function () {
-                                window.location.href='{{ urlfor "ConfirmController.ConfirmList"}}'
+                            parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                                parent.layer.closeAll()
                             });
                         }else{
-                            layer.msg(data.message, {icon: 5,offset: '400px'});
+                            parent.layer.msg(data.message, {icon: 5,offset: '400px'},);
                         }
                     }
                 });

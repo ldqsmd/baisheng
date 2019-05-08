@@ -18,6 +18,7 @@ func init() {
 	beego.Router("/admin/list",&controllers.AdminController{},"GET:AdminList")
 	beego.Router("/admin/add",&controllers.AdminController{},"*:AddAdmin")
 	beego.Router("/admin/edit",&controllers.AdminController{},"*:EditAdmin")
+	beego.Router("/admin/forbid",&controllers.AdminController{},"POST:ForbidAdmin")
 
 	//store
 	beego.Router("/store/list",&controllers.StoreController{},"GET:StoreList")
@@ -43,4 +44,16 @@ func init() {
 	beego.Router("/deviceCheck/add",&controllers.DeviceCheckController{},"*:AddCheck")
 	beego.Router("/deviceCheck/edit",&controllers.DeviceCheckController{},"*:EditCheck")
 	beego.Router("/deviceCheck/del",&controllers.DeviceCheckController{},"*:DelCheck")
+
+	//model
+	beego.Router("/model/list",&controllers.ModelController{},"GET:ModelList")
+	beego.Router("/model/add",&controllers.ModelController{},"POST:AddModel")
+	beego.Router("/model/edit",&controllers.ModelController{},"*:EditModel")
+	beego.Router("/model/del",&controllers.ModelController{},"*:DelModel")
+
+	//modelDevice
+	beego.Router("/modelDevice/list",&controllers.ModelDeviceController{},"GET:List")
+	beego.Router("/modelDevice/add",&controllers.ModelDeviceController{},"*:Add")
+	beego.Router("/modelDevice/edit",&controllers.ModelDeviceController{},"*:Edit")
+	beego.Router("/modelDevice/del",&controllers.ModelDeviceController{},"*:Del")
 }

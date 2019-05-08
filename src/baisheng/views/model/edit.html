@@ -3,42 +3,28 @@
     <div class="row">
         <div class="col-sm-12 col-md-12 ">
             <div class="ibox float-e-margins">
+                {{/*<div class="ibox-title">*/}}
+                    {{/*<h5>{{.titleName}}</h5>*/}}
+                {{/*</div>*/}}
                 <div class="ibox-content">
                     <form class="form-horizontal m-t" id="signupForm" method="post" >
-
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">餐厅名称</label>
-
+                            <label class="col-sm-4 control-label">软件名称</label>
                             <div class="col-sm-3">
-                                <select class="form-control m-b" name="storeId" id="storeId" >
-                                    <option value="">请选择</option>
-                                    {{range $key, $val := .storeList}}
-                                        <option value="{{$val.StoreId}}">{{$val.StoreName}}</option>
-                                    {{end}}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">确认回复时间</label>
-                            <div class="col-sm-3">
-                                <input id="replyDate" name="replyDate" class="form-control" type="date">
+                                <input  value="{{.modelInfo.ModelName}}" id="modelName" name="modelName" class="form-control" type="text">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">备注信息</label>
                             <div class="col-sm-3">
-                                <input id="remark" name="remark" class="form-control" type="text">
+                                <input  value="{{.modelInfo.Remark}}" id="remark" name="remark" class="form-control" type="text">
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <div class="col-sm-8 col-sm-offset-4">
-                                <button class="btn btn-primary" type="submit">提交</button>
-                            </div>
+                            <label class="col-sm-4 control-label">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <input value="{{.modelInfo.ModelId}}" id="modelId" name="modelId" class="form-control" type="hidden">
+                            <button class="btn btn-primary " type="submit">保存</button>
                         </div>
-                        <br>
-                        <br>
-                        <br>
                     </form>
                 </div>
             </div>
@@ -54,16 +40,14 @@
         var icon = "<i class='fa fa-times-circle'></i> ";
         $("#signupForm").validate({
             rules: {
-                storeId: "required",
-                replyDate: "required",
+                modelName: "required",
             },
             messages: {
-                storeId: icon + "请选择调试餐厅",
-                replyDate: icon + "请填写确认回复时间",
+                modelName: icon + "请填模板名称",
             },
             submitHandler:function(form){
                 var form = new FormData(document.getElementById("signupForm"));
-                var url = '{{urlfor "DeviceCheckController.AddCheck"}}';
+                var url = '{{urlfor "ModelController.EditModel"}}';
 
                 $.ajax({
                     url:url,
@@ -72,12 +56,13 @@
                     processData:false,
                     contentType:false,
                     success:function(data){
+
                         if(data.code == 0){
                             parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
                                 parent.layer.closeAll()
                             });
                         }else{
-                            parent.layer.msg(data.message, {icon: 5,offset: '400px'},);
+                            parent.layer.msg(data.message, {icon: 5,offset: '400px'});
                         }
                     }
                 });

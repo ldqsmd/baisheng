@@ -19,14 +19,14 @@
 <body class="gray-bg">
     <div class="middle-box text-center animated fadeInDown">
         <h1>404</h1>
-        <h3 class="font-bold">页面未找到</h3>
+        <h3 class="font-bold">页面未找到！ {{.error}}</h3>
 
         <div class="error-desc">
             抱歉，页面好像去火星了~
 
             <form class="form-inline m-t" role="form">
                 <div class="form-group">
-                    {{/*<a href="{{.returnUrl}}" class="btn btn-primary">GO HOME</a>*/}}
+                    <a href="{{.returnUrl}}" class="btn btn-primary">GO HOME</a>
                 </div>
             </form>
         </div>

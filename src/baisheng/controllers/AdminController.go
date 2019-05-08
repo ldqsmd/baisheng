@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"baisheng/models"
-	"fmt"
 	"github.com/astaxie/beego/validation"
 	"strconv"
 )
@@ -34,10 +33,8 @@ func (this *AdminController)filterParams(admin models.Admin)  {
 	if this.actionName == "EditAdmin"{
 		//编辑的时候 必填 adminId
 		valid.Required(admin.Id, "管理员ID").Message("不能为空")
-
 		if this.requestMethod == "POST"{
 			valid.Required(admin.Account, "账号").Message("不能为空")
-			valid.Required(admin.Password, "密码").Message("不能为空")
 			valid.Required(admin.Email, "e-mail").Message("不能为空")
 		}
 	}
@@ -70,11 +67,11 @@ func (this *AdminController)AddAdmin() {
 			//校验必填参数
 			this.filterParams(admin)
 
-			 admin.AddAdmin()
-			//if err != nil{
-			//	this.ReturnJson(-1,err.Error(),nil)
-			//}
-			//this.ReturnJson(0,"添加成功",nil)
+			if  err := admin.InsertOrUpdate() ; err != nil{
+				this.ReturnJson(-1,err.Error(),nil)
+			}else{
+				this.ReturnJson(0,"添加成功",nil)
+			}
 
 	}
 }
@@ -85,29 +82,41 @@ func (this *AdminController)EditAdmin() {
 	switch this.requestMethod {
 		case "GET":
 			var  admin models.Admin
-			admin.Id,_ = strconv.Atoi(this.GetString("adminId"))
-			this.filterParams(admin)
-			//err := admin.GetAdminInfo()
-			//if  err != nil{
-			//	this.Data["error"] = err.Error()
-			//	this.Error404()
-			//}
-
-		case "POST":
-
+			if adminInfo :=  admin.GetAdminDetail(this.GetString("adminId")) ;adminInfo.Id ==0{
+				this.ReturnJson(-2,"信息不存在",nil)
+			}else{
+				this.Data["adminInfo"] = adminInfo
+				this.SetTpl("base/layout_page.html","admin/edit.html")
+			}
+	case "POST":
 			var admin models.Admin
 			if err := this.ParseForm(&admin); err != nil {
-				fmt.Println(err.Error())
+				this.ReturnJson(-1,err.Error(),nil)
 			}
 			//校验必填参数
 			this.filterParams(admin)
-
-			err := admin.UpdateAdmin()
-			if err != nil{
-				this.ReturnJson(-1,err.Error(),nil)
+			if err := admin.InsertOrUpdate() ;err != nil{
+				this.ReturnJson(-2,err.Error(),nil)
+			}else{
+				this.ReturnJson(0,"修改成功",nil)
 			}
-			this.ReturnJson(0,"添加成功",nil)
-
 	}
 }
 
+//软删除
+func (this *AdminController)ForbidAdmin() {
+
+	var admin models.Admin
+	//校验必填参数
+	if  adminId := this.GetString("adminId") ; adminId == ""{
+		this.ReturnJson(-1,"管理员ID",nil)
+	}else{
+		intId,_ := strconv.Atoi(adminId)
+		if err := admin.ForbidAdmin(intId) ;err != nil{
+			this.ReturnJson(-1,err.Error(),nil)
+		}else{
+			this.ReturnJson(0,"禁用成功",nil)
+		}
+	}
+
+}

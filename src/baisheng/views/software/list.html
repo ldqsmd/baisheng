@@ -4,7 +4,9 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>{{.titleName}}</h5>
+                    <h5>
+                        <a href="{{ urlfor "ConfirmController.ConfirmList"}}">新店调试列表</a>>
+                        {{.titleName}}</h5>
                     <div class="ibox-tools">
                         <a href="{{ urlfor "ConfirmController.ConfirmList"}}"><i class="fa fa-times"></i></a>
                     </div>
@@ -72,6 +74,7 @@
 </div>
 <!-- Page-Level Scripts -->
 <script>
+
 
     function editSoftware(softwareId) {
         //iframe层

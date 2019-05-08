@@ -96,8 +96,8 @@ func (this *BaseController) ReturnJson(code int,message string,data interface{})
 	this.StopRun()
 }
 
-//上传excel
-func (this *BaseController) UpFileTable(formFile string)(string,error){
+//1 上传excel 2 pic
+func (this *BaseController) UpFileTable(formFile string ,fileType int)(string,error){
 
 	var  filePath string
  	f, h,err := this.GetFile(formFile)//获取上传的文件
@@ -105,15 +105,31 @@ func (this *BaseController) UpFileTable(formFile string)(string,error){
 		return filePath,err
 	}
 	ext := path.Ext(h.Filename)
-	//验证后缀名是否符合要求
-	var AllowExtMap map[string]bool = map[string]bool{
-		".xls":true,
-		".csv":true,
-		".xlsx":true,
+
+	switch fileType {
+		case 1:
+			//验证后缀名是否符合要求
+			var AllowExtMap map[string]bool = map[string]bool{
+				".xls":true,
+				".csv":true,
+				".xlsx":true,
+			}
+			if _,ok:=AllowExtMap[ext];!ok{
+				return filePath,errors.New("文件格式不正确,允许文件格式(.xls/.csv/.xlsx)")
+			}
+
+		case 2:
+			//验证后缀名是否符合要求
+			var AllowExtMap map[string]bool = map[string]bool{
+				".jpg":true,
+				".png":true,
+				".img":true,
+			}
+			if _,ok:=AllowExtMap[ext];!ok{
+				return filePath,errors.New("文件格式不正确,允许文件格式(.jpg/.png/.img)")
+			}
 	}
-	if _,ok:=AllowExtMap[ext];!ok{
-		return filePath,errors.New("文件格式不正确,允许文件格式(.xls/.csv/.xlsx)")
-	}
+
 	//创建目录
 	uploadDir := "static/upload/"+formFile+"/"
 	err = os.MkdirAll( uploadDir , 777)
@@ -128,9 +144,12 @@ func (this *BaseController) UpFileTable(formFile string)(string,error){
 	if err != nil {
 		return filePath,err
 	}
-	filePath = uploadDir + fileName
+	filePath = "/"+uploadDir + fileName
 	return filePath,nil
 }
+
+
+
 
 //
 func (this *BaseController) Error404() {

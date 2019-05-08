@@ -25,7 +25,7 @@ func (this *DeviceCheckController)filterParams(params *models.DeviceCheck) {
 	completeFile := "file-complete_file"
 
 	if _, _,err := this.GetFile(readyFile);err == nil{
-		filePath,err := this.UpFileTable(readyFile)
+		filePath,err := this.UpFileTable(readyFile,1)
 		if err != nil {
 			this.ReturnJson(-1,readyFile+":"+err.Error(),nil)
 		}
@@ -40,7 +40,7 @@ func (this *DeviceCheckController)filterParams(params *models.DeviceCheck) {
 			this.ReturnJson(-1,"请上传初始详情表",nil)
 		}
 
-		filePath,err := this.UpFileTable(completeFile)
+		filePath,err := this.UpFileTable(completeFile,1)
 		if err != nil {
 			this.ReturnJson(-1,completeFile+":"+err.Error(),nil)
 		}
