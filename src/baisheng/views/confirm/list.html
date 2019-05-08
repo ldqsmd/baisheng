@@ -25,8 +25,9 @@
 
                                 <td>{{$val.Number}}</td>
                                 <td>
-                                    {{range $status, $des := $.storeStatus}}
-                                        {{if eq $status $val.StoreStatus}}
+
+                                    {{range  $des := $.storeStatus}}
+                                        {{if eq $des.Status $val.StoreStatus}}
                                             {{$des.Content}}
                                         {{end}}
                                     {{end}}
