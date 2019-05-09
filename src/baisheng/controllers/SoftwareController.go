@@ -126,11 +126,16 @@ func (this *SoftwareController)SignSoftware() {
 	var software models.Software
 
 	softwareId := this.GetString("softwareId")
+	status := this.GetString("status")
 	if  softwareId == ""{
-		this.ReturnJson(-1,"软件ID",nil)
+		this.ReturnJson(-1,"软件ID不能为空",nil)
+	}
+	if  status == ""{
+		this.ReturnJson(-1,"状态标识不能为空",nil)
 	}
 	software.AdminId = this.adminInfo.Id
 	software.SoftwareId,_ = strconv.Atoi(softwareId)
+	software.Status,_ = strconv.Atoi(status)
 	err := software.SignSoftware()
 	if err != nil{
 		this.ReturnJson(-1,err.Error(),nil)

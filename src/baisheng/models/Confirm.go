@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/astaxie/beego/orm"
+	"strconv"
 	"time"
 )
 
@@ -11,7 +12,7 @@ type Confirm struct {
 	StoreId   		int			`form:"storeId" `
 	Remark   		string		`form:"remark" `
 	ConfirmStatus  	int			`form:"confirmStatus" ` // 0 进行中1 已完成
-	CompleteTime   	string		`form:"completeTime" `
+	UpdateTime   	string		`form:"completeTime" `
 	CreateTime		string		`form:"_" `
 
 }
@@ -22,15 +23,18 @@ type ConfirmList struct {
 	UserName   		string		`form:"userName"`
 	ConfirmRemark  	string		`form:"confirmRemark" `
 	StoreStatus  	int			`form:"storeStatus" `
-	CompleteNum		string
-	TotalNum		string
+	WaitCheckNum	int
+	CompleteNum		int
+	FailNum			int
+	NoNeedCheckNum	int
+	TotalNum		int
 
 }
 
 func (this *Confirm) GetConfirmList()([]ConfirmList,error){
 
 	var confirmList []ConfirmList
-	_, err := orm.NewOrm().Raw("SELECT store.status as store_status, confirm_id,store.number,admin.user_name,confirm.complete_time,confirm.confirm_status,confirm.remark as confirm_remark  FROM  confirm   inner join  store   on  confirm.store_id = store.store_id inner join admin on confirm.admin_id = admin.id order by confirm.create_time desc").QueryRows(&confirmList)
+	_, err := orm.NewOrm().Raw("SELECT store.status as store_status, confirm_id,store.number,admin.user_name,confirm.update_time,confirm.confirm_status,confirm.remark as confirm_remark  FROM  confirm   inner join  store   on  confirm.store_id = store.store_id inner join admin on confirm.admin_id = admin.id order by confirm.create_time desc").QueryRows(&confirmList)
 	if err != nil {
 		return confirmList,err
 	}
@@ -38,12 +42,27 @@ func (this *Confirm) GetConfirmList()([]ConfirmList,error){
 	//遍历添加 完成数 和未完成数
 	for k,confirm :=  range confirmList {
 
-		var completeNum []orm.Params
-		var totalNum []orm.Params
-		orm.NewOrm().Raw("select count(*) as completeNum  from software where status = 1 and confirm_id= ?", confirm.ConfirmId).Values(&completeNum)
-		orm.NewOrm().Raw("select count(*) as  totalNum  from software where confirm_id= ?", confirm.ConfirmId).Values(&totalNum)
-		confirmList[k].CompleteNum = completeNum[0]["completeNum"].(string)
-		confirmList[k].TotalNum = totalNum[0]["totalNum"].(string)
+		var softwareStatusList []orm.ParamsList
+
+		//状态 0  没有核对 1  已经核对 2  安装失败 3  不需要核对
+		orm.NewOrm().Raw("select  status,count(*) as count from software where   confirm_id= ?  group by status ", confirm.ConfirmId).ValuesList(&softwareStatusList)
+
+		for _,val :=  range softwareStatusList{
+			num ,_:= strconv.Atoi(val[1].(string))
+			key ,_:= strconv.Atoi(val[0].(string))
+			switch key {
+				case 0:
+					confirmList[k].WaitCheckNum = num
+				case 1:
+					confirmList[k].CompleteNum = num
+				case 2:
+					confirmList[k].FailNum 	=  num
+				case 3:
+					confirmList[k].NoNeedCheckNum 	=  num
+
+			}
+			confirmList[k].TotalNum += num
+		}
 	}
 	return confirmList, nil
 }
@@ -66,6 +85,7 @@ func (this *Confirm)InsertOrUpdate()error  {
 		}
 		this.ConfirmId = int(conformId)
 	}else {
+		this.UpdateTime  = time.Now().Format("2006-01-02 15:04:05")
 		if  _,err :=  orm.NewOrm().Update(this); err != nil{
 			return err
 		}
@@ -74,11 +94,20 @@ func (this *Confirm)InsertOrUpdate()error  {
 }
 
 
+//更改该状态
+func (this *Confirm)UpdateStatus(confirmId,status int)error  {
 
+	this.ConfirmId 		= confirmId
+	this.ConfirmStatus 	= status
+	this.UpdateTime 	= time.Now().Format("2006-01-02 15:04:05")
+	if _,err := orm.NewOrm().Update(this,"ConfirmStatus","UpdateTime") ;err != nil{
 
+		return  err
+	}else{
 
-
-
+		return nil
+	}
+}
 
 
 

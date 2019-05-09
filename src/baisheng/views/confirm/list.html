@@ -13,9 +13,12 @@
                             <th>餐厅编号</th>
                             <th>餐厅状态</th>
                             <th>调试人</th>
-                            <th>完成时间</th>
-                            <th>状态</th>
+                            <th>未核对</th>
+                            <th>已核对</th>
+                            <th>安装失败</th>
+                            <th>无需核对</th>
                             <th>备注</th>
+                            <th>更新时间</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -25,7 +28,6 @@
 
                                 <td>{{$val.Number}}</td>
                                 <td>
-
                                     {{range  $des := $.storeStatus}}
                                         {{if eq $des.Status $val.StoreStatus}}
                                             {{$des.Content}}
@@ -33,20 +35,19 @@
                                     {{end}}
                                 </td>
                                 <td>{{$val.UserName}}</td>
-                                <td>{{$val.CompleteTime}}</td>
-                                <td>
 
-                                    {{if eq $val.TotalNum "0"}}
-                                        <span class="badge badge-warning">&nbsp;&nbsp;&nbsp;&nbsp;进行中 {{$val.CompleteNum}}/{{$val.TotalNum}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <td><span style="font-weight: bolder;font-size: 15px;">{{$val.WaitCheckNum}}</span></td>
+                                <td><span style="font-weight: bolder;font-size: 15px;" class="badge badge-primary">&nbsp; &nbsp; {{$val.CompleteNum}}/{{$val.TotalNum}}&nbsp; &nbsp; </span></td>
+                                <td><span style="color: red ;font-weight: bolder;font-size: 15px;">{{$val.FailNum}}</span></td>
+                                <td><span style="color: orange ;font-weight: bolder;font-size: 15px;">{{$val.NoNeedCheckNum}}</span></td>
+                                <td>{{$val.ConfirmRemark}}</td>
+                                <td>
+                                    {{if eq $val.UpdateTime ""}}
+                                        --
                                     {{else}}
-                                        {{if eq $val.TotalNum $val.CompleteNum }}
-                                            <span class="badge badge-primary">&nbsp;&nbsp;&nbsp;&nbsp;已完成 {{$val.CompleteNum}}/{{$val.TotalNum}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                        {{else}}
-                                            <span class="badge badge-warning">&nbsp;&nbsp;&nbsp;&nbsp;进行中 {{$val.CompleteNum}}/{{$val.TotalNum}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                        {{end}}
+                                        {{$val.UpdateTime}}
                                     {{end}}
                                 </td>
-                                <td>{{$val.ConfirmRemark}}</td>
                                 <td>
                                     <button onclick="edit({{$val.ConfirmId}})"  class=" btn   btn-xs btn-success" type="button">编辑</button>
                                     <a href="/software/list?confirmId={{$val.ConfirmId}}"  class=" btn   btn-xs" type="button">调店</a>
@@ -96,61 +97,6 @@
         });
 
     }
-
-    //标记餐厅为 重要
-    function signStore(storeId,signFlag){
-        var url     = '{{urlfor "StoreController.SignStore"}}';
-
-        if(signFlag == 1){
-            signFlag = 2
-        }else{
-            signFlag = 1
-        }
-
-        $.ajax({
-            url : url,
-            type : 'POST',
-            dataType : 'json',
-            data : {
-                storeId :storeId,
-                signFlag :signFlag,
-            },
-            success : function(data) {
-                console.log(data);
-                if(data.code == 0){
-                    layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
-                        window.location.reload()
-                    });
-                }else{
-                    layer.msg(data.message, {icon: 5,offset: '400px'});
-                }
-            }
-        });
-    }
-
-    function forbidStore(storeId){
-        var url = '{{urlfor "StoreController.DeleteStore"}}';
-
-        $.ajax({
-            url : url,
-            type : 'POST',
-            dataType : 'json',
-            data : {
-                storeId :storeId,
-            },
-            success : function(data) {
-                console.log(data);
-                if(data.code == 0){
-                    layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
-                        window.location.href='{{ urlfor "StoreController.StoreList"}}'
-                    });
-                }else{
-                    layer.msg(data.message, {icon: 5,offset: '400px'});
-                }
-            }
-        });
-    }
-
     $(document).ready(function () {
         $('.dataTables-example').dataTable(
             {
@@ -165,8 +111,6 @@
                     { "width": "1%" },
                     { "width": "4%" },
                     { "width": "4%" },
-
-
                 ]
             }
         );

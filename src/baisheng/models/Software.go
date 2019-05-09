@@ -57,21 +57,31 @@ func (this *Software)InsertOrUpdate()error  {
 			return err
 		}
 	}
+	//如果有添加或者 更新 则 修改 confirm 状态为未完成
 	var confirm Confirm
-	confirm.ConfirmId = this.ConfirmId
-	confirm.ConfirmStatus = 0
-	orm.NewOrm().Update(&confirm,"ConfirmStatus")
-
+	if err := confirm.UpdateStatus(this.ConfirmId,0) ; err != nil{
+		return err
+	}
 	return nil
 }
 
 //标记完成
 func (this *Software)SignSoftware()error  {
 
-	this.Status  = 1
 	this.CheckTime  = time.Now().Format("2006-01-02 15:04:05")
 	if  _,err :=  orm.NewOrm().Update(this,"Status","CheckTime","AdminId"); err != nil{
 		return err
+	}
+	//如果所有软件都完成了 则修改confirm状态为 完成
+	var count  int
+	if orm.NewOrm().Raw("SELECT count(*)  from software where confirm_id=? and status != 1 and status != 3 ", this.ConfirmId).QueryRow(&count) ;count == 0 {
+		var confirm Confirm
+		var confirmId int
+ 		orm.NewOrm().Raw("select confirm_id from software where software_id=?",this.SoftwareId).QueryRow(&confirmId)
+
+		if err := confirm.UpdateStatus(confirmId,1) ; err != nil{
+			return err
+		}
 	}
 
 	return nil

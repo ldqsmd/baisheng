@@ -1,4 +1,10 @@
+<style>
+    .changeStatus {
+        font-size: 15px;
+        font-weight: bolder;
+    }
 
+</style>
 <div class="wrapper wrapper-content animated fadeInRight" >
     <div class="row">
         <div class="col-sm-12">
@@ -23,7 +29,7 @@
                             <th>软件名称</th>
                             <th>版本</th>
                             <th>调试人</th>
-                            <th>完成时间</th>
+                            <th>状态更新时间</th>
                             <th>状态</th>
                             <th>备注</th>
                             <th>操作</th>
@@ -33,32 +39,37 @@
 
                         {{range $key, $val := .softwareList}}
                             <tr class="gradeX">
-
-
                                 <td>
-
                                     {{$val.SoftwareName}}</td>
                                 <td>{{$val.Version}}</td>
                                 <td>{{$val.AdminName}}</td>
                                 <td>
-                                    {{if eq $val.Status 1 }}
-                                        {{$val.CheckTime}}
-                                    {{else}}
-                                        未完成
-                                    {{end}}
+                                    {{$val.CheckTime}}
                                 </td>
                                 <td>
-                                    {{if eq $val.Status 1 }}
+                                    {{if eq $val.Status 0 }}
+                                        <span class="badge badge-defautl">&nbsp;&nbsp;&nbsp;&nbsp;未核对&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{else if eq $val.Status 1  }}
                                         <span class="badge badge-primary">&nbsp;&nbsp;&nbsp;&nbsp;已完成&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                    {{else}}
-                                        <span class="badge badge-warning">&nbsp;&nbsp;&nbsp;&nbsp;进行中&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{else if eq $val.Status 2  }}
+                                        <span class="badge badge-danger">&nbsp;&nbsp;&nbsp;&nbsp;安装失败&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{else if eq $val.Status 3  }}
+                                        <span class="badge badge-warning">&nbsp;&nbsp;&nbsp;&nbsp;无需安装&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     {{end}}
                                 </td>
                                 <td>{{$val.Remark}}</td>
                                 <td>
-                                    {{if eq $val.Status 0}}
-                                        <button onclick="signOk({{$val.SoftwareId}})"  class="btn btn-outline  btn-primary   btn-xs">完成<i class="fa fa-check"></i></button>
-                                    {{end}}
+                                    <div class="btn-group">
+                                        <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle">更改状态 <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="changeStatus" onclick="changeStatus({{$val.SoftwareId}},1)" >已核对</a></li>
+                                            <li><a class="changeStatus" onclick="changeStatus({{$val.SoftwareId}},2)"  class="font-bold">安装失败</a></li>
+                                            <li><a class="changeStatus" onclick="changeStatus({{$val.SoftwareId}},3)"  class="font-bold">无需核对</a></li>
+                                            <li class="divider"></li>
+                                            <li><a  class="changeStatus"  onclick="changeStatus({{$val.SoftwareId}},0)" >未核对</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                     <button  onclick="editSoftware({{$val.SoftwareId}})" class=" btn   btn-xs btn-success" type="button">编辑</button>
                                     <button  onclick="delSoftware({{$val.SoftwareId}})" class=" btn   btn-xs btn-danger" type="button">删除</button>
 
@@ -92,10 +103,11 @@
 
     }
     //标记餐厅为 重要
-    function signOk(softwareId){
+    function changeStatus(softwareId,status){
 
+        statusArr = ["未核对","完成","安装失败","无需核对"]
         //询问框
-        parent.layer.confirm('确认标记该软件为完成？', {
+        parent.layer.confirm('确认标记该软件为'+statusArr[status]+'?', {
             btn: ['确当','手滑'], //按钮
             shade: false //不显示遮罩
         }, function(){
@@ -106,6 +118,7 @@
                 dataType : 'json',
                 data : {
                     softwareId :softwareId,
+                    status :status,
                 },
                 success : function(data) {
                     if(data.code == 0){
