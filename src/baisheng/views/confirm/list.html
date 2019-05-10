@@ -11,6 +11,7 @@
                         <thead>
                         <tr>
                             <th>餐厅编号</th>
+                            <th>餐厅名称</th>
                             <th>餐厅状态</th>
                             <th>调试人</th>
                             <th>未核对</th>
@@ -27,6 +28,7 @@
                             <tr class="gradeX">
 
                                 <td>{{$val.Number}}</td>
+                                <td>{{$val.StoreName}}</td>
                                 <td>
                                     {{range  $des := $.storeStatus}}
                                         {{if eq $des.Status $val.StoreStatus}}
@@ -95,7 +97,6 @@
                 location.reload()
             }
         });
-
     }
     $(document).ready(function () {
         $('.dataTables-example').dataTable(
@@ -104,12 +105,16 @@
                 "bAutoWidth":false,
                 "columns": [
                     //给第一列指定宽度为表格整个宽度的20%
-                    { "width": "4%" },
-                    { "width": "3%" },
-                    { "width": "3%" },
-                    { "width": "4%" },
                     { "width": "1%" },
                     { "width": "4%" },
+                    { "width": "1%" },
+                    { "width": "1%" },
+                    { "width": "1%" },
+                    { "width": "1%" },
+                    { "width": "1%" },
+                    { "width": "1%" },
+                    { "width": "2%" },
+                    { "width": "2%" },
                     { "width": "4%" },
                 ]
             }

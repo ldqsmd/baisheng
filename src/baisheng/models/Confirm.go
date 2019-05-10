@@ -20,6 +20,7 @@ type Confirm struct {
 type ConfirmList struct {
 	Confirm
 	Number     		string		`form:"number" ` //餐厅编号
+	StoreName     	string
 	UserName   		string		`form:"userName"`
 	ConfirmRemark  	string		`form:"confirmRemark" `
 	StoreStatus  	int			`form:"storeStatus" `
@@ -34,7 +35,7 @@ type ConfirmList struct {
 func (this *Confirm) GetConfirmList()([]ConfirmList,error){
 
 	var confirmList []ConfirmList
-	_, err := orm.NewOrm().Raw("SELECT store.status as store_status, confirm_id,store.number,admin.user_name,confirm.update_time,confirm.confirm_status,confirm.remark as confirm_remark  FROM  confirm   inner join  store   on  confirm.store_id = store.store_id inner join admin on confirm.admin_id = admin.id order by confirm.create_time desc").QueryRows(&confirmList)
+	_, err := orm.NewOrm().Raw("SELECT store.store_name, store.status as store_status, confirm_id,store.number,admin.user_name,confirm.update_time,confirm.confirm_status,confirm.remark as confirm_remark  FROM  confirm   inner join  store   on  confirm.store_id = store.store_id inner join admin on confirm.admin_id = admin.id order by confirm.create_time desc").QueryRows(&confirmList)
 	if err != nil {
 		return confirmList,err
 	}

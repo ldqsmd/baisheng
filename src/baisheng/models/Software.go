@@ -82,6 +82,8 @@ func (this *Software)SignSoftware()error  {
 		if err := confirm.UpdateStatus(confirmId,1) ; err != nil{
 			return err
 		}
+	}else{
+		
 	}
 
 	return nil

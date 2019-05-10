@@ -8,18 +8,26 @@
 
                         <div class="form-group">
                             <label class="col-sm-4 control-label">餐厅名称</label>
-
                             <div class="col-sm-3">
-                                <select class="form-control m-b" name="storeId" id="storeId" >
-                                    {{range $key, $val := .storeList}}
-                                        <option
+                                <div class="input-group">
+                                    <input type="text"
+                                            {{range $val := .optionList}}
                                                 {{if eq $val.StoreId $.checkInfo.StoreId}}
-                                                    selected
+                                                    value="{{$val.StoreName}}"
                                                 {{end}}
-                                                value="{{$val.StoreId}}">{{$val.StoreName}}
-                                        </option>
-                                    {{end}}
-                                </select>
+                                            {{end}}
+
+                                           class="form-control" name="storeId-select"  id="store-select">
+                                    <input type="hidden" class="form-control" name="storeId"    value="{{.checkInfo.StoreId}}"   id="storeId">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        </ul>
+                                    </div>
+                                    <!-- /btn-group -->
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -82,8 +90,28 @@
         </div>
     </div>
 </div>
+<script src="/static/js/plugins/suggest/bootstrap-suggest.min.js"></script>
 
 <script>
+    //data 数据中获取
+    $("#store-select").bsSuggest({
+        indexId: 2, //data.value 的第几个数据，作为input输入框的内容
+        indexKey: 1, //data.value 的第几个数据，作为input输入框的内容
+        idField: "storeId",    //id字段
+        keyField: "storeName",   //key字段
+        effectiveFields:["storeId","storeName"],
+        effectiveFieldsAlias:{storeId: "餐厅ID",storeName:"餐厅名称"},
+        showHeader: true,
+        data: {
+            'value':{{.optionList}}  ,
+            'defaults': ' '
+        }
+    }).on("onSetSelectValue",function(e, keyword) {    //选择时
+
+        console.log(keyword)
+        $("#storeId").attr("value",keyword.id)
+    });
+
     //以下为官方示例
     $().ready(function () {
 

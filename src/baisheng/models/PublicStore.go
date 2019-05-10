@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/astaxie/beego/orm"
 	"time"
 )
@@ -36,10 +37,18 @@ type PublicStore struct {
 	SignFlag		int		`form:"signFlag"`
 }
 
+
+type StoreOption struct {
+	StoreId         int 	`json:"storeId"`
+	StoreName       string 	`json:"storeName"`
+}
+
+
 func (this *PublicStore) TableName() string {
 	return "store"
 }
 
+//获取餐厅列表
 func (this *PublicStore) GetStoreList()([]PublicStore,error){
 	var storeList []PublicStore
 	_, err := orm.NewOrm().Raw("SELECT * from store order by forbidden_status, sign_flag desc,open_time desc,wait_time desc").QueryRows(&storeList)
@@ -48,6 +57,21 @@ func (this *PublicStore) GetStoreList()([]PublicStore,error){
 	}
 	return storeList, nil
 }
+
+//获取餐厅option 信息
+func (this  StoreOption)GetStoreOption()[]StoreOption  {
+
+	var storeOption []StoreOption
+
+	num, err :=  orm.NewOrm().Raw("SELECT store_id, store_name FROM store order by wait_time desc ").QueryRows(&storeOption)
+	if err == nil {
+		fmt.Println("user nums: ", num)
+	}
+
+	return  storeOption
+
+}
+
 
 func (this *PublicStore)InsertOrUpdate()error {
 

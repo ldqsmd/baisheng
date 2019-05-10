@@ -5,7 +5,6 @@ import (
 	"time"
 )
 
-
 type DeviceCheck struct {
 	CheckId 		int 	`json:"checkId" form:"checkId"  orm:"pk"`
 	StoreId			int 	`json:"storeId" form:"storeId"`
@@ -33,7 +32,7 @@ func (this *DeviceCheck) TableName() string {
 func (this *CheckList) GetCheckList()([]CheckList,error){
 
 	var checkList []CheckList
-	_, err := orm.NewOrm().Raw("SELECT d.*,store.store_name,store.number,a.user_name as admin_name FROM  device_check as d left join admin as a on d.admin_id=a.id left join store on store.store_id = d.store_id ").QueryRows(&checkList)
+	_, err := orm.NewOrm().Raw("SELECT d.*,store.store_name,store.number,a.user_name as admin_name FROM  device_check as d left join admin as a on d.admin_id=a.id left join store on store.store_id = d.store_id order by d.update_time desc ").QueryRows(&checkList)
 	if err == nil {
 		return checkList,err
 	}
@@ -42,11 +41,11 @@ func (this *CheckList) GetCheckList()([]CheckList,error){
 
 
 func (this *DeviceCheck) GetCheckInfo(checkId string)(DeviceCheck){
-
 	var deviceCheck  DeviceCheck
 	orm.NewOrm().Raw("select * from device_check where check_id=?",checkId).QueryRow(&deviceCheck)
 	return deviceCheck
 }
+
 
 func (this *DeviceCheck)InsertOrUpdate()error  {
 

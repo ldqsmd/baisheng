@@ -18,7 +18,7 @@ type Admin struct {
 
 func (this *Admin) GetAdminList()([]Admin,int64)  {
 	var adminList []Admin
-	query := orm.NewOrm().QueryTable(AdminTabelName())
+	query := orm.NewOrm().QueryTable("admin")
 	total ,_ :=query.OrderBy("id").Filter("status","0").All(&adminList)
 	return adminList, total
 }

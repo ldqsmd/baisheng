@@ -76,8 +76,8 @@ func (this *DeviceCheckController)AddCheck() {
 
 	switch this.requestMethod {
 		case "GET":
-			var store	models.PublicStore
-			this.Data["storeList"] 	 , _ = store.GetStoreList()
+			var storeOption 	models.StoreOption
+			this.Data["optionList"] 	=  storeOption.GetStoreOption()
 			this.Data["titleName"]  = "添加审查信息"
 			this.SetTpl("base/layout_page.html","deviceCheck/add.html")
 
@@ -106,11 +106,11 @@ func (this *DeviceCheckController)EditCheck() {
 				this.Abort("404")
 			}else{
 				var check models.DeviceCheck
-				var store	models.PublicStore
+				var storeOption 	models.StoreOption
 				if checkInfo := check.GetCheckInfo(checkId);checkInfo.CheckId == 0 {
 					this.Abort("404")
 				}
-				this.Data["storeList"],_ = store.GetStoreList()
+				this.Data["optionList"] 	=  storeOption.GetStoreOption()
 				this.Data["checkInfo"]  =  check.GetCheckInfo(checkId)
 				this.Data["titleName"] 	= "编辑审查信息"
 				this.SetTpl("base/layout_page.html","deviceCheck/edit.html")

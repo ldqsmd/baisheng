@@ -1,0 +1,100 @@
+<link href="/static/css/plugins/cropper/cropper.min.css" rel="stylesheet">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 ">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">设备名称</label>
+                            <div class="col-sm-3">
+                                <input  value="{{.deviceInfo.DeviceName}}" id="deviceName" name="deviceName" class="form-control" type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">设备型号</label>
+                            <div class="col-sm-3">
+                                <input   value="{{.deviceInfo.DeviceType}}" id="deviceType" name="deviceType" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">产地</label>
+                            <div class="col-sm-3">
+                                <input  value="{{.deviceInfo.Origin}}"  id="origin" name="origin" class="form-control" type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">设备JDE项目号</label>
+                            <div class="col-sm-3">
+                                <input  value="{{.deviceInfo.DeviceJde}}"  id="deviceJde" name="deviceJde" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">供应商JDE码</label>
+                            <div class="col-sm-3">
+                                <input  value="{{.deviceInfo.SupplierJde}}"  id="supplierJde" name="supplierJde" class="form-control" type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">供应商名称</label>
+                            <div class="col-sm-3">
+                                <input   value="{{.deviceInfo.Supplier}}" id="supplier" name="supplier" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">描述</label>
+                            <div class="col-sm-3">
+                                <input  value="{{.deviceInfo.Description}}"  id="description" name="description" class="form-control" type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">备注</label>
+                            <div class="col-sm-3">
+                                <input  value="{{.deviceInfo.Remark}}"  id="remark" name="remark" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <input  value="{{.deviceInfo.DeviceId}}"  id="deviceId" name="deviceId" class="form-control" type="hidden">
+
+                            <button class="btn btn-primary " type="submit">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //以下为官方示例
+    $().ready(function () {
+
+        // validate signup form on keyup and submit
+        var icon = "<i class='fa fa-times-circle'></i> ";
+        $("#signupForm").validate({
+            rules: {
+                deviceName: "required",
+            },
+            messages: {
+                deviceName: icon + "请填设备名称",
+            },
+            submitHandler:function(form){
+                var form = new FormData(document.getElementById("signupForm"));
+
+                $.ajax({
+                    url:"/device/edit",
+                    type:"post",
+                    data:form,
+                    processData:false,
+                    contentType:false,
+                    success:function(data){
+
+                        if(data.code == 0){
+                            parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                                parent.layer.closeAll()
+                            });
+                        }else{
+                            layer.msg(data.message, {icon: 5,offset: '400px'});
+                        }
+                    }
+                });
+            }
+        });
+
+    });
+
+
+</script>

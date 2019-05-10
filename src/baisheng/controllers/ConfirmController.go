@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"baisheng/models"
-	"fmt"
 	"github.com/astaxie/beego/validation"
 )
 
@@ -52,16 +51,14 @@ func (this *ConfirmController)AddConfirm() {
 
 	switch this.requestMethod {
 		case "GET":
-			var store	models.PublicStore
-			this.Data["storeList"] 	 , _ = store.GetStoreList()
+			var storeOption 	models.StoreOption
+			this.Data["optionList"] 	=  storeOption.GetStoreOption()
 			this.Data["titleName"]  = "添加调试信息"
 			this.Data["statusList"] = GetStatusList()
 			this.SetTpl("base/layout_page.html","confirm/add.html")
 
 		case "POST":
-
 			var confirm models.Confirm
-
 			if err := this.ParseForm(&confirm); err != nil {
 				this.ReturnJson(-1,err.Error(),nil)
 			}
@@ -81,16 +78,13 @@ func (this *ConfirmController)EditConfirm() {
 
 	switch this.requestMethod {
 		case "GET":
-			var  confirm	models.Confirm
-			var  store		models.PublicStore
-
+			var  confirm		models.Confirm
+			var storeOption 	models.StoreOption
 			confirmId := this.GetString("confirmId")
 			if confirmId == ""{
-				this.Abort("404")
+				this.Abort(	"404")
 			}
-
-		fmt.Println(this.Data["confirmInfo"] )
-			this.Data["storeList"] 	 , _ = store.GetStoreList()
+			this.Data["optionList"] 	=  storeOption.GetStoreOption()
 			this.Data["confirmInfo"] , _ =  confirm.GetConfirmInfo(confirmId)
 			this.Data["titleName"] 		= "编辑调试信息"
 			this.SetTpl("base/layout_page.html","confirm/edit.html")
