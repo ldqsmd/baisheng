@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"baisheng/models"
+	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
 	"reflect"
 	"strings"
@@ -20,7 +21,7 @@ func (this *StoreController)filterParams(store *models.Store) {
 	valid.Required(store.Number, "餐厅编号").Message("不能为空")
 	valid.Required(store.Brand, "餐厅品牌").Message("不能为空")
 	valid.Required(store.Status, "餐厅状态").Message("不能为空")
-
+	valid.Required(store.SystemId, "餐厅系统").Message("不能为空")
 
 	//新店
 	if store.Status == 1 {
@@ -114,6 +115,8 @@ func (this *StoreController)AddStore() {
 
 	switch this.requestMethod {
 		case "GET":
+			var system	models.System
+			this.Data["systemList"],_ =  system.GetList()
 			this.Data["titleName"]  = "添加餐厅信息"
 			this.Data["statusList"] = GetStatusList()
 			this.SetTpl("base/layout_page.html","store/add.html")
@@ -124,12 +127,14 @@ func (this *StoreController)AddStore() {
 			if err := this.ParseForm(&store); err != nil {
 				this.ReturnJson(-1,err.Error(),nil)
 			}
-
 			//校验必填参数
 			this.filterParams(&store)
+
 			if err := store.InsertOrUpdate();err != nil{
 				this.ReturnJson(-2,err.Error(),nil)
 			}
+			this.ReturnJson(-2,"test" ,store)
+
 			this.ReturnJson(0,"添加成功",nil)
 	}
 }
@@ -145,6 +150,8 @@ func (this *StoreController)EditStore() {
 			if storeId == ""{
 				this.Abort("404")
 			}
+
+			this.Data["systemList"]    =  GetStoreSystem(storeId)
 			this.Data["statusList"] 	=  GetStatusList()
 			this.Data["titleName"] 		= "编辑餐厅信息"
 			this.Data["storeInfo"] 		= store.PublicStore.GetStoreInfo(storeId)
@@ -208,4 +215,14 @@ func (this *StoreController)SignStore() {
 		this.ReturnJson(-1,err.Error(),nil)
 	}
 	this.ReturnJson(0,"操作成功",nil)
+}
+
+//获取餐厅系统列表
+func  GetStoreSystem(storeId string) []models.StoreSystemList {
+	var  list []models.StoreSystemList
+	sql :=  `select s.system_id,system_name,ss.store_system_id from system as s left join  (select store_system_id, system_id from store_system  where store_id = ? ) as ss on s.system_id = ss.system_id order by ss.store_system_id desc`
+	orm.NewOrm().Raw(sql, storeId).QueryRows(&list)
+
+	return list
+
 }

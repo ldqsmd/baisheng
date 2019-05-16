@@ -8,7 +8,7 @@ import (
 type System struct {
 	SystemId 		int 	`json:"systemId" form:"systemId" orm:"pk"`
 	SystemName		string  `json:"systemName" form:"systemName"`
-	Remark			string	`json:"Remark" form:"Remark"`
+	Remark			string	`json:"remark" form:"remark"`
 	Status			string	`json:"status" form:"status"`
 	CreateTime		string  `json:"createTime"`
 	UpdateTime		string  `json:"updateTime"`
@@ -38,6 +38,7 @@ func (this *System) GetInfo(systemId string)(System){
 
 
 func (this *System)InsertOrUpdate()error  {
+
 
 	nowTime := time.Now().Format("2006-01-02 15:04:05")
 	if this.SystemId == 0 {

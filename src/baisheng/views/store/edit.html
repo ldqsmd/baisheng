@@ -7,9 +7,6 @@
                     <h5>
                         <a href="{{ urlfor "StoreController.StoreList"}}">餐厅列表</a>>
                         {{.titleName}}</h5>
-                    <div class="ibox-tools">
-                        <a href="{{ urlfor "StoreController.StoreList"}}"><i class="fa fa-times"></i></a>
-                    </div>
                 </div>
                 <div class="ibox-content">
 
@@ -147,6 +144,18 @@
                                 <input value="{{.storeInfo.StoreRemark}}" id="storeRemark" name="storeRemark" class="form-control" type="text">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">餐厅系统</label>
+                            <div class="col-sm-8">
+                                {{range $val :=  .systemList }}
+                                    <input
+                                            {{if ne $val.StoreSystemId 0}}
+                                                checked
+                                            {{end}}
+                                            type="checkbox" name="systemId"  class="storeSystem" storeId="{{$.storeInfo.StoreId}}" value="{{$val.SystemId}}"> <i></i> {{$val.SystemName}} &nbsp;&nbsp;&nbsp;&nbsp;
+                                {{end}}
+                            </div>
+                        </div>
 
                         <div class="form-group  " id="status-detail">
                             <label class="col-sm-1 control-label"></label>
@@ -172,18 +181,13 @@
                                             <div id="tab-10" class="tab-pane statusTab status3 active">
                                                 <div class="panel-body">
                                                     {{template "closeStore/editCloseStore.html" .}}
-
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-2">
                                 <button class="btn btn-primary" type="submit">提交</button>
@@ -197,6 +201,37 @@
 </div>
 {{/*<script src="/static/js/demo/form-validate-demo.js"></script>*/}}
 <script>
+
+    //随状态切换tab
+    $(".storeSystem").change(function(){
+        var systemId =  $(this).val()
+        var storeId =  $(this).attr("storeId")
+
+        if ($(this).is(":checked")){
+         url = "/storeSystem/add"
+        }else{
+            url = "/storeSystem/del"
+        }
+
+        $.ajax({
+            url :url ,
+            type : 'POST',
+            dataType : 'json',
+            data : {
+                storeId  :storeId,
+                systemId :systemId,
+            },
+            success : function(data) {
+                console.log(data);
+                if(data.code == 0){
+                    layer.msg(data.message, {icon: 1,time:1000,offset: '400px'});
+                }else{
+                    layer.msg(data.message, {icon: 5,offset: '400px'});
+                }
+            }
+        });
+    });
+
 
     //以下为官方示例
     $().ready(function () {

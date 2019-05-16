@@ -58,8 +58,9 @@ func (this *DeviceController)Add() {
 
 			if err := device.InsertOrUpdate();err != nil{
 				this.ReturnJson(-2,err.Error(),nil)
+			}else{
+				this.ReturnJson(0,"添加成功",nil)
 			}
-			this.ReturnJson(0,"添加成功",nil)
 	}
 }
 

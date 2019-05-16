@@ -1,0 +1,133 @@
+
+<div class="wrapper wrapper-content animated fadeInRight" >
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content" >
+                    {{template  "model/add.html" .}}
+
+                    <table class="table table-striped table-bordered table-hover dataTables-example ">
+                        <thead>
+                        <tr>
+                            <th>餐厅名称</th>
+                            <th>供应商JDE</th>
+                            <th>供应商名称</th>
+                            <th>订单编号</th>
+                            <th>设备名称</th>
+                            <th>设备JDE</th>
+                            <th>旧设备数量</th>
+                            <th>新购数量</th>
+                            <th>单价(元)</th>
+                            <th>总价(元)</th>
+                            <th>备注</th>
+                            <th>小件订购</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {{range $key, $val := .storeDeviceList}}
+                            <tr class="gradeX">
+
+                                <td>{{$key}}</td>
+                                <td>{{$val.SupplierJde}}</td>
+                                <td>{{$val.Supplier}}</td>
+                                <td>{{$val.OrderNum}}</td>
+                                <td>{{$val.DeviceName}}</td>
+                                <td>{{$val.DeviceJde}}</td>
+                                <td>{{$val.OldDeviceNum}}</td>
+                                <td>{{$val.Number}}</td>
+                                <td>{{$val.Price}}</td>
+                                <td>{{$val.TotalPrice}}</td>
+                                <td>{{$val.Remark}}</td>
+                                <td>{{$val.SmallBook}}</td>
+                                <td>更新</td>
+                            </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page-Level Scripts -->
+<script>
+
+    function edit(id) {
+        //iframe层
+        parent.layer.open({
+            type: 2,
+            title: '编辑模板信息',
+            shadeClose: true,
+            shade: 0.3,
+            area: ['40%', '45%'],
+            content: ["/model/edit?modelId="+id ,"no"],
+            end:function () {
+               location.reload()
+            }
+        });
+
+    }
+
+    function del(id){
+
+        //询问框
+        parent.layer.confirm('删除之后将不能找回,确认删除？', {
+            btn: ['确当','手滑'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            var url     = '{{urlfor "ModelController.DelModel"}}';
+            $.ajax({
+                url : url,
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    modelId :id,
+                },
+                success : function(data) {
+                    if(data.code == 0){
+                        parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                            window.location.reload()
+                        });
+                    }else{
+                        layer.msg(data.message, {icon: 5,time:1000,offset: '400px'});
+                    }
+                }
+            });
+        }, function(){
+            // parent.layer.close()
+            parent.layer.msg('彪啊，乱点啥！', {time:500,shift: 6});
+        });
+    }
+
+    $(document).ready(function () {
+        $('.dataTables-example').dataTable(
+            {
+                "ordering": false,
+                "bAutoWidth":false,
+                "columns": [
+                    //给第一列指定宽度为表格整个宽度的20%
+                    { "width": "1%" },
+                    { "width": "3%" },
+                    { "width": "3%" },
+                    { "width": "3%" },
+                    { "width": "2%" },
+                    { "width": "2%" },
+                    { "width": "2%" },
+                    { "width": "2%" },
+                    { "width": "1%" },
+                    { "width": "1%" },
+                    { "width": "4%" },
+                    { "width": "4%" },
+                    { "width": "1%" },
+                ]
+            }
+        );
+
+
+        //删除 软删除
+        $(".delStore").click();
+    });
+
+</script>

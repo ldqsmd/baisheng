@@ -30,3 +30,4 @@ func GetStatusList()[]models.StoreStatus{
 	return statusList
 }
 
+

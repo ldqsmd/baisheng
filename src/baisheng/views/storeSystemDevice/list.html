@@ -1,0 +1,164 @@
+
+<div class="wrapper wrapper-content animated fadeInRight" >
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <a href="{{ urlfor "StoreController.StoreList"}}">餐厅列表</a>>
+                        {{.storeInfo.StoreName}}</h5>
+                    <div class="ibox-tools">
+                        <a href="{{ urlfor "StoreController.StoreList"}}"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content" >
+                    <table class="table table-striped table-bordered table-hover dataTables-example ">
+                        <thead>
+                        <tr>
+                            <th>序列</th>
+                            <th>所属系统</th>
+                            <th>供应商JDE</th>
+                            <th>供应商名称</th>
+                            <th>订单编号</th>
+                            <th>设备名称</th>
+                            <th>设备JDE</th>
+                            <th>旧设备数量</th>
+                            <th>新购数量</th>
+                            <th>单价(元)</th>
+                            <th>总价(元)</th>
+                            <th>备注</th>
+                            <th>小件订购</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {{range $key, $val := .storeSystemDeviceList}}
+                            <tr class="gradeX">
+
+                                <td>{{$key}}</td>
+                                <td>{{$val.SystemName}}</td>
+                                <td>{{$val.SupplierJde}}</td>
+                                <td>{{$val.Supplier}}</td>
+                                <td>{{$val.OrderNum}}</td>
+                                <td>{{$val.DeviceName}}</td>
+                                <td>{{$val.DeviceJde}}</td>
+                                <td>{{$val.OldDeviceNum}}</td>
+                                <td>{{$val.Number}}</td>
+                                <td>{{$val.Price}}</td>
+                                <td>{{$val.TotalPrice}}</td>
+                                <td>{{$val.Remark}}</td>
+                                <td>{{$val.SmallBook}}</td>
+                                <td>
+                                    {{if eq $val.StoreSystemDeviceId 0}}
+                                    <button  onclick="add({{$.storeId}},{{$val.DeviceName}},{{$val.SystemDeviceId}})" class=" btn   btn-xs btn-success" type="button">添加</button>
+                                    {{else}}
+                                    <button  onclick="edit({{$val.StoreSystemDeviceId}},{{$val.DeviceName}})" class=" btn   btn-xs btn-success" type="button">编辑</button>
+                                    {{end}}
+                                </td>
+                            </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page-Level Scripts -->
+<script>
+
+    function add(storeId,deviceName,systemDeviceId) {
+        //iframe层
+        parent.layer.open({
+            type: 2,
+            title: "《"+ {{.storeInfo.StoreName}} +"》"+ deviceName,
+            shadeClose: true,
+            shade: 0.3,
+            area: ['40%', '50%'],
+            content: ["/storeSystemDevice/add?storeId="+storeId+"&systemDeviceId="+systemDeviceId,"yes"],
+            end:function () {
+               location.reload()
+            }
+        });
+
+    }
+
+    function edit(storeSystemDeviceId,deviceName) {
+        //iframe层
+        parent.layer.open({
+            type: 2,
+            title: "《"+ {{.storeInfo.StoreName}} +"》"+ deviceName,
+            shadeClose: true,
+            shade: 0.3,
+            area: ['40%', '50%'],
+            content: ["/storeSystemDevice/edit?storeSystemDeviceId="+storeSystemDeviceId ,"yes"],
+            end:function () {
+               location.reload()
+            }
+        });
+
+    }
+
+    function del(id){
+
+        //询问框
+        parent.layer.confirm('删除之后将不能找回,确认删除？', {
+            btn: ['确当','手滑'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            var url     = '{{urlfor "ModelController.DelModel"}}';
+            $.ajax({
+                url : url,
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    modelId :id,
+                },
+                success : function(data) {
+                    if(data.code == 0){
+                        parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                            window.location.reload()
+                        });
+                    }else{
+                        layer.msg(data.message, {icon: 5,time:1000,offset: '400px'});
+                    }
+                }
+            });
+        }, function(){
+            // parent.layer.close()
+            parent.layer.msg('彪啊，乱点啥！', {time:500,shift: 6});
+        });
+    }
+
+    $(document).ready(function () {
+        $('.dataTables-example').dataTable(
+            {
+                "ordering": false,
+                "bAutoWidth":false,
+                "columns": [
+                    //给第一列指定宽度为表格整个宽度的20%
+                    { "width": "1%" },
+                    { "width": "3%" },
+                    { "width": "3%" },
+                    { "width": "3%" },
+                    { "width": "3%" },
+                    { "width": "2%" },
+                    { "width": "2%" },
+                    { "width": "2%" },
+                    { "width": "2%" },
+                    { "width": "1%" },
+                    { "width": "1%" },
+                    { "width": "4%" },
+                    { "width": "4%" },
+                    { "width": "1%" },
+                ]
+            }
+        );
+
+
+        //删除 软删除
+        $(".delStore").click();
+    });
+
+</script>

@@ -35,94 +35,65 @@ func (this *SystemDeviceController)filterParams(params *models.SystemDevice) {
 func (this *SystemDeviceController)List() {
 
 	var systemDevice	models.SystemDevice
+	var system 	models.System
 
-	if systemId := this.GetString("systemId") ; systemId == ""{
-		this.ReturnJson(-1,"设备ID不能为空",nil)
-	}else{
-		intSystemId ,_ := strconv.Atoi(systemId)
-		this.Data["systemDeviceList"] , _ = systemDevice.GetSystemDeviceList(intSystemId)
-		this.SetTpl("base/layout_page.html","systemDevice/list.html")
-	}
+	systemId ,_ := strconv.Atoi(this.GetString("systemId"))
+	systemDeviceList, _ := systemDevice.GetSystemDeviceList(systemId)
+	this.Data["systemDeviceList"]  = systemDeviceList
+	this.Data["systemId"]  = systemId
+	this.Data["systemList"] , _ = system.GetList()
+	this.SetTpl("base/layout_page.html","systemDevice/list.html")
+
 }
 
 //添加
-func (this *SystemController)Add() {
+func (this *SystemDeviceController)Edit() {
 
 	switch this.requestMethod {
-		case "GET":
-			this.SetTpl("base/layout_page.html","system/add.html")
-
 		case "POST":
 
-			var system	models.System
-			if err := this.ParseForm(&system); err != nil {
+			var systemDevice	models.SystemDevice
+			if err := this.ParseForm(&systemDevice); err != nil {
 				this.ReturnJson(-1,err.Error(),nil)
 			}
 			//校验必填参数
-			this.filterParams(&system)
-
-			if err := system.InsertOrUpdate();err != nil{
+			this.filterParams(&systemDevice)
+			if err := systemDevice.InsertOrUpdate();err != nil{
 				this.ReturnJson(-2,err.Error(),nil)
 			}
-			this.ReturnJson(0,"添加成功",nil)
+			this.ReturnJson(0,"修改成功",nil)
 	}
 }
-
-//编辑
-func (this *SystemController)Edit() {
-
-	switch this.requestMethod {
-		case "GET":
-			if systemId := this.GetString("systemId"); systemId == ""{
-				this.Abort("404")
-			}else{
-				var system  models.System
-				if systemInfo := system.GetInfo(systemId);systemInfo.SystemId == 0 {
-					this.Abort("404")
-				}else{
-					this.Data["systemInfo"]  =  systemInfo
-					this.SetTpl("base/layout_page.html","system/edit.html")
-				}
-			}
-
-		case "POST":
-			var system  models.System
-			if err := this.ParseForm(&system); err != nil {
-				this.ReturnJson(-1,err.Error(),nil)
-			}
-			//校验必填参数
-			this.filterParams(&system)
-			if err := system.InsertOrUpdate(); err != nil{
-				this.ReturnJson(-1,err.Error(),nil)
-			}else{
-				this.ReturnJson(0,"修改成功",nil)
-			}
-	}
-}
-
-//更改状态
-func (this *SystemController)ChangeStatus() {
-
-	var system  models.System
-	if err := this.ParseForm(&system); err != nil {
-		this.ReturnJson(-1,err.Error(),nil)
-	}
-	if system.SystemId == 0 {
-		this.ReturnJson(-1,"系统ID不能为空",nil)
-	}
-
-	if system.Status == "" {
-		this.ReturnJson(-1,"状态ID不能为空",nil)
-	}
-
-	if err := system.ChangeStatus(); err != nil{
-		this.ReturnJson(-1,err.Error(),nil)
-	}else{
-		this.ReturnJson(0,"操作成功",nil)
-	}
-
-}
-
-
-
-
+//
+////编辑
+//func (this *SystemDeviceController)Edit() {
+//
+//	switch this.requestMethod {
+//		case "GET":
+//			if systemId := this.GetString("systemId"); systemId == ""{
+//				this.Abort("404")
+//			}else{
+//				var system  models.System
+//				if systemInfo := system.GetInfo(systemId);systemInfo.SystemId == 0 {
+//					this.Abort("404")
+//				}else{
+//					this.Data["systemInfo"]  =  systemInfo
+//					this.SetTpl("base/layout_page.html","system/edit.html")
+//				}
+//			}
+//
+//		case "POST":
+//			var system  models.System
+//			if err := this.ParseForm(&system); err != nil {
+//				this.ReturnJson(-1,err.Error(),nil)
+//			}
+//			//校验必填参数
+//			this.filterParams(&system)
+//			if err := system.InsertOrUpdate(); err != nil{
+//				this.ReturnJson(-1,err.Error(),nil)
+//			}else{
+//				this.ReturnJson(0,"修改成功",nil)
+//			}
+//	}
+//}
+//

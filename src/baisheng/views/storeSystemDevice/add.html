@@ -1,4 +1,3 @@
-<link href="/static/css/plugins/cropper/cropper.min.css" rel="stylesheet">
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12 col-md-12 ">
@@ -6,39 +5,31 @@
                 <div class="ibox-content">
                     <form class="form-horizontal m-t" id="signupForm" method="post" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">设备名称</label>
+                            <label class="col-sm-2 control-label">新购设备数量</label>
                             <div class="col-sm-3">
-                                <input  id="deviceName" name="deviceName" class="form-control" type="text">
+                                <input   id="number" name="number" class="form-control" type="text">
                             </div>
-                            <label class="col-sm-2 control-label">设备型号</label>
+                            <label class="col-sm-2 control-label">单价</label>
                             <div class="col-sm-3">
-                                <input   id="deviceType" name="deviceType" class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">产地</label>
-                            <div class="col-sm-3">
-                                <input   id="origin" name="origin" class="form-control" type="text">
-                            </div>
-                            <label class="col-sm-2 control-label">设备JDE项目号</label>
-                            <div class="col-sm-3">
-                                <input   id="deviceJde" name="deviceJde" class="form-control" type="text">
+                                <input   id="price" name="price" class="form-control" type="text">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">供应商JDE码</label>
+
+                            <label class="col-sm-2 control-label">旧设备数量</label>
                             <div class="col-sm-3">
-                                <input   id="supplierJde" name="supplierJde" class="form-control" type="text">
+                                <input  id="oldDeviceNum" name="oldDeviceNum" class="form-control" type="text">
                             </div>
-                            <label class="col-sm-2 control-label">供应商名称</label>
+
+                            <label class="col-sm-2 control-label">小件订购</label>
                             <div class="col-sm-3">
-                                <input   id="supplier" name="supplier" class="form-control" type="text">
+                                <input   id="smallBook" name="smallBook" class="form-control" type="text">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">描述</label>
+                            <label class="col-sm-2 control-label">订单编号</label>
                             <div class="col-sm-3">
-                                <input   id="description" name="description" class="form-control" type="text">
+                                <input   id="orderNum" name="orderNum" class="form-control" type="text">
                             </div>
                             <label class="col-sm-2 control-label">备注</label>
                             <div class="col-sm-3">
@@ -46,7 +37,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label class="col-sm-2 control-label">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <input value="{{.ssdInfo.StoreId}}" name="storeId" type="hidden">
+                            <input value="{{.ssdInfo.SystemDeviceId}}" name="systemDeviceId" type="hidden">
                             <button class="btn btn-primary " type="submit">提交</button>
                         </div>
                     </form>
@@ -63,15 +56,17 @@
         var icon = "<i class='fa fa-times-circle'></i> ";
         $("#signupForm").validate({
             rules: {
-                deviceName: "required",
+                number: "required",
+                price: "required",
             },
             messages: {
-                deviceName: icon + "请填设备名称",
+                number: icon + "请填新购设备数量",
+                price: icon + "请填设备单价",
             },
             submitHandler:function(form){
                 var form = new FormData(document.getElementById("signupForm"));
                 $.ajax({
-                    url:"/device/add",
+                    url:"/storeSystemDevice/add",
                     type:"post",
                     data:form,
                     processData:false,

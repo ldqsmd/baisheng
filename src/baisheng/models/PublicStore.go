@@ -72,7 +72,6 @@ func (this  StoreOption)GetStoreOption()[]StoreOption  {
 
 }
 
-
 func (this *PublicStore)InsertOrUpdate()error {
 
 	if this.StoreId == 0 {
@@ -104,11 +103,14 @@ func (this *PublicStore)SignStore()error  {
 	_,err :=  orm.NewOrm().Update(this,"SignFlag")
 	return err
 }
-//获取管理员信息
+
+
+//获取公共餐厅信息
 func (this *PublicStore)GetStoreInfo(storeId string)PublicStore{
 	//获取
-	orm.NewOrm().Raw("SELECT * FROM store WHERE store_id=?",storeId).QueryRow(&this)
-	return *this
+	var publicStore PublicStore
+	orm.NewOrm().Raw("SELECT * FROM store WHERE store_id=?",storeId).QueryRow(&publicStore)
+	return publicStore
 }
 
 

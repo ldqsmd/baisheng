@@ -9,20 +9,20 @@
                 <div class="ibox-content">
                     <form class="form-horizontal m-t" id="signupForm" method="post" >
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">软件名称</label>
+                            <label class="col-sm-4 control-label">系统名称</label>
                             <div class="col-sm-3">
-                                <input  value="{{.modelInfo.ModelName}}" id="modelName" name="modelName" class="form-control" type="text">
+                                <input  value="{{.systemInfo.SystemName}}" id="systemName" name="systemName" class="form-control" type="text">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">备注信息</label>
                             <div class="col-sm-3">
-                                <input  value="{{.modelInfo.Remark}}" id="remark" name="remark" class="form-control" type="text">
+                                <input  value="{{.systemInfo.Remark}}" id="remark" name="remark" class="form-control" type="text">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                            <input value="{{.modelInfo.ModelId}}" id="modelId" name="modelId" class="form-control" type="hidden">
+                            <input value="{{.systemInfo.SystemId}}" id="systemId" name="systemId" class="form-control" type="hidden">
                             <button class="btn btn-primary " type="submit">保存</button>
                         </div>
                     </form>
@@ -40,14 +40,14 @@
         var icon = "<i class='fa fa-times-circle'></i> ";
         $("#signupForm").validate({
             rules: {
-                modelName: "required",
+                systemName: "required",
             },
             messages: {
-                modelName: icon + "请填模板名称",
+                systemName: icon + "请填系统名称",
             },
             submitHandler:function(form){
                 var form = new FormData(document.getElementById("signupForm"));
-                var url = '{{urlfor "ModelController.EditModel"}}';
+                var url = '{{urlfor "SystemController.Edit"}}';
 
                 $.ajax({
                     url:url,

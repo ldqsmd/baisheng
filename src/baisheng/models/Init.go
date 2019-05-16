@@ -19,5 +19,8 @@ func init() {
 		new(ModelDevice),
 		new(Device),
 		new(System),
+		new(SystemDevice),
+		new(StoreSystem),
+		new(StoreSystemDevice),
 		)
 }

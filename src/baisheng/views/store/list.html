@@ -44,6 +44,7 @@
                                 <td>{{$val.TempCloseTime}}</td>
                                 <td>{{$val.StoreRemark}}</td>
                                 <td>
+                                    <a href="/storeSystemDevice/list?storeId={{$val.StoreId}}"  class=" btn   btn-xs" type="button">设备</a>
                                     <a href="/store/edit?storeId={{$val.StoreId}}"  class=" btn   btn-xs" type="button">编辑</a>
                                     <span onclick="forbidStore({{$val.StoreId}})" style="color: red" class=" btn  btn-xs " type="button">删除</span>
                                 </td>
@@ -129,7 +130,7 @@
                     { "width": "4%" },
                     { "width": "4%" },
                     { "width": "4%" },
-                    { "width": "10%" },
+                    { "width": "5%" },
                     { "width": "4%" },
 
                 ]

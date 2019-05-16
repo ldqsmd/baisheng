@@ -19,7 +19,7 @@
 
                         {{range $key, $val := .systemList}}
                             <tr class="gradeX">
-                                <td>{{$val.SystemName}}</td>
+                                <td><a href="/systemDevice/list?systemId={{$val.SystemId}}">{{$val.SystemName}}</a></td>
                                 <td>
                                     {{if eq $val.Status "0" }}
                                     <span class="badge badge-primary">&nbsp;&nbsp;&nbsp;&nbsp;启用&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -30,8 +30,8 @@
                                 <td>{{$val.Remark}}</td>
                                 <td>{{$val.UpdateTime}}</td>
                                 <td>
-                                    <button  onclick="related({{$val.SystemId}})" class=" btn   btn-xs btn-primary" type="button">配置设备</button>
                                     <button  onclick="edit({{$val.SystemId}})" class=" btn   btn-xs btn-success" type="button">编辑</button>
+                                    <a href="/systemDevice/list?systemId={{$val.SystemId}}" class=" btn   btn-xs btn-primary" type="button">系统设备列表</a>
                                     <div class="btn-group">
                                         <button data-toggle="dropdown" class="btn btn-danger btn-xs dropdown-toggle">更改状态 <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
@@ -74,10 +74,10 @@
         //iframe层
         parent.layer.open({
             type: 2,
-            title: '编辑模板信息',
+            title: '编辑',
             shadeClose: true,
             shade: 0.3,
-            area: ['40%', '45%'],
+            area: ['40%', '30%'],
             content: ["/system/edit?systemId="+id ,"no"],
             end:function () {
                location.reload()
@@ -88,9 +88,11 @@
 
     function changeStatus(id,status){
 
-        statusArr = ["启用","禁用"]
+        var msg = ""
+        statusArr = ["启用之后将显示在选项中,确认启用该系统?","禁用之后将不在选项中显示,确认该系统为禁用?"]
+
         //询问框
-        parent.layer.confirm('确认标记该软件为'+statusArr[status]+'?', {
+        parent.layer.confirm(statusArr[status], {
             btn: ['确当','手滑'], //按钮
             shade: false //不显示遮罩
         }, function(){

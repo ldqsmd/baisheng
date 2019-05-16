@@ -68,4 +68,17 @@ func init() {
 	beego.Router("/system/add",&controllers.SystemController{},"*:Add")
 	beego.Router("/system/edit",&controllers.SystemController{},"*:Edit")
 	beego.Router("/system/changeStatus",&controllers.SystemController{},"POST:ChangeStatus")
+
+	//SystemDeviceController
+	beego.Router("/systemDevice/list",&controllers.SystemDeviceController{},"GET:List")
+	beego.Router("/systemDevice/edit",&controllers.SystemDeviceController{},"*:Edit")
+
+	//StoreSystemController
+	beego.Router("/storeSystem/add",&controllers.StoreSystemController{},"POST:Add")
+	beego.Router("/storeSystem/del",&controllers.StoreSystemController{},"POST:Del")
+
+	//StoreSystemDeviceController
+	beego.Router("/storeSystemDevice/list",&controllers.StoreSystemDeviceController{},"GET:List")
+	beego.Router("/storeSystemDevice/edit",&controllers.StoreSystemDeviceController{},"*:Edit")
+	beego.Router("/storeSystemDevice/add",&controllers.StoreSystemDeviceController{},"*:Add")
 }
