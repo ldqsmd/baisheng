@@ -16,12 +16,13 @@
                         <thead>
                         <tr>
                             <th>序列</th>
+                            <th>设备名称</th>
+                            <th>设备JDE</th>
                             <th>所属系统</th>
+                            <th>系统设备状态</th>
                             <th>供应商JDE</th>
                             <th>供应商名称</th>
                             <th>订单编号</th>
-                            <th>设备名称</th>
-                            <th>设备JDE</th>
                             <th>旧设备数量</th>
                             <th>新购数量</th>
                             <th>单价(元)</th>
@@ -34,29 +35,87 @@
                         <tbody>
 
                         {{range $key, $val := .storeSystemDeviceList}}
+                            {{if eq 0 $val.StoreSystemDeviceId }}
+                                {{if ne 0 $val.Active }}
+                                    <tr class="gradeX">
+
+                                        <td>{{$key}}</td>
+                                        <td>{{$val.DeviceName}}</td>
+                                        <td>{{$val.DeviceJde}}</td>
+                                        <td>{{$val.SystemName}}</td>
+                                        <td>
+                                            {{if eq $val.Active 1}}
+                                                <span class="badge badge-primary">  绑定 </span>
+                                            {{else}}
+                                                <span class="badge">  解绑 </span>
+                                            {{end}}
+                                        </td>
+                                        <td>{{$val.SupplierJde}}</td>
+                                        <td>{{$val.Supplier}}</td>
+                                        <td>{{$val.OrderNum}}</td>
+                                        <td>
+                                            <span class="badge badge-warning">&nbsp;&nbsp;{{$val.OldDeviceNum}}&nbsp;&nbsp;</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-primary">&nbsp;&nbsp;{{$val.Number}}&nbsp;&nbsp;</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-info">&nbsp;&nbsp;{{$val.Price}}&nbsp;&nbsp;</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-danger">&nbsp;&nbsp;{{$val.TotalPrice}}&nbsp;&nbsp;</span>
+                                        </td>
+                                        <td>{{$val.Remark}}</td>
+                                        <td>{{$val.SmallBook}}</td>
+                                        <td>
+                                            {{if eq $val.StoreSystemDeviceId 0}}
+                                                <button  onclick="add({{$.storeId}},{{$val.DeviceName}},{{$val.SystemDeviceId}})" class=" btn   btn-xs btn-success" type="button">报价</button>
+                                            {{else}}
+                                                <button  onclick="edit({{$val.StoreSystemDeviceId}},{{$val.DeviceName}})" class=" btn   btn-xs btn-primary" type="button">编辑</button>
+                                            {{end}}
+                                        </td>
+                                    </tr>
+                                {{end}}
+                            {{else}}
                             <tr class="gradeX">
 
                                 <td>{{$key}}</td>
+                                <td>{{$val.DeviceName}}</td>
+                                <td>{{$val.DeviceJde}}</td>
                                 <td>{{$val.SystemName}}</td>
+                                <td>
+                                        {{if eq $val.Active 1}}
+                                    <span class="badge badge-primary">  绑定 </span>
+                                        {{else}}
+                                    <span class="badge">  解绑 </span>
+                                        {{end}}
+                                    </td>
                                 <td>{{$val.SupplierJde}}</td>
                                 <td>{{$val.Supplier}}</td>
                                 <td>{{$val.OrderNum}}</td>
-                                <td>{{$val.DeviceName}}</td>
-                                <td>{{$val.DeviceJde}}</td>
-                                <td>{{$val.OldDeviceNum}}</td>
-                                <td>{{$val.Number}}</td>
-                                <td>{{$val.Price}}</td>
-                                <td>{{$val.TotalPrice}}</td>
+                                <td>
+                                    <span class="badge badge-warning">&nbsp;&nbsp;{{$val.OldDeviceNum}}&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-primary">&nbsp;&nbsp;{{$val.Number}}&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-info">&nbsp;&nbsp;{{$val.Price}}&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-danger">&nbsp;&nbsp;{{$val.TotalPrice}}&nbsp;&nbsp;</span>
+                                </td>
                                 <td>{{$val.Remark}}</td>
                                 <td>{{$val.SmallBook}}</td>
                                 <td>
                                     {{if eq $val.StoreSystemDeviceId 0}}
-                                    <button  onclick="add({{$.storeId}},{{$val.DeviceName}},{{$val.SystemDeviceId}})" class=" btn   btn-xs btn-success" type="button">添加</button>
+                                    <button  onclick="add({{$.storeId}},{{$val.DeviceName}},{{$val.SystemDeviceId}})" class=" btn   btn-xs btn-success" type="button">报价</button>
                                     {{else}}
-                                    <button  onclick="edit({{$val.StoreSystemDeviceId}},{{$val.DeviceName}})" class=" btn   btn-xs btn-success" type="button">编辑</button>
+                                    <button  onclick="edit({{$val.StoreSystemDeviceId}},{{$val.DeviceName}})" class=" btn   btn-xs btn-primary" type="button">编辑</button>
                                     {{end}}
                                 </td>
                             </tr>
+                            {{end}}
                         {{end}}
                         </tbody>
                     </table>
@@ -141,8 +200,9 @@
                     { "width": "1%" },
                     { "width": "3%" },
                     { "width": "3%" },
-                    { "width": "3%" },
-                    { "width": "3%" },
+                    { "width": "2%" },
+                    { "width": "2%" },
+                    { "width": "1%" },
                     { "width": "2%" },
                     { "width": "2%" },
                     { "width": "2%" },

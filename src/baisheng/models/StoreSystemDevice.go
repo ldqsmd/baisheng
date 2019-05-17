@@ -29,6 +29,7 @@ type StoreSystemDeviceList struct {
 	TotalPrice		float64 `json:"totalPrice"`
 	SystemDeviceId	int 	`json:"systemDeviceId" `
 	SystemName		string 	`json:"systemName" `
+	Active			int 	`json:"active" `
 	StoreSystemDevice
 }
 
@@ -45,6 +46,7 @@ func (this *StoreSystemDevice) GetStoreSystemDeviceList(storeId int)([]StoreSyst
 	sql := `SELECT 
 			ssd.store_system_device_id,
 			sd.system_device_id,
+			sd.active,
 			s.system_name,
 			d.supplier,
 			d.supplier_jde,
@@ -61,10 +63,11 @@ func (this *StoreSystemDevice) GetStoreSystemDeviceList(storeId int)([]StoreSyst
 			FROM  		store_system 		as ss  
 			left join  	system 				as s 	on 	ss.system_id 		= s.system_id
 			left join  	system_device 		as sd 	on 	ss.system_id 		= sd.system_id
-			left join  	store_system_device as ssd  on sd.system_device_id 	= ssd.system_device_id
 			left join  	device 		 		as d 	on 	sd.device_id 		= d.device_id
-			where ss.store_id=?  and sd.active=1 order by ss.system_id`
-	_,err := orm.NewOrm().Raw(sql,storeId).QueryRows(&list)
+			left join (select * from store_system_device  where  store_id = ?  ) as ssd  on sd.system_device_id 	= ssd.system_device_id
+
+			where ss.store_id=?  order by ss.system_id,ssd.update_time desc `
+	_,err := orm.NewOrm().Raw(sql,storeId,storeId).QueryRows(&list)
 	return list, err
 }
 
