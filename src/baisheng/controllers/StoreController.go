@@ -133,8 +133,6 @@ func (this *StoreController)AddStore() {
 			if err := store.InsertOrUpdate();err != nil{
 				this.ReturnJson(-2,err.Error(),nil)
 			}
-			this.ReturnJson(-2,"test" ,store)
-
 			this.ReturnJson(0,"添加成功",nil)
 	}
 }

@@ -19,7 +19,7 @@ func (this *Store)InsertOrUpdate()(error) {
 	var storeSystem  StoreSystem
 	var numberCount  int
 	orm.NewOrm().Raw("SELECT count(*)  from store where number=?", this.Number).QueryRow(&numberCount)
-	if numberCount>0 {
+	if numberCount>1 {
 		return errors.New("餐厅编号已经存在")
 	}
 	//默认指定 标识为 特别关注
