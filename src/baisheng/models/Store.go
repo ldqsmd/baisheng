@@ -31,16 +31,16 @@ func (this *Store)InsertOrUpdate()(error) {
 	this.IeStore.IeStoreId   		= this.PublicStore.StoreId
 	this.CloseStore.CloseStoreId   	= this.PublicStore.StoreId
 
-	//选择添加餐厅系统
-	for _,systemId := range this.SystemId{
-		storeSystem.SystemId  = systemId
-		storeSystem.StoreId  = this.StoreId
-		if err := storeSystem.InsertOrUpdate();err != nil {
-			return err
+	if numberCount == 0{
+		//选择添加餐厅系统
+		for _,systemId := range this.SystemId{
+			storeSystem.SystemId  = systemId
+			storeSystem.StoreId  = this.StoreId
+			if err := storeSystem.InsertOrUpdate();err != nil {
+				return err
+			}
 		}
 	}
-
-
 	//NEW store
 	if  this.PublicStore.Status   == 1 {
 		//默认 不标记
