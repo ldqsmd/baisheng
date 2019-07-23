@@ -81,4 +81,10 @@ func init() {
 	beego.Router("/storeSystemDevice/list",&controllers.StoreSystemDeviceController{},"GET:List")
 	beego.Router("/storeSystemDevice/edit",&controllers.StoreSystemDeviceController{},"*:Edit")
 	beego.Router("/storeSystemDevice/add",&controllers.StoreSystemDeviceController{},"*:Add")
+
+	//NoticeController
+	beego.Router("/notice/list",&controllers.NoticeController{},"GET:List")
+	beego.Router("/notice/edit",&controllers.NoticeController{},"*:Edit")
+	beego.Router("/notice/add",&controllers.NoticeController{},"*:Add")
+	beego.Router("/notice/del",&controllers.NoticeController{},"*:Del")
 }

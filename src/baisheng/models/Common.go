@@ -7,4 +7,3 @@ type ReturnJson struct {
 	Data	interface{} `json:"data"`
 }
 
-

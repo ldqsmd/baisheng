@@ -237,13 +237,11 @@
         $("#signupForm").validate({
             rules: {
                 storeName: "required",
-                waitTime: "required",
                 number: {
                     required: true,
                 },
             },
             messages: {
-                waitTime: icon + "待开业时间",
                 storeName: icon + "请输入餐厅名称",
                 number: icon + "请输入餐厅编号",
             },

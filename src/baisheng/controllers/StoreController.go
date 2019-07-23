@@ -28,9 +28,9 @@ func (this *StoreController)filterParams(store *models.Store) {
 		//新店：必选 邮箱申请、派单时间 （三星、LG 、HP）
 		//IE:必选报废评估、派单时间 （HP、三星、LG）
 		//关店：不用了
-		valid.Required(store.ApplyEmailTime, "申请邮箱时间").Message("不能为空")
-		valid.Required(store.NewDmbDispatchTime, "DMB派单时间").Message("不能为空")
-		valid.Required(store.CallNumTime, "叫号屏派单时间").Message("不能为空")
+		//valid.Required(store.ApplyEmailTime, "申请邮箱时间").Message("不能为空")
+		//valid.Required(store.NewDmbDispatchTime, "DMB派单时间").Message("不能为空")
+		//valid.Required(store.CallNumTime, "叫号屏派单时间").Message("不能为空")
 	}
 	//IE
 	if store.Status == 2 {
@@ -38,12 +38,12 @@ func (this *StoreController)filterParams(store *models.Store) {
 		//IE:必选报废评估、派单时间 （HP、三星、LG）
 		//关店：不用了
 
-		valid.Required(store.OpenImacTime, "开店IMAC派单时间").Message("不能为空")
-		valid.Required(store.CloseImacTime, "关店IMAC派单时间").Message("不能为空")
-		valid.Required(store.DmbUninstallTime, "DMB拆除派单时间").Message("不能为空")
-		valid.Required(store.DmbInstallTime, "DMB安装派单时间").Message("不能为空")
-		valid.Required(store.SamsungIntallTime, "DMB三星安装派单时间").Message("不能为空")
-		valid.Required(store.SamsungUnintallTime, "DMB三星拆除派单时间").Message("不能为空")
+		//valid.Required(store.OpenImacTime, "开店IMAC派单时间").Message("不能为空")
+		//valid.Required(store.CloseImacTime, "关店IMAC派单时间").Message("不能为空")
+		//valid.Required(store.DmbUninstallTime, "DMB拆除派单时间").Message("不能为空")
+		//valid.Required(store.DmbInstallTime, "DMB安装派单时间").Message("不能为空")
+		//valid.Required(store.SamsungIntallTime, "DMB三星安装派单时间").Message("不能为空")
+		//valid.Required(store.SamsungUnintallTime, "DMB三星拆除派单时间").Message("不能为空")
 	}
 
 	if store.Status == 3 {

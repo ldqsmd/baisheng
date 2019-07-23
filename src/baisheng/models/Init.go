@@ -22,5 +22,6 @@ func init() {
 		new(SystemDevice),
 		new(StoreSystem),
 		new(StoreSystemDevice),
+		new(Notice),
 		)
 }
