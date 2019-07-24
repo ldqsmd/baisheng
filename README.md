@@ -1,6 +1,6 @@
 # baisheng
 一般的 beego 项目的目录如下所示：
-
+```
 ├── conf
 │   └── app.conf
 ├── controllers
@@ -17,3 +17,4 @@
 └── views
     ├── admin
     └── index.tpl
+```
