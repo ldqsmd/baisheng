@@ -3,6 +3,7 @@ package controllers
 import (
 	"baisheng/models"
 	"errors"
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"gopkg.in/gomail.v2"
@@ -53,10 +54,13 @@ func NotcieAlertByEmail() error {
 		if  err := SendEmail(mailTo, subject, body) ;err != nil {
 			return err
 		}else{
+
+			fmt.Printf("===>邮件发送成功:收件人%v 主题:%v 发送时间：%v <===\n",v.Email,v.Subject,v.NoticeTime)
 			if err := v.UpdateNoticeStatus();err !=nil {
 				return errors.New("修改notice状态错:"+err.Error())
 			}
 		}
+
 	}
 	return nil
 }
@@ -80,6 +84,8 @@ func SendEmail(mailTo []string,subject string, body string ) error {
 	m.SetBody("text/html", body)     //设置邮件正文
 	d := gomail.NewDialer(mailConn["host"], port, mailConn["user"], mailConn["pass"])
 	err := d.DialAndSend(m)
+
+
 	return err
 
 }
