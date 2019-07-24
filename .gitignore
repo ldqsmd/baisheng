@@ -7,3 +7,4 @@ src/opms/
 src/sdrms/
 *.gz
 src/baisheng/static/upload/
+src/baisheng/conf/app.conf
