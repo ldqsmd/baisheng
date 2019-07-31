@@ -43,6 +43,7 @@ func NotcieAlertByEmail() error {
 		return err
 	}
 	for _,v := range  noticeList{
+
 		//定义收件人
 		mailTo := []string {
 			v.Email,

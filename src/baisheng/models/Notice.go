@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"time"
 )
@@ -41,17 +42,22 @@ func (this *Notice) Delete( )error{
 func (this *Notice)InsertOrUpdate()error  {
 
 	nowTime := time.Now().Format("2006-01-02 15:04:05")
+	sendTime:= beego.AppConfig.String("email::sendtime")
+	if  len(sendTime) < 5{
+		sendTime = "09:00"
+	}
+
+	this.PlanNoticeTime = StrToMicTimeInt64(this.NoticeTime+" "+sendTime)
+
 	this.CreateTime = nowTime
 
 	if this.Id == 0 {
-		this.PlanNoticeTime = StrToMicTimeInt64(this.NoticeTime)
 		if id,err :=  orm.NewOrm().Insert(this); err != nil{
 			return err
 		}else{
 			this.Id  = int(id)
 		}
 	}else {
-		this.PlanNoticeTime = StrToMicTimeInt64(this.NoticeTime)
 		if  _,err :=  orm.NewOrm().Update(this); err != nil{
 			return err
 		}
@@ -63,7 +69,9 @@ func (this *Notice)InsertOrUpdate()error  {
 func  GetNoticeToList()([]Notice,error ) {
 	var notice []Notice
 	nowTime := time.Now().Unix()
-	cond := orm.NewCondition().And("status__eq",0).And("plan_notice_time__lt",nowTime)
+	cond := orm.NewCondition()
+	cond = cond.And("status__eq",0)
+	cond = cond.And("plan_notice_time__lt",nowTime)
 	if _,err := orm.NewOrm().QueryTable("notice").SetCond(cond).All(&notice);err != nil {
 		return notice, err
 	}
@@ -80,7 +88,7 @@ func  (this *Notice) UpdateNoticeStatus( )error {
 
 func StrToMicTimeInt64(s string) int64 {
 	//获取本地location   	//待转化为时间戳的字符串 注意 这里的小时和分钟还要秒必须写 因为是跟着模板走的 修改模板的话也可以不写
-	timeLayout := "2006-01-02 15:04:05"                    //转化所需模板
+	timeLayout := "2006-01-02 15:04"                    //转化所需模板
 	loc, _ := time.LoadLocation("Local")                   //重要：获取时区
 	theTime, _ := time.ParseInLocation(timeLayout, s, loc) //使用模板在对应时区转化为time.time类型
 	return theTime.Unix()
