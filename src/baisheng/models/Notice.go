@@ -65,7 +65,6 @@ func (this *Notice)InsertOrUpdate()error  {
 	return nil
 }
 
-
 func  GetNoticeToList()([]Notice,error ) {
 	var notice []Notice
 	nowTime := time.Now().Unix()
