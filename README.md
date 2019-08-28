@@ -1,4 +1,4 @@
-# 
+# baisheng
 一般的 beego 项目的目录如下所示：
 ```
 ├── conf
@@ -42,6 +42,8 @@ port        = "587"             #smtp 端口
 from        = "MR.Zhang"        #发件人昵称
 user        = ""                #发件人邮箱地址
 pass        = ""                #发件人邮箱密码
-turn        = "on"              #是否开启邮件提醒
- 
+turn        = "on"              #是否开启轮询
+rate        = "1"               #轮询是否需要提醒 时间间隔
+
+
 ```
