@@ -39,6 +39,7 @@ func (this *Notice) Delete( )error{
 	return nil
 }
 
+//新增或者修改
 func (this *Notice)InsertOrUpdate()error  {
 
 	nowTime := time.Now().Format("2006-01-02 15:04:05")
@@ -64,7 +65,6 @@ func (this *Notice)InsertOrUpdate()error  {
 	}
 	return nil
 }
-
 
 func  GetNoticeToList()([]Notice,error ) {
 	var notice []Notice
